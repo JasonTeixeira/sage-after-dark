@@ -13,6 +13,9 @@ import remarkGfm from "remark-gfm";
 import { getAllPosts, getPostBySlug } from "@/content/loader";
 import { mdxComponents } from "@/content/mdx-components";
 import { LAYOUT_BY_TEMPLATE } from "@/components/layouts";
+import { Paywall } from "@/components/paywall";
+import { getSessionEmail } from "@/lib/auth";
+import { memberStatus } from "@/lib/supabase";
 import type { Metadata } from "next";
 import type { Pillar } from "@/content/schema";
 
@@ -79,24 +82,49 @@ export default async function PostPage({
 
   const Layout = LAYOUT_BY_TEMPLATE[post.frontmatter.template];
 
+  // Members-only gate. Unsigned-in users see the paywall; non-active members
+  // see the paywall with the dashboard CTA. Anything fails open as a safety
+  // measure for content delivery, except an explicit "not active" answer.
+  let isMember = false;
+  let signedIn = false;
+  if (post.frontmatter.members_only) {
+    try {
+      const email = await getSessionEmail();
+      signedIn = Boolean(email);
+      if (email) {
+        const status = await memberStatus(email);
+        isMember = status?.status === "active";
+      }
+    } catch (e) {
+      console.warn("[post] member check failed", e);
+      // Fail closed for paywalled content if we genuinely can't check.
+      isMember = false;
+    }
+  }
+  const showPaywall = post.frontmatter.members_only && !isMember;
+
   return (
     <Layout post={post}>
-      <MDXRemote
-        source={post.source}
-        components={mdxComponents}
-        options={{
-          mdxOptions: {
-            remarkPlugins: [remarkGfm],
-            rehypePlugins: [
-              rehypeSlug,
-              [
-                rehypeAutolinkHeadings,
-                { behavior: "wrap", properties: { className: ["heading-anchor"] } },
+      {showPaywall ? (
+        <Paywall pillar={post.frontmatter.pillar} signedIn={signedIn} />
+      ) : (
+        <MDXRemote
+          source={post.source}
+          components={mdxComponents}
+          options={{
+            mdxOptions: {
+              remarkPlugins: [remarkGfm],
+              rehypePlugins: [
+                rehypeSlug,
+                [
+                  rehypeAutolinkHeadings,
+                  { behavior: "wrap", properties: { className: ["heading-anchor"] } },
+                ],
               ],
-            ],
-          },
-        }}
-      />
+            },
+          }}
+        />
+      )}
     </Layout>
   );
 }

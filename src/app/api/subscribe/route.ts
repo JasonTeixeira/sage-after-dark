@@ -7,11 +7,14 @@
  * Required env vars:
  *   SUPABASE_URL                  https://<project>.supabase.co
  *   SUPABASE_ANON_KEY             public anon key (used to call the SECURITY DEFINER RPC)
+ *   RESEND_API_KEY                optional — when set, sends a welcome dispatch
  *
  * The schema lives in the database as a migration. Insert path is
  * the public.subscribe(p_email, p_source) RPC — it validates the
  * email server-side and upserts on conflict.
  */
+
+import { sendEmail, welcomeEmail } from "@/lib/email";
 
 export const runtime = "nodejs";
 
@@ -75,6 +78,14 @@ export async function POST(req: Request) {
     const text = await r.text();
     console.error("[subscribe] supabase error", r.status, text);
     return json({ error: "Could not save right now. Try again." }, 500);
+  }
+
+  // Best-effort welcome dispatch — never blocks the response on email failure.
+  try {
+    const tpl = welcomeEmail();
+    await sendEmail({ to: email, ...tpl });
+  } catch (e) {
+    console.warn("[subscribe] welcome email failed", e);
   }
 
   return json({ ok: true });

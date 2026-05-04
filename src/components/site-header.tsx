@@ -17,6 +17,8 @@ const NAV = [
   { label: "about", href: "/about" },
 ];
 
+const RIGHT_NAV = [{ label: "members", href: "/membership" }];
+
 export function SiteHeader({ path = "/" }: { path?: string }) {
   return (
     <header className="border-b border-rule bg-ink-0/80 backdrop-blur-sm sticky top-0 z-40">
@@ -43,7 +45,17 @@ export function SiteHeader({ path = "/" }: { path?: string }) {
               </Link>
             ))}
           </nav>
-          <span className="ml-auto hidden sm:inline-flex items-center gap-2">
+          <span className="ml-auto hidden sm:inline-flex items-center gap-4">
+            {RIGHT_NAV.map((n) => (
+              <Link
+                key={n.href}
+                href={n.href}
+                className="text-teach hover:opacity-80 transition-opacity"
+              >
+                ▸ {n.label}
+              </Link>
+            ))}
+            <StripSep />
             <Link
               href="/search"
               className="hover:text-cyan transition-colors"

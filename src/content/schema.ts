@@ -89,6 +89,7 @@ export const FrontmatterSchema = z
     // status
     status: z.enum(["draft", "published", "archived"]).default("draft"),
     featured: z.boolean().default(false),
+    members_only: z.boolean().default(false),
 
     // sharing
     og_image: z.string().optional(), // path or URL; auto-generated if absent
