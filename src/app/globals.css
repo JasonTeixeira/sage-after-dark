@@ -132,20 +132,57 @@ html[data-reading-mode="parchment"] header[data-print-hide] {
   color: #2A2520;
 }
 html[data-reading-mode="parchment"] article,
-html[data-reading-mode="parchment"] [data-highlightable] {
+html[data-reading-mode="parchment"] [data-highlightable],
+html[data-reading-mode="parchment"] [data-highlightable] * {
   color: #2A2520;
 }
+/* Force darker body text on every prose paragraph and span inside the article column */
+html[data-reading-mode="parchment"] [data-highlightable] p,
+html[data-reading-mode="parchment"] [data-highlightable] li,
+html[data-reading-mode="parchment"] [data-highlightable] em,
+html[data-reading-mode="parchment"] [data-highlightable] strong,
+html[data-reading-mode="parchment"] [data-highlightable] span {
+  color: #2A2520 !important;
+}
+html[data-reading-mode="parchment"] [data-highlightable] h1,
+html[data-reading-mode="parchment"] [data-highlightable] h2,
+html[data-reading-mode="parchment"] [data-highlightable] h3,
+html[data-reading-mode="parchment"] [data-highlightable] h4,
 html[data-reading-mode="parchment"] article h1,
 html[data-reading-mode="parchment"] article h2,
 html[data-reading-mode="parchment"] article h3,
 html[data-reading-mode="parchment"] article h4 {
-  color: #1A1612;
+  color: #1A1612 !important;
 }
+html[data-reading-mode="parchment"] [data-highlightable] a,
 html[data-reading-mode="parchment"] article a {
-  color: #8B4513;
+  color: #8B4513 !important;
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 2px;
+}
+/* Floating TOC + header readable in parchment */
+html[data-reading-mode="parchment"] nav[aria-label="Table of contents"],
+html[data-reading-mode="parchment"] nav[aria-label="Table of contents"] * {
+  color: #2A2520 !important;
+}
+html[data-reading-mode="parchment"] nav[aria-label="Table of contents"] [aria-current="true"] {
+  color: #8B4513 !important;
+  font-weight: 500;
+}
+html[data-reading-mode="parchment"] nav[aria-label="Table of contents"] .text-faint {
+  color: rgba(42, 37, 32, 0.55) !important;
+}
+html[data-reading-mode="parchment"] nav[aria-label="Table of contents"] .border-rule {
+  border-color: #C9BFA7 !important;
+}
+html[data-reading-mode="parchment"] header[data-print-hide] a,
+html[data-reading-mode="parchment"] header[data-print-hide] button {
+  color: #2A2520 !important;
+}
+html[data-reading-mode="parchment"] header[data-print-hide] a:hover,
+html[data-reading-mode="parchment"] header[data-print-hide] button:hover {
+  color: #8B4513 !important;
 }
 html[data-reading-mode="parchment"] .sidenote-anchor {
   color: #8B4513 !important;
@@ -173,10 +210,7 @@ html[data-reading-mode="parchment"] ::selection {
   background: #B8956A;
   color: #1A1612;
 }
-/* The floating TOC stays usable in parchment mode */
-html[data-reading-mode="parchment"] aside[aria-label="Table of contents"] {
-  color: #2A2520;
-}
+/* (TOC parchment styles handled in dedicated block above) */
 /* View Transitions — root crossfade between modes */
 @supports (view-transition-name: root) {
   ::view-transition-old(root),
