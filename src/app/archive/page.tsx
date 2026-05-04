@@ -380,7 +380,7 @@ function FilterItem({
         }`}
       >
         <span className="truncate">{label}</span>
-        <span className="text-mute shrink-0 tabular-nums ml-2">{count}</span>
+        <span className={`shrink-0 tabular-nums ml-2 ${active ? "text-cyan" : "text-mute"}`}>{count}</span>
       </Link>
     </li>
   );
