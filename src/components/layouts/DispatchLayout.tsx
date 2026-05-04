@@ -8,7 +8,7 @@
 import type { ReactNode } from "react";
 import { Page, Container, EditorialColumn } from "@/components";
 import type { Post } from "@/content/schema";
-import { PostStrip, PostHeader, ColophonLine } from "./shared";
+import { PostStrip, PostHeader, ColophonLine, PostFooter } from "./shared";
 
 export function DispatchLayout({
   post,
@@ -26,6 +26,7 @@ export function DispatchLayout({
           {children}
           <ColophonLine post={post} />
         </EditorialColumn>
+        <PostFooter post={post} />
       </Container>
     </Page>
   );

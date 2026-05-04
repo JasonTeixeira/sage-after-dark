@@ -24,6 +24,7 @@ import {
   PostHeader,
   RelatedPosts,
   ColophonLine,
+  PostFooter,
 } from "./shared";
 
 export async function ArcEpisodeLayout({
@@ -115,6 +116,7 @@ export async function ArcEpisodeLayout({
           <div className="mx-auto" style={{ maxWidth: "66ch" }}>
             <RelatedPosts slugs={fm.related} />
           </div>
+          <PostFooter post={post} />
         </Section>
       </Container>
     </Page>

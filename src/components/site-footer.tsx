@@ -20,7 +20,7 @@ const FOOTER_LINKS = [
   { label: "reading", href: "/reading" },
   { label: "about", href: "/about" },
   { label: "colophon", href: "/colophon" },
-  { label: "rss", href: "/rss.xml" },
+  { label: "rss", href: "/feed.xml" },
 ];
 
 const SOCIAL = [

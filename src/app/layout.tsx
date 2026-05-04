@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
-import { SiteHeader, SiteFooter } from "@/components";
+import { SiteHeader, SiteFooter, KeyboardShortcuts } from "@/components";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://sageafterdark.com"),
@@ -15,6 +15,12 @@ export const metadata: Metadata = {
   authors: [{ name: "Jason Teixeira", url: "https://sageideas.dev" }],
   creator: "Jason Teixeira",
   publisher: "Sage Ideas LLC",
+  alternates: {
+    types: {
+      "application/rss+xml": "/feed.xml",
+      "application/feed+json": "/feed.json",
+    },
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -23,6 +29,14 @@ export const metadata: Metadata = {
     title: "Sage After Dark",
     description:
       "A tactical-editorial publication by Jason Teixeira. Field notes from building Sage Ideas.",
+    images: [
+      {
+        url: "/api/og?title=Sage%20After%20Dark&dek=Field%20notes%20from%20building%20in%20the%20open",
+        width: 1200,
+        height: 630,
+        alt: "Sage After Dark",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -30,6 +44,9 @@ export const metadata: Metadata = {
     description:
       "A tactical-editorial publication by Jason Teixeira. Field notes from building Sage Ideas.",
     creator: "@JasonTeixeira",
+    images: [
+      "/api/og?title=Sage%20After%20Dark&dek=Field%20notes%20from%20building%20in%20the%20open",
+    ],
   },
   robots: { index: true, follow: true },
 };
@@ -47,6 +64,7 @@ export default function RootLayout({
         <SiteHeader />
         <div className="flex-1">{children}</div>
         <SiteFooter />
+        <KeyboardShortcuts />
       </body>
     </html>
   );

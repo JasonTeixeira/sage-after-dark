@@ -19,7 +19,7 @@ import {
   PillarTag,
 } from "@/components";
 import type { Post } from "@/content/schema";
-import { PostStrip, RelatedPosts, ColophonLine } from "./shared";
+import { PostStrip, RelatedPosts, ColophonLine, PostFooter } from "./shared";
 
 export function AnnualLayout({
   post,
@@ -60,6 +60,7 @@ export function AnnualLayout({
           <div className="mx-auto" style={{ maxWidth: "66ch" }}>
             <RelatedPosts slugs={fm.related} />
           </div>
+          <PostFooter post={post} />
         </Section>
       </Container>
     </Page>

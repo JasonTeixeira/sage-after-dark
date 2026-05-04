@@ -43,3 +43,6 @@ export { SiteFooter } from "./site-footer";
 
 // Post listings
 export { PostCard } from "./post-card";
+export { NewsletterForm } from "./newsletter-form";
+export { Comments } from "./comments";
+export { KeyboardShortcuts } from "./keyboard-shortcuts";

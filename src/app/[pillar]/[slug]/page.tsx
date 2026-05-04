@@ -34,9 +34,17 @@ export async function generateMetadata({
   if (!post) return { title: "Not found" };
 
   const fm = post.frontmatter;
+  const ogUrl = fm.og_image ?? `/api/og?slug=${encodeURIComponent(fm.slug)}`;
   return {
     title: `${fm.title} — Sage After Dark`,
     description: fm.dek,
+    alternates: {
+      canonical: `/${fm.pillar}/${fm.slug}`,
+      types: {
+        "application/rss+xml": "/feed.xml",
+        "application/feed+json": "/feed.json",
+      },
+    },
     openGraph: {
       title: fm.title,
       description: fm.dek,
@@ -44,11 +52,14 @@ export async function generateMetadata({
       publishedTime: fm.published,
       modifiedTime: fm.updated,
       tags: fm.tags,
+      url: `/${fm.pillar}/${fm.slug}`,
+      images: [{ url: ogUrl, width: 1200, height: 630, alt: fm.title }],
     },
     twitter: {
       card: "summary_large_image",
       title: fm.title,
       description: fm.dek,
+      images: [ogUrl],
     },
   };
 }

@@ -14,6 +14,7 @@ import {
   PostHeader,
   RelatedPosts,
   ColophonLine,
+  PostFooter,
 } from "./shared";
 
 export function FieldNoteLayout({
@@ -37,6 +38,7 @@ export function FieldNoteLayout({
           <div className="mx-auto" style={{ maxWidth: "66ch" }}>
             <RelatedPosts slugs={fm.related} />
           </div>
+          <PostFooter post={post} />
         </Section>
       </Container>
     </Page>

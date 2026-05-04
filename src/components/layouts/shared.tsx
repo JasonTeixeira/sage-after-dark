@@ -5,6 +5,7 @@
  *   <PostStrip>           — top tactical strip showing status/time/words/pillar
  *   <RelatedPosts>        — bottom rail rendering related cards by slug
  *   <ColophonLine>        — tiny footer block above the global footer
+ *   <PostFooter>          — newsletter signup + comments at the end of every post
  */
 
 import { format } from "date-fns";
@@ -22,6 +23,8 @@ import {
 } from "@/components";
 import type { Post } from "@/content/schema";
 import { getPostBySlug } from "@/content/loader";
+import { NewsletterForm } from "@/components/newsletter-form";
+import { Comments } from "@/components/comments";
 
 export function PostStrip({
   post,
@@ -129,6 +132,24 @@ export function ColophonLine({ post }: { post: Post }) {
         {format(new Date(fm.published), "yyyy-MM-dd")}
         {fm.updated && <> · updated {format(new Date(fm.updated), "yyyy-MM-dd")}</>}
       </Tactical>
+    </div>
+  );
+}
+
+/* -----------------------------------------------------------
+ * <PostFooter> — newsletter signup + comments. Mounts after
+ * RelatedPosts on every post layout.
+ * --------------------------------------------------------- */
+
+export function PostFooter({ post }: { post: Post }) {
+  const fm = post.frontmatter;
+  return (
+    <div className="mt-16 space-y-12 max-w-3xl mx-auto">
+      <NewsletterForm source={`post:${fm.slug}`} variant="card" />
+      <div>
+        <Tactical className="block mb-4 text-cyan">// discussion</Tactical>
+        <Comments slug={fm.slug} />
+      </div>
     </div>
   );
 }

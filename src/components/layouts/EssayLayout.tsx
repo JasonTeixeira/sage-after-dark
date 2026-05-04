@@ -18,6 +18,7 @@ import {
   PostHeader,
   RelatedPosts,
   ColophonLine,
+  PostFooter,
 } from "./shared";
 
 export function EssayLayout({
@@ -41,6 +42,7 @@ export function EssayLayout({
           <div className="mx-auto" style={{ maxWidth: "66ch" }}>
             <RelatedPosts slugs={fm.related} />
           </div>
+          <PostFooter post={post} />
         </Section>
       </Container>
     </Page>

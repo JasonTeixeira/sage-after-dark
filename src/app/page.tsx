@@ -21,6 +21,7 @@ import {
   ButtonLink,
   NotchedCard,
   Reticle,
+  NewsletterForm,
 } from "@/components";
 import { getAllPosts } from "@/content/loader";
 import { NOW } from "@/content/site-data";
@@ -185,6 +186,13 @@ export default async function HomePage() {
                 </NotchedCard>
               </Link>
             ))}
+          </div>
+        </Section>
+
+        {/* Newsletter */}
+        <Section label="// dispatches">
+          <div className="max-w-2xl">
+            <NewsletterForm source="home" variant="card" />
           </div>
         </Section>
       </Container>
