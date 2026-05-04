@@ -36,8 +36,8 @@ export function Sidenote({
   const label = n != null ? String(n) : "*";
 
   return (
-    <span className="sidenote-wrap relative">
-      {/* Inline anchor */}
+    <>
+      {/* Inline anchor (always visible) */}
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
@@ -51,11 +51,19 @@ export function Sidenote({
         [{label}]
       </button>
 
-      {/* Desktop: right-margin float (≥ lg) */}
+      {/*
+       * Desktop: right-margin float at ≥ lg. We use CSS float + a
+       * negative right margin so the note physically sits in the
+       * column's right gutter rather than inside the prose. The
+       * `shape-outside: none` keeps text from wrapping around it.
+       *
+       * On mobile (< lg) we hide this float entirely and surface the
+       * note inline via the disclosure span below.
+       */}
       <aside
         className={cn(
-          "hidden lg:block absolute top-0",
-          "right-[-15rem] w-[14rem]",
+          "sidenote-aside hidden lg:block float-right clear-right",
+          "w-[13rem] -mr-[15rem] ml-6 mb-3",
           "font-mono text-[12px] leading-snug text-bone/70",
           "border-l border-cyan/40 pl-3",
         )}
@@ -65,10 +73,10 @@ export function Sidenote({
         {children}
       </aside>
 
-      {/* Mobile: inline disclosure (< lg or when toggled) */}
+      {/* Mobile: inline disclosure (toggled by anchor) */}
       <span
         className={cn(
-          "lg:hidden inline",
+          "lg:hidden",
           open ? "inline" : "hidden",
         )}
       >
@@ -82,6 +90,6 @@ export function Sidenote({
           {children}
         </span>
       </span>
-    </span>
+    </>
   );
 }

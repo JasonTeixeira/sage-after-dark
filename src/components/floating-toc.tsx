@@ -109,8 +109,8 @@ export function FloatingTOC({
       <nav
         aria-label="Table of contents"
         className={cn(
-          "hidden xl:block fixed top-1/2 -translate-y-1/2 right-6 z-30",
-          "max-w-[16rem] print:hidden",
+          "hidden 2xl:block fixed top-1/2 -translate-y-1/2 right-8 z-30",
+          "max-w-[14rem] print:hidden",
         )}
       >
         <div className="border-l border-rule pl-4">
@@ -166,7 +166,7 @@ export function FloatingTOC({
         onClick={() => setMobileOpen(true)}
         aria-label="Open table of contents"
         className={cn(
-          "xl:hidden fixed bottom-20 right-4 z-30",
+          "2xl:hidden fixed bottom-20 right-4 z-30",
           "h-11 w-11 rounded-full border border-rule bg-ink-1/95 backdrop-blur-md",
           "flex items-center justify-center text-cyan",
           "shadow-lg hover:bg-ink-2 transition-colors print:hidden",
@@ -179,7 +179,7 @@ export function FloatingTOC({
 
       {mobileOpen && (
         <div
-          className="xl:hidden fixed inset-0 z-50 bg-ink/80 backdrop-blur-sm flex items-end sm:items-center justify-center print:hidden"
+          className="2xl:hidden fixed inset-0 z-50 bg-ink/80 backdrop-blur-sm flex items-end sm:items-center justify-center print:hidden"
           onClick={() => setMobileOpen(false)}
         >
           <div
