@@ -244,10 +244,10 @@ export default async function ArchivePage({
               months.map((month) => (
                 <section key={month} className="mb-10">
                   <div className="flex items-center gap-3 mb-4">
-                    <span className="text-cyan font-mono text-[11px] uppercase tracking-[0.08em]">▸</span>
-                    <span className="text-bone font-mono text-[11px] uppercase tracking-[0.08em]">
+                    <span className="text-cyan font-mono text-[11px] uppercase tracking-[0.08em]" aria-hidden="true">▸</span>
+                    <h2 className="text-bone font-mono text-[11px] uppercase tracking-[0.08em] m-0 font-normal">
                       {month.toUpperCase()}
-                    </span>
+                    </h2>
                   </div>
                   <ul>
                     {byMonth[month].map((p, i) => (
@@ -380,7 +380,7 @@ function FilterItem({
         }`}
       >
         <span className="truncate">{label}</span>
-        <span className="text-faint shrink-0 tabular-nums ml-2">{count}</span>
+        <span className="text-mute shrink-0 tabular-nums ml-2">{count}</span>
       </Link>
     </li>
   );
