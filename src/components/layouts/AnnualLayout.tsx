@@ -20,6 +20,7 @@ import {
 } from "@/components";
 import type { Post } from "@/content/schema";
 import { PostStrip, RelatedPosts, ColophonLine, PostFooter } from "./shared";
+import { ShareButtons } from "@/components/share-buttons";
 
 export function AnnualLayout({
   post,
@@ -60,6 +61,11 @@ export function AnnualLayout({
           <div className="mx-auto" style={{ maxWidth: "66ch" }}>
             <RelatedPosts slugs={fm.related} currentSlug={fm.slug} />
           </div>
+          <ShareButtons
+            url={`https://www.sageafterdark.com/${post.frontmatter.pillar}/${post.frontmatter.slug}`}
+            title={post.frontmatter.title}
+            dek={post.frontmatter.dek}
+          />
           <PostFooter post={post} />
         </Section>
       </Container>

@@ -25,6 +25,7 @@ import {
 import { FloatingTOC } from "@/components/floating-toc";
 import { HighlightToShare } from "@/components/highlight-to-share";
 import { EssaySignoff } from "@/components/essay-signoff";
+import { ShareButtons } from "@/components/share-buttons";
 import { Comments } from "@/components/comments";
 
 export function EssayLayout({
@@ -58,6 +59,9 @@ export function EssayLayout({
           <div className="mx-auto" style={{ maxWidth: "66ch" }}>
             <RelatedPosts slugs={fm.related} currentSlug={fm.slug} />
           </div>
+
+          {/* Share buttons — HN, LinkedIn, copy, email. */}
+          <ShareButtons url={url} title={fm.title} dek={fm.dek} />
 
           {/* Personal end-of-essay sign-off. Replaces the generic card. */}
           <EssaySignoff post={post} />

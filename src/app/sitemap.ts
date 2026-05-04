@@ -26,6 +26,10 @@ const STATIC_PATHS = [
   "/best",
   "/tags",
   "/series",
+  "/dispatch",
+  "/tools",
+  "/tools/30-second-rollback",
+  "/ask",
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

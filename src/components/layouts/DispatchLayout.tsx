@@ -9,6 +9,7 @@ import type { ReactNode } from "react";
 import { Page, Container, EditorialColumn } from "@/components";
 import type { Post } from "@/content/schema";
 import { PostStrip, PostHeader, ColophonLine, PostFooter } from "./shared";
+import { ShareButtons } from "@/components/share-buttons";
 
 export function DispatchLayout({
   post,
@@ -26,6 +27,11 @@ export function DispatchLayout({
           {children}
           <ColophonLine post={post} />
         </EditorialColumn>
+        <ShareButtons
+          url={`https://www.sageafterdark.com/${post.frontmatter.pillar}/${post.frontmatter.slug}`}
+          title={post.frontmatter.title}
+          dek={post.frontmatter.dek}
+        />
         <PostFooter post={post} />
       </Container>
     </Page>

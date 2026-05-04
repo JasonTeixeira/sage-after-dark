@@ -16,6 +16,7 @@ import {
   ColophonLine,
   PostFooter,
 } from "./shared";
+import { ShareButtons } from "@/components/share-buttons";
 
 export function FieldNoteLayout({
   post,
@@ -38,6 +39,11 @@ export function FieldNoteLayout({
           <div className="mx-auto" style={{ maxWidth: "66ch" }}>
             <RelatedPosts slugs={fm.related} currentSlug={fm.slug} />
           </div>
+          <ShareButtons
+            url={`https://www.sageafterdark.com/${fm.pillar}/${fm.slug}`}
+            title={fm.title}
+            dek={fm.dek}
+          />
           <PostFooter post={post} />
         </Section>
       </Container>
