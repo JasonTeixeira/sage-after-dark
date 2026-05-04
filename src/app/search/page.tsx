@@ -25,6 +25,18 @@ export const metadata = {
 
 export default async function SearchPage() {
   const posts = await getAllPosts();
+  // Strip MDX/markdown syntax and trim to ~3kb per post for the client bundle.
+  const stripMdx = (src: string): string =>
+    src
+      .replace(/```[\s\S]*?```/g, " ")              // fenced code
+      .replace(/`[^`]*`/g, " ")                       // inline code
+      .replace(/<[^>]+>/g, " ")                       // jsx/html tags
+      .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")          // images
+      .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")        // links → keep text
+      .replace(/[#*_>~|`]/g, " ")                     // markdown punctuation
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, 3000);
   const index: SearchEntry[] = posts.map((p) => ({
     slug: p.frontmatter.slug,
     pillar: p.frontmatter.pillar,
@@ -32,6 +44,7 @@ export default async function SearchPage() {
     title: p.frontmatter.title,
     dek: p.frontmatter.dek ?? "",
     tags: p.frontmatter.tags ?? [],
+    body: stripMdx(p.source ?? ""),
     published: p.frontmatter.published,
     href: `/${p.frontmatter.pillar}/${p.frontmatter.slug}`,
   }));

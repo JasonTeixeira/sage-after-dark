@@ -13,7 +13,7 @@
 
 import { sendEmail, memberWelcomeEmail } from "@/lib/email";
 import { createPortalSession, verifyStripeSignature } from "@/lib/stripe";
-import { upsertMember } from "@/lib/supabase";
+import { recordStripeEvent, upsertMember } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 // Must read the raw body byte-for-byte for HMAC verification.
@@ -60,6 +60,13 @@ export async function POST(req: Request) {
     evt = JSON.parse(raw) as StripeEvent;
   } catch {
     return new Response("invalid json", { status: 400 });
+  }
+
+  // Idempotency: Stripe retries on any non-2xx, and may also fire the
+  // same event multiple times. Record the event id and bail on duplicates.
+  const fresh = await recordStripeEvent(evt.id, evt.type);
+  if (!fresh) {
+    return new Response("duplicate", { status: 200 });
   }
 
   try {

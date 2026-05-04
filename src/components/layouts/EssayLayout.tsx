@@ -69,7 +69,7 @@ export function EssayLayout({
           {/* Discussion still mounts below the sign-off. */}
           <div className="mt-16 max-w-3xl mx-auto">
             <Tactical className="block mb-4 text-cyan">// discussion</Tactical>
-            <Comments slug={fm.slug} />
+            <Comments slug={fm.slug} title={fm.title} />
           </div>
         </Section>
       </Container>

@@ -7,6 +7,7 @@
  */
 
 import type { MDXComponents } from "mdx/types";
+import NextImage from "next/image";
 import { cn } from "@/lib/cn";
 import {
   Body,
@@ -154,23 +155,46 @@ export const mdxComponents: MDXComponents = {
   ),
 
   /* ---------- images ---------- */
-  // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
-  img: ({ alt, ...rest }) => (
-    <figure className="my-8">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        alt={alt ?? ""}
-        className="w-full border border-rule"
-        loading="lazy"
-        {...rest}
-      />
-      {alt && (
-        <figcaption className="mt-2 text-center">
-          <Tactical>{alt}</Tactical>
-        </figcaption>
-      )}
-    </figure>
-  ),
+  img: ({ alt, src, width, height, ...rest }) => {
+    const safeAlt = alt ?? "";
+    const url = typeof src === "string" ? src : "";
+    // External or unresolved → fall back to native <img> to avoid next/image
+    // domain config issues. Internal /public assets use next/image with auto blur.
+    const isLocal = url.startsWith("/") && !url.startsWith("//");
+    const w = typeof width === "number" ? width : Number(width) || 1600;
+    const h = typeof height === "number" ? height : Number(height) || 900;
+
+    return (
+      <figure className="my-8">
+        {isLocal ? (
+          <NextImage
+            src={url}
+            alt={safeAlt}
+            width={w}
+            height={h}
+            sizes="(min-width: 1024px) 720px, 100vw"
+            placeholder="empty"
+            className="w-full h-auto border border-rule"
+          />
+        ) : (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={url}
+            alt={safeAlt}
+            className="w-full border border-rule"
+            loading="lazy"
+            decoding="async"
+            {...rest}
+          />
+        )}
+        {safeAlt && (
+          <figcaption className="mt-2 text-center">
+            <Tactical>{safeAlt}</Tactical>
+          </figcaption>
+        )}
+      </figure>
+    );
+  },
 
   /* ---------- expose custom components for inline use ---------- */
   Pullquote,

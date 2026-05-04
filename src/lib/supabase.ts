@@ -84,3 +84,25 @@ export async function consumeMagicLink(token: string): Promise<string | null> {
   const out = await rpc<string | null>("sage_after_dark_consume_magic_link", { p_token: token });
   return out ?? null;
 }
+
+/* ---- stripe event idempotency ----
+ * Returns true the FIRST time we see this event id, false on every retry.
+ * Lets the webhook handler skip side effects on duplicates.
+ */
+export async function recordStripeEvent(
+  eventId: string,
+  eventType: string,
+): Promise<boolean> {
+  if (!supabaseConfigured()) return true; // dry-run: always allow
+  try {
+    const inserted = await rpc<boolean>("sage_after_dark_stripe_event_record", {
+      p_event_id: eventId,
+      p_event_type: eventType,
+    });
+    return Boolean(inserted);
+  } catch (e) {
+    // If the idempotency table isn't migrated yet, allow processing.
+    console.warn("[stripe] idempotency check failed, allowing:", e);
+    return true;
+  }
+}

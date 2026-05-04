@@ -13,32 +13,58 @@ export type SearchEntry = {
   title: string;
   dek: string;
   tags: string[];
+  body: string; // plain-text excerpt of the post body for full-text search
   published: string;
   href: string;
 };
 
-function score(entry: SearchEntry, q: string): number {
-  if (!q) return 1;
+function score(entry: SearchEntry, q: string): { s: number; snippet: string } {
+  const empty = { s: 0, snippet: "" };
+  if (!q) return { s: 1, snippet: "" };
   const needle = q.toLowerCase().trim();
-  if (!needle) return 1;
-  const hay = [
-    entry.title,
-    entry.dek,
+  if (!needle) return { s: 1, snippet: "" };
+
+  const titleLow = entry.title.toLowerCase();
+  const dekLow = entry.dek.toLowerCase();
+  const metaHay = [
+    titleLow,
+    dekLow,
     entry.pillar,
     entry.template,
     ...entry.tags,
   ]
-    .join(" ")
-    .toLowerCase();
-  if (!hay.includes(needle)) {
-    // token-level fallback: every token must appear somewhere
+    .join(" ");
+  const bodyLow = entry.body.toLowerCase();
+
+  const titleHit = titleLow.includes(needle);
+  const dekHit = dekLow.includes(needle);
+  const metaHit = metaHay.includes(needle);
+  const bodyHit = bodyLow.includes(needle);
+
+  if (!titleHit && !metaHit && !bodyHit) {
+    // token-level fallback: every token must appear somewhere (meta OR body)
     const tokens = needle.split(/\s+/).filter(Boolean);
-    if (!tokens.every((t) => hay.includes(t))) return 0;
-    return 0.4;
+    const haystack = `${metaHay} ${bodyLow}`;
+    if (!tokens.every((t) => haystack.includes(t))) return empty;
+    return { s: 0.3, snippet: "" };
   }
-  // boost title hits
-  if (entry.title.toLowerCase().includes(needle)) return 2;
-  return 1;
+
+  // Build a snippet around the first body match
+  let snippet = "";
+  if (bodyHit) {
+    const idx = bodyLow.indexOf(needle);
+    const start = Math.max(0, idx - 60);
+    const end = Math.min(entry.body.length, idx + needle.length + 80);
+    const raw = entry.body.slice(start, end).replace(/\s+/g, " ").trim();
+    snippet = `${start > 0 ? "…" : ""}${raw}${end < entry.body.length ? "…" : ""}`;
+  }
+
+  let s = 0.4;
+  if (bodyHit) s = 0.8;
+  if (dekHit) s = 1.2;
+  if (metaHit && !bodyHit && !dekHit) s = 1;
+  if (titleHit) s = 2;
+  return { s, snippet };
 }
 
 export function SearchClient({ index }: { index: SearchEntry[] }) {
@@ -51,7 +77,10 @@ export function SearchClient({ index }: { index: SearchEntry[] }) {
 
   const results = useMemo(() => {
     return index
-      .map((e) => ({ entry: e, s: score(e, q) }))
+      .map((e) => {
+        const { s, snippet } = score(e, q);
+        return { entry: e, s, snippet };
+      })
       .filter((r) => r.s > 0)
       .sort((a, b) => {
         if (b.s !== a.s) return b.s - a.s;
@@ -59,8 +88,7 @@ export function SearchClient({ index }: { index: SearchEntry[] }) {
           new Date(b.entry.published).getTime() -
           new Date(a.entry.published).getTime()
         );
-      })
-      .map((r) => r.entry);
+      });
   }, [q, index]);
 
   return (
@@ -94,7 +122,7 @@ export function SearchClient({ index }: { index: SearchEntry[] }) {
         </div>
       ) : (
         <ul className="divide-y divide-rule border-y border-rule">
-          {results.map((r) => (
+          {results.map(({ entry: r, snippet }) => (
             <li key={r.slug}>
               <Link
                 href={r.href}
@@ -117,6 +145,11 @@ export function SearchClient({ index }: { index: SearchEntry[] }) {
                 {r.dek ? (
                   <p className="text-bone/70 mt-1 text-[14px] leading-snug">
                     {r.dek}
+                  </p>
+                ) : null}
+                {snippet ? (
+                  <p className="text-bone/55 mt-2 text-[13px] leading-snug font-mono">
+                    {snippet}
                   </p>
                 ) : null}
               </Link>

@@ -11,7 +11,7 @@ const instrumentSerif = Instrument_Serif({
   variable: "--font-serif",
   display: "swap",
 });
-import { SiteHeader, SiteFooter, KeyboardShortcuts, HeroReticle, Konami, JsonLd, WEBSITE_LD, PERSON_LD, RouterTransitions } from "@/components";
+import { SiteHeader, SiteFooter, KeyboardShortcuts, HeroReticle, Konami, JsonLd, WEBSITE_LD, PERSON_LD, RouterTransitions, AnalyticsTracker } from "@/components";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://sageafterdark.com"),
@@ -84,6 +84,7 @@ export default function RootLayout({
         <HeroReticle />
         <Konami />
         <RouterTransitions />
+        <AnalyticsTracker />
       </body>
     </html>
   );
