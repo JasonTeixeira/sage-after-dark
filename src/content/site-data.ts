@@ -168,8 +168,8 @@ export const ABOUT = {
   ],
   contact: [
     { label: "Email", value: "sage@sageideas.org", href: "mailto:sage@sageideas.org" },
-    { label: "Twitter / X", value: "@JasonTeixeira", href: "https://twitter.com/JasonTeixeira" },
     { label: "GitHub", value: "JasonTeixeira", href: "https://github.com/JasonTeixeira" },
+    { label: "LinkedIn", value: "in/jasonteixeira", href: "https://www.linkedin.com/in/jasonteixeira" },
     { label: "Sage Ideas", value: "sageideas.dev", href: "https://sageideas.dev" },
   ],
   principles: [
@@ -178,6 +178,182 @@ export const ABOUT = {
     "The infrastructure of low-trust collaboration is the only infrastructure worth investing in.",
     "Cadence > intensity.",
     "Pay your attention tax with care.",
+  ],
+};
+
+/* -----------------------------------------------------------
+ * Story arcs — multi-part series. Featured on home.
+ * --------------------------------------------------------- */
+export const ARCS = [
+  {
+    slug: "trayd-in-public",
+    code: "ARC_001",
+    title: "Trayd, In Public",
+    italic: "In Public",
+    episodes_done: 3,
+    episodes_total: 12,
+    status: "latest",
+    pull:
+      "The first ten paying contractors. The week the calls came in.",
+    summary:
+      "A twelve-episode field journal documenting the build, launch, and operation of Trayd — an AI companion for trades contractors. Every episode is a real chapter of a real product. The receipts are public. The mistakes are public. The numbers, when I can share them, are public.",
+    pillar: "build" as const,
+    started: "2026-03-10",
+    cadence: "weekly · fridays",
+    format: "long-form + primary docs",
+  },
+  {
+    slug: "becoming-a-studio",
+    code: "ARC_002",
+    title: "Becoming a Studio",
+    italic: "a Studio",
+    episodes_done: 1,
+    episodes_total: 8,
+    status: "latest",
+    pull:
+      "On pricing the work — what I charge, what I refuse, why.",
+    summary:
+      "What it actually takes to turn one operator into a studio of one — pricing, positioning, the kinds of clients you say no to, and the day the calendar fills.",
+    pillar: "world" as const,
+    started: "2026-04-04",
+    cadence: "biweekly",
+    format: "essay + ledger",
+  },
+  {
+    slug: "the-reading-list",
+    code: "ARC_003",
+    title: "The Reading List",
+    italic: "Reading List",
+    episodes_done: 4,
+    episodes_total: 12,
+    status: "latest",
+    pull:
+      "Borges, AI, and the unsettling math of the Library of Babel.",
+    summary:
+      "Books I'm reading and what they're doing to my thinking. Less review, more annotation. Twelve books, twelve essays, one year.",
+    pillar: "mind" as const,
+    started: "2026-01-01",
+    cadence: "monthly",
+    format: "essay + margin notes",
+  },
+];
+
+/* -----------------------------------------------------------
+ * Trayd, In Public — the 12-episode arc.
+ * --------------------------------------------------------- */
+export const TRAYD_EPISODES = [
+  {
+    n: "01",
+    kind: "PUBLISHED",
+    title: "“What if a contractor didn’t have to read?”",
+    summary:
+      "The first conversation that became Trayd. A drywall sub in Phoenix asked me a question that would not leave for three weeks. This is that question. The answer that emerged, and why bilingual voice was the obvious right thing.",
+    date: "22 MAR",
+    read: "15 MIN",
+    views: "4,108",
+    responses: "412",
+  },
+  {
+    n: "02",
+    kind: "PUBLISHED",
+    title: "The HVAC — first thesis.",
+    summary:
+      "Why we picked easy job. Why HVAC. Why bilingual from day one. Why the quiet math of $50/m fit, and the meeting where I almost picked plumbing and was wrong.",
+    date: "29 MAR",
+    read: "12 MIN",
+    views: "4,112",
+    responses: "33",
+  },
+  {
+    n: "03",
+    kind: "LIVE NOW",
+    title: "Why I rebuilt Trayd’s voice agent in a weekend.",
+    summary:
+      "The old stack hit 1.4s of round-trip latency on a Tuesday and I knew it had to go. What I didn’t expect was that the rewrite would teach me more about voice machines than five years of fintech ever did.",
+    date: "05 APR",
+    read: "12 MIN",
+    views: "3,109",
+    responses: "61",
+  },
+  {
+    n: "04",
+    kind: "SCHEDULED",
+    title: "The first ten paying contractors. The week the calls came in.",
+    summary:
+      "Onboarding ten companies in five days. The DM that opened the floodgates. What I got wrong. The Saturday that almost lost three of them. The voice I’d give a refund to even though they didn’t ask.",
+    date: "19 APR",
+    read: "EST · 18 MIN",
+    format: "LONG-FORM + DASHBOARD",
+  },
+  {
+    n: "05",
+    kind: "SCHEDULED",
+    title: "The data wall. What we know after a thousand calls.",
+    summary:
+      "A thousand voice calls in. What contractors actually ask. The five categories nobody predicted. The chart I’m going to live with for years.",
+    date: "26 APR",
+    read: "—",
+  },
+  {
+    n: "06",
+    kind: "DRAFTING",
+    title: "A bilingual product is two products. Both have to be great.",
+    summary:
+      "The translation problem nobody warned me about. Why “Spanish-first” and “Spanish toggle” are different products. The decision tree.",
+    date: "03 MAY",
+    read: "—",
+  },
+  {
+    n: "07",
+    kind: "PLANNED",
+    title: "Pricing · The first hire · The mistake · The number · The wall · The end of the arc.",
+    summary:
+      "Six chapters to come. A pricing essay, the question of when to stop being one person, the public mistake, the first ARR number I’ll share, the wall I’m going to hit, and the closing chapter that turns this whole arc into a printed PDF for the people who read it all.",
+    date: "SUMMER",
+    read: "—",
+  },
+];
+
+/* -----------------------------------------------------------
+ * Products — the day-job side of Sage Ideas.
+ * Shown on home in "By day, I ship production software" strip.
+ * --------------------------------------------------------- */
+export const PRODUCTS = [
+  {
+    code: "T",
+    name: "Trayd",
+    tagline: "AI companion for trades contractors · LIVE",
+    href: "https://trayd.app",
+    accent: "cyan" as const,
+  },
+  {
+    code: "A",
+    name: "Alphathreum",
+    tagline: "DeFi calculations + NL prompts · BETA",
+    href: "https://alphathreum.com",
+    accent: "ember" as const,
+  },
+  {
+    code: "N",
+    name: "Naural",
+    tagline: "AI tables for ops teams · PRIVATE",
+    href: "https://naural.app",
+    accent: "mute" as const,
+  },
+];
+
+/* -----------------------------------------------------------
+ * Now-playing tape strip — the rotating obsession marquee
+ * shown above the products section on home.
+ * --------------------------------------------------------- */
+export const NOW_PLAYING = {
+  status: "NOW PLAYING",
+  items: [
+    { kind: "album", label: "Reflection · Brian Eno" },
+    { kind: "book", label: "A Pattern Language · Alexander" },
+    { kind: "film", label: "Severance, S2 E04" },
+    { kind: "app", label: "Linear — Monthly Replant" },
+    { kind: "obs", label: "Pyrex glass" },
   ],
 };
 

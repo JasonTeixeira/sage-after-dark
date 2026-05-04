@@ -25,7 +25,8 @@ const FOOTER_LINKS = [
 
 const SOCIAL = [
   { label: "github", href: "https://github.com/JasonTeixeira" },
-  { label: "twitter", href: "https://twitter.com/JasonTeixeira" },
+  { label: "linkedin", href: "https://www.linkedin.com/in/jasonteixeira" },
+  { label: "sageideas.dev", href: "https://sageideas.dev" },
   { label: "email", href: "mailto:sage@sageideas.org" },
 ];
 

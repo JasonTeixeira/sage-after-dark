@@ -8,6 +8,8 @@
 // Typography
 export {
   Display,
+  EditorialDisplay,
+  EditorialHeading,
   H1,
   H2,
   H3,

@@ -31,6 +31,49 @@ export function Display({ className, children, ...rest }: Props) {
   );
 }
 
+/**
+ * EditorialDisplay — the big serif headline with italic accent.
+ * Used on the home hero and section openers.
+ * Compose with <em> for the gorgeous italic accent.
+ */
+export function EditorialDisplay({ className, children, ...rest }: Props) {
+  return (
+    <h1
+      {...rest}
+      className={cn(
+        "text-bone leading-[0.95] tracking-[-0.01em]",
+        "[font-family:var(--font-editorial)]",
+        "[font-size:clamp(3rem,8vw,6.5rem)]",
+        "[&_em]:text-cyan [&_em]:italic [&_em]:font-normal",
+        className,
+      )}
+    >
+      {children}
+    </h1>
+  );
+}
+
+/**
+ * EditorialHeading — smaller serif heading for section openers like
+ * "Story arcs, in progress." — italic accent via <em>.
+ */
+export function EditorialHeading({ className, children, ...rest }: Props & { as?: "h2" | "h3" }) {
+  return (
+    <h2
+      {...rest}
+      className={cn(
+        "text-bone leading-[1.05] tracking-[-0.005em]",
+        "[font-family:var(--font-editorial)]",
+        "[font-size:clamp(1.75rem,3.5vw,2.75rem)]",
+        "[&_em]:italic [&_em]:font-normal [&_em]:text-bone",
+        className,
+      )}
+    >
+      {children}
+    </h2>
+  );
+}
+
 export function H1({ className, children, ...rest }: Props) {
   return (
     <h1

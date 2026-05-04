@@ -1,7 +1,16 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
+import { Instrument_Serif } from "next/font/google";
 import "./globals.css";
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-serif",
+  display: "swap",
+});
 import { SiteHeader, SiteFooter, KeyboardShortcuts, HeroReticle, Konami } from "@/components";
 
 export const metadata: Metadata = {
@@ -43,7 +52,6 @@ export const metadata: Metadata = {
     title: "Sage After Dark",
     description:
       "A tactical-editorial publication by Jason Teixeira. Field notes from building Sage Ideas.",
-    creator: "@JasonTeixeira",
     images: [
       "/api/og?title=Sage%20After%20Dark&dek=Field%20notes%20from%20building%20in%20the%20open",
     ],
@@ -57,7 +65,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${GeistSans.variable} ${GeistMono.variable}`}
+      className={`${GeistSans.variable} ${GeistMono.variable} ${instrumentSerif.variable}`}
       suppressHydrationWarning
     >
       <body className="bg-ink-0 text-bone antialiased flex flex-col min-h-screen">

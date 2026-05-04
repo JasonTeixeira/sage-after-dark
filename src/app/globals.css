@@ -46,6 +46,7 @@
   /* Type stack — set by next/font on <html> as CSS variables */
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-editorial: var(--font-serif), "Iowan Old Style", "Hoefler Text", "Georgia", serif;
 
   /* Type scale — modular, tactical-editorial */
   --text-display: clamp(2.5rem, 6vw, 5rem);
