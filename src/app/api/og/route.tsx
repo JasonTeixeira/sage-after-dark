@@ -7,17 +7,14 @@
  *   - Pillar accent color + glow
  *   - Mini oscilloscope signal panel for visual continuity with the home
  *
- * Usage:
- *   /api/og?slug=why-we-roll-back
- *   /api/og?title=Custom%20title&pillar=mind&template=essay&date=2026-04-22
- *
- * Three "modes" determined by template:
- *   - essay        → big serif italic
- *   - tutorial     → mono prefix + serif title + "TUTORIAL · DIFFICULTY"
- *   - field_note   → smaller title + date dominant
+ * Fonts are self-hosted in public/_fonts/ and read at request time
+ * via the file system (Node runtime). Graceful system-serif fallback
+ * if the font files are missing.
  */
 
 import { ImageResponse } from "next/og";
+import { promises as fs } from "node:fs";
+import path from "node:path";
 import { getPostBySlug } from "@/content/loader";
 
 export const runtime = "nodejs";
@@ -52,45 +49,54 @@ const TEMPLATE_LABEL: Record<string, string> = {
   dispatch: "DISPATCH",
 };
 
-// Fetch Instrument Serif (italic) at request time. next/og needs ArrayBuffer.
-async function loadFonts(origin: string) {
-  const [serifItalic, serifRegular, mono] = await Promise.all([
-    fetch(
-      `${origin}/_fonts/InstrumentSerif-Italic.ttf`,
-    ).then((r) => (r.ok ? r.arrayBuffer() : null)),
-    fetch(
-      `${origin}/_fonts/InstrumentSerif-Regular.ttf`,
-    ).then((r) => (r.ok ? r.arrayBuffer() : null)),
-    fetch(
-      `${origin}/_fonts/JetBrainsMono-Regular.ttf`,
-    ).then((r) => (r.ok ? r.arrayBuffer() : null)),
-  ]).catch(() => [null, null, null]);
-  return { serifItalic, serifRegular, mono };
-}
+let _fontCache: { regular: ArrayBuffer; italic: ArrayBuffer } | null = null;
 
-// Google Fonts CSS API → return raw TTF bytes for a single weight/style.
-async function googleFontFile(
-  family: string,
-  italic = false,
-): Promise<ArrayBuffer | null> {
+async function loadFonts() {
+  if (_fontCache) return _fontCache;
   try {
-    const cssUrl = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(
-      family,
-    )}${italic ? ":ital@1" : ""}`;
-    const css = await fetch(cssUrl, {
-      headers: {
-        // Edge CDN gives us TTF only when UA looks like a desktop browser.
-        "User-Agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
-      },
-    }).then((r) => (r.ok ? r.text() : ""));
-    const m = css.match(/url\((https:[^)]+\.ttf)\)/);
-    if (!m) return null;
-    const buf = await fetch(m[1]).then((r) => (r.ok ? r.arrayBuffer() : null));
-    return buf;
+    const dir = path.join(process.cwd(), "public", "_fonts");
+    const [regular, italic] = await Promise.all([
+      fs.readFile(path.join(dir, "InstrumentSerif-Regular.ttf")),
+      fs.readFile(path.join(dir, "InstrumentSerif-Italic.ttf")),
+    ]);
+    _fontCache = {
+      regular: regular.buffer.slice(
+        regular.byteOffset,
+        regular.byteOffset + regular.byteLength,
+      ) as ArrayBuffer,
+      italic: italic.buffer.slice(
+        italic.byteOffset,
+        italic.byteOffset + italic.byteLength,
+      ) as ArrayBuffer,
+    };
+    return _fontCache;
   } catch {
     return null;
   }
+}
+
+/**
+ * Detect a stylish italic split point in a title.
+ * Strategy:
+ *   1. If title contains an em-dash, italicize everything after.
+ *   2. Else if title has 6+ words, italicize the last 1-2 words.
+ *   3. Else italicize the last word.
+ * Returns { head, italic } where head + " " + italic === title (approx).
+ */
+function splitForItalic(title: string): { head: string; italic: string } {
+  const dashMatch = title.split(/\s[—–]\s/);
+  if (dashMatch.length === 2) {
+    return { head: dashMatch[0] + " —", italic: dashMatch[1] };
+  }
+  const words = title.trim().split(/\s+/);
+  if (words.length >= 6) {
+    const tail = words.slice(-2).join(" ");
+    return { head: words.slice(0, -2).join(" "), italic: tail };
+  }
+  if (words.length >= 3) {
+    return { head: words.slice(0, -1).join(" "), italic: words[words.length - 1] };
+  }
+  return { head: "", italic: title };
 }
 
 export async function GET(req: Request) {
@@ -102,7 +108,6 @@ export async function GET(req: Request) {
   let template = searchParams.get("template") ?? "essay";
   let date = searchParams.get("date") ?? "";
   let dek = searchParams.get("dek") ?? "";
-  let italic = searchParams.get("italic") ?? "";
 
   if (slug) {
     const post = await getPostBySlug(slug);
@@ -116,36 +121,47 @@ export async function GET(req: Request) {
     }
   }
 
-  // Auto-detect italic phrase: last word group becomes the italic part.
-  // E.g. "I write at night." → italic = "night."
-  if (!italic) {
-    const m = title.match(/[\s—–-]([\w'']+[.!?]?)$/);
-    if (m && title.length > 12) italic = m[1];
-  }
-  const titleHead = italic ? title.slice(0, title.length - italic.length).trimEnd() : title;
+  const overrideHead = searchParams.get("head");
+  const overrideItalic = searchParams.get("italic");
+  const { head: titleHead, italic: titleItalic } = overrideItalic
+    ? { head: overrideHead ?? "", italic: overrideItalic }
+    : splitForItalic(title);
 
   const accent = PILLAR_COLORS[pillar] ?? PILLAR_COLORS.build;
   const pillarLabel = PILLAR_LABELS[pillar] ?? PILLAR_LABELS.build;
-  const templateLabel = TEMPLATE_LABEL[template] ?? template.toUpperCase().replace("_", " ");
+  const templateLabel =
+    TEMPLATE_LABEL[template] ?? template.toUpperCase().replace("_", " ");
 
-  // Load brand fonts. Best-effort with graceful fallback to system serif.
-  const [serifItalicBuf, serifRegularBuf] = await Promise.all([
-    googleFontFile("Instrument Serif", true),
-    googleFontFile("Instrument Serif", false),
-  ]);
+  const fontFiles = await loadFonts();
+  const fonts = fontFiles
+    ? [
+        {
+          name: "InstrumentSerif",
+          data: fontFiles.regular,
+          weight: 400 as const,
+          style: "normal" as const,
+        },
+        {
+          name: "InstrumentSerif",
+          data: fontFiles.italic,
+          weight: 400 as const,
+          style: "italic" as const,
+        },
+      ]
+    : undefined;
 
-  const fonts: Array<{ name: string; data: ArrayBuffer; weight: 400; style: "normal" | "italic" }> = [];
-  if (serifRegularBuf)
-    fonts.push({ name: "InstrumentSerif", data: serifRegularBuf, weight: 400, style: "normal" });
-  if (serifItalicBuf)
-    fonts.push({ name: "InstrumentSerif", data: serifItalicBuf, weight: 400, style: "italic" });
+  // Auto-size title so it never overflows.
+  const totalLen = title.length;
+  const titleFontSize = totalLen > 64 ? 84 : totalLen > 44 ? 102 : 118;
+  const dekTrimmed =
+    dek.length > 130 ? dek.slice(0, 130).trimEnd() + "…" : dek;
 
-  const titleFontSize = title.length > 80 ? 78 : title.length > 50 ? 92 : 110;
-
-  // Deterministic mini-oscilloscope bars (no Math.random — must be stable).
-  const bars = Array.from({ length: 48 }, (_, i) => {
-    const phase = (i * 31) % 100;
-    return 8 + (phase / 100) * 36;
+  // Deterministic mini-oscilloscope bars — sine-like envelope.
+  const bars = Array.from({ length: 56 }, (_, i) => {
+    const t = i / 55;
+    const env = Math.sin(t * Math.PI) * 0.7 + 0.3; // 0.3..1.0
+    const wave = Math.sin(i * 0.7) * 0.3 + 0.7; // ripple
+    return Math.max(6, env * wave * 42);
   });
 
   return new ImageResponse(
@@ -159,11 +175,11 @@ export async function GET(req: Request) {
           background: "#0A0E13",
           color: "#E8EAED",
           fontFamily: "InstrumentSerif, Georgia, serif",
-          padding: "56px 72px",
+          padding: "52px 72px",
           position: "relative",
         }}
       >
-        {/* Tactical grid */}
+        {/* Tactical grid backdrop */}
         <div
           style={{
             position: "absolute",
@@ -177,15 +193,15 @@ export async function GET(req: Request) {
           }}
         />
 
-        {/* Subtle accent glow top-right */}
+        {/* Soft accent glow top-right */}
         <div
           style={{
             position: "absolute",
-            top: -200,
-            right: -200,
-            width: 500,
-            height: 500,
-            background: `radial-gradient(circle, ${accent}22 0%, transparent 60%)`,
+            top: -240,
+            right: -240,
+            width: 560,
+            height: 560,
+            background: `radial-gradient(circle, ${accent}26 0%, transparent 60%)`,
           }}
         />
 
@@ -224,13 +240,13 @@ export async function GET(req: Request) {
           </div>
         </div>
 
-        {/* Pillar tag + template label */}
+        {/* Pillar tag + template */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
             gap: 16,
-            marginTop: 64,
+            marginTop: 56,
             zIndex: 1,
           }}
         >
@@ -266,17 +282,19 @@ export async function GET(req: Request) {
             display: "flex",
             flexWrap: "wrap",
             alignItems: "baseline",
-            marginTop: 28,
+            marginTop: 24,
             fontSize: titleFontSize,
-            lineHeight: 1.02,
+            lineHeight: 1.04,
             letterSpacing: "-0.015em",
             color: "#F5F7FA",
             zIndex: 1,
-            maxWidth: "92%",
+            maxWidth: "94%",
           }}
         >
-          <span style={{ display: "flex" }}>{titleHead}</span>
-          {italic ? (
+          {titleHead ? (
+            <span style={{ display: "flex" }}>{titleHead}</span>
+          ) : null}
+          {titleItalic ? (
             <span
               style={{
                 display: "flex",
@@ -285,30 +303,30 @@ export async function GET(req: Request) {
                 color: accent,
               }}
             >
-              {italic}
+              {titleItalic}
             </span>
           ) : null}
         </div>
 
-        {/* Dek */}
-        {dek ? (
+        {/* Dek (small, single line preferred) */}
+        {dekTrimmed ? (
           <div
             style={{
               display: "flex",
-              marginTop: 22,
-              fontSize: 26,
-              lineHeight: 1.35,
+              marginTop: 18,
+              fontSize: 23,
+              lineHeight: 1.32,
               color: "#A1A8B3",
-              maxWidth: "82%",
+              maxWidth: "78%",
               fontFamily: "Georgia, serif",
               zIndex: 1,
             }}
           >
-            {dek.length > 150 ? dek.slice(0, 150).trimEnd() + "…" : dek}
+            {dekTrimmed}
           </div>
         ) : null}
 
-        {/* Spacer pushes oscilloscope + footer down */}
+        {/* Spacer */}
         <div style={{ flex: 1 }} />
 
         {/* Mini oscilloscope */}
@@ -318,9 +336,9 @@ export async function GET(req: Request) {
             alignItems: "flex-end",
             gap: 4,
             height: 50,
-            marginBottom: 22,
+            marginBottom: 18,
             zIndex: 1,
-            opacity: 0.55,
+            opacity: 0.6,
           }}
         >
           {bars.map((h, i) => (
@@ -330,7 +348,7 @@ export async function GET(req: Request) {
                 width: 5,
                 height: h,
                 background: accent,
-                opacity: 0.4 + (i / bars.length) * 0.6,
+                opacity: 0.45 + (i / bars.length) * 0.55,
               }}
             />
           ))}
@@ -347,7 +365,7 @@ export async function GET(req: Request) {
             color: "#7A8290",
             letterSpacing: "0.1em",
             textTransform: "uppercase",
-            paddingTop: 22,
+            paddingTop: 18,
             borderTop: "1px solid rgba(232,234,237,0.12)",
             zIndex: 1,
           }}
@@ -357,6 +375,6 @@ export async function GET(req: Request) {
         </div>
       </div>
     ),
-    { ...size, fonts: fonts.length ? fonts : undefined },
+    { ...size, fonts },
   );
 }
