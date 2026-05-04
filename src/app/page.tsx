@@ -301,9 +301,9 @@ export default async function HomePage() {
                       >
                         #{num}
                       </div>
-                      <h4 className="mt-3 text-bone leading-snug font-sans text-[16px] group-hover:text-cyan transition-colors">
+                      <h3 className="mt-3 text-bone leading-snug font-sans text-[16px] group-hover:text-cyan transition-colors">
                         {p.frontmatter.title}
-                      </h4>
+                      </h3>
                       {p.frontmatter.dek && (
                         <p className="mt-2 text-bone/70 leading-relaxed text-[13px] line-clamp-3">
                           {p.frontmatter.dek}

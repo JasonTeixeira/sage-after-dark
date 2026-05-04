@@ -18,7 +18,7 @@
   /* Text scale */
   --color-bone: #E8E6E0;
   --color-mute: #8A8F98;
-  --color-faint: #4F5563;
+  --color-faint: #6B7280; /* bumped from #4F5563 — hits ~4.6:1 on ink-0 */
 
   /* Accents — restraint required */
   --color-cyan: #00E5FF;
