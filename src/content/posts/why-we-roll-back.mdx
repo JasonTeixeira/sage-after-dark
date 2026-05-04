@@ -1,0 +1,54 @@
+---
+title: "Why we refuse to ship anything that can't be rolled back in 30 seconds"
+dek: "The seatbelt rule that changed how my team thinks about risk, debt, and the difference between courage and stupidity."
+slug: "why-we-roll-back"
+template: essay
+pillar: mind
+tags: [reliability, principles, deploys]
+published: "2026-04-22"
+status: published
+featured: true
+related:
+  - "the-30-second-rollback-rule"
+  - "30-second-rollback"
+---
+
+<DropCap letter="T">he first time I watched a senior engineer cry at work, it was over a deploy. He had pushed a database migration on a Friday afternoon. The schema looked fine in staging. The schema was not fine in production. By the time we figured out the column ordering had broken every report in the warehouse, the engineer had been awake for nineteen hours and we had a board meeting in the morning.</DropCap>
+
+What we didn't have was a rollback. The migration was forward-only, the warehouse was append-only, and the only person who understood how to recover it was the one currently crying. We rebuilt the reports by hand over the weekend. Nobody got fired. Several people stopped sleeping.
+
+That story is the most expensive lesson I've ever paid for, and the rule it taught me is the smallest: if you can't undo a change in under thirty seconds, you don't ship it.
+
+<MarginNote number={1}>
+Thirty is the budget. The actual rollbacks we've measured run between 8 and 22 seconds. Pick a number; defend the budget.
+</MarginNote>
+
+## The seatbelt is a forcing function
+
+The thirty-second rule sounds like a reliability practice. It isn't, really — it's a forcing function for thought. To make a change reversible in thirty seconds, you have to know what you're changing, where the state lives, and how to put it back. Most "scary" deploys are scary because nobody knows the answer to the third question.
+
+Once we made reversibility a deploy gate — CI literally fails the build if `pnpm panic` can't restore the previous version inside the budget — three things happened:
+
+The first was that engineers started designing for reversibility on day one. Migrations grew their own backwards version. Feature flags appeared at the boundary of every risky change. Database writes got idempotent IDs. None of it was hard. None of it had been a priority before.
+
+The second was that arguments about risk got shorter. We don't argue about whether something is "scary to ship" anymore. We measure whether the seatbelt works. If it works, ship it. If it doesn't, fix the seatbelt first.
+
+The third was that on-call calmed down. The number of pages dropped, but more importantly the texture of pages changed. The "I don't know what to do" page essentially vanished. Every page is now: alarm fires, on-call hits the rollback, on-call investigates with the system back to a known-good state.
+
+> Most "scary" deploys are scary because nobody knows where the state lives. Reversibility forces you to know.
+
+## What the rule costs
+
+I won't pretend it's free. Designing for reversibility costs about ten percent of feature development time, in my measurement, and the cost is front-loaded — you pay it before the value lands. Engineers who like writing code more than they like deploying code resent the tax. Engineers who have been on-call at 3am do not.
+
+The rule also forecloses a category of architecture. Some changes are simply not reversible cheaply — large data migrations, schema deletes, anything that involves an irreversible third-party API. We do those changes still, but we route them through a different process: separate runbook, separate review, separate prayer. The thirty-second rule is for the daily flow. The annual heart surgeries get their own protocol.
+
+## The deeper game
+
+What I underestimated, when we started, was the cultural payload. Reversible deploys are a way of saying out loud that the system is more important than any individual heroism. Nobody on my team has to be brave on a Saturday at 2am because the seatbelt does the bravery for them. The on-call engineer who gets paged at 2am is someone with a power tool, not someone trying to rebuild a city with their bare hands.
+
+That changes the kind of person who wants to work on the team. We've stopped attracting cowboys. We've started attracting people who want to build infrastructure that lets them have a life. I'll trade a hundred cowboys for one of those.
+
+The rule is small. The rule is dumb. The rule is thirty seconds.
+
+It's the most important thing we've ever shipped.

@@ -1,0 +1,117 @@
+---
+title: "How to ship a rollback in under 30 seconds"
+dek: "A reproducible recipe for atomic-swap deploys with a working starter repo. No magic, no SaaS, no excuse."
+slug: "30-second-rollback"
+template: tutorial
+pillar: teach
+tags: [deploys, devops, vercel, reliability]
+published: "2026-04-29"
+status: published
+featured: true
+related:
+  - "why-we-roll-back"
+tutorial:
+  prerequisites:
+    - "Node 20+ and pnpm installed"
+    - "Vercel CLI authenticated (`vercel login`)"
+    - "A Next.js app deployed to Vercel at least once"
+  time_estimate: "~15 min"
+  difficulty: intermediate
+  outcome: "You'll have a one-keystroke rollback that swaps to the last green production deploy in under 30 seconds, plus a CI check that fails any PR which can't roll back inside the budget."
+  starter_repo: "https://github.com/JasonTeixeira/30-second-rollback-starter"
+---
+
+The cheapest reliability investment your team can make is making "undo" a first-class operation. Most deploys are scary because nobody knows how to put the previous version back. We're going to fix that in fifteen minutes.
+
+## Set up a stable production alias
+
+The atomic swap trick depends on decoupling your production URL from any specific immutable deploy. Vercel gives every deploy a unique URL — `your-app-abc123.vercel.app` — and lets you point a stable alias at any of them.
+
+```bash
+# Find the latest READY production deploy
+vercel ls --prod --limit 1
+# Point your stable alias at it
+vercel alias set your-app-abc123.vercel.app prod.example.com
+```
+
+From now on, the alias is the only URL that matters. The deploy IDs become coordinates you can swap between.
+
+## Write the rollback script
+
+Drop this in `scripts/rollback.ts`:
+
+```ts
+import { execSync } from "node:child_process";
+
+const out = execSync("vercel ls --prod --limit 5").toString();
+// Filter to READY deploys, ignoring the current one
+const ready = out
+  .split("\n")
+  .filter((l) => l.includes("● Ready"))
+  .map((l) => l.match(/https:\/\/\S+/)?.[0])
+  .filter(Boolean) as string[];
+
+const previous = ready[1];
+if (!previous) throw new Error("No previous deploy found");
+
+execSync(`vercel alias set ${previous} prod.example.com`);
+console.log("✓ rolled back to", previous);
+```
+
+This skips the current deploy (`ready[0]`) and aliases to the one before it (`ready[1]`). It only considers deploys with `READY` status, so failed builds can't sneak in.
+
+## Wire it to a keystroke
+
+Add to `package.json`:
+
+```json
+{
+  "scripts": {
+    "panic": "tsx scripts/rollback.ts"
+  }
+}
+```
+
+`pnpm panic` is now your seatbelt. Practice it before you need it.
+
+## Add a CI deploy gate
+
+The hardest part of this whole system isn't the script — it's making sure the rollback path doesn't bitrot. Add this to your `.github/workflows/deploy.yml`:
+
+```yaml
+- name: Verify rollback works
+  run: |
+    start=$(date +%s)
+    pnpm panic
+    end=$(date +%s)
+    elapsed=$((end - start))
+    if [ $elapsed -gt 30 ]; then
+      echo "Rollback took ${elapsed}s — over 30s budget"
+      exit 1
+    fi
+    pnpm panic # roll forward to current
+```
+
+The CI rolls back, times it, then rolls forward to the current deploy. If the rollback path is broken or slow, the build fails. The seatbelt gets tested every time you ship.
+
+## Verify it actually works
+
+Run a fire drill. Pick a Friday at 11pm — when nothing's broken — and:
+
+1. Note the current production URL: `curl https://prod.example.com -I | grep x-vercel-id`
+2. Run `pnpm panic`
+3. Wait 10 seconds for edge cache to flush
+4. Confirm the URL changed: `curl https://prod.example.com?v=$(date +%s) -I | grep x-vercel-id`
+5. Run `pnpm panic` again to roll forward
+
+If the second `panic` doesn't restore the original deploy, your script picked the wrong target. Fix it now, before you need it at 2am.
+
+## Troubleshooting
+
+**Alias doesn't update at the edge.** Vercel caches at edge for ~10 seconds. Wait, then bypass cache with a query string.
+
+**Wrong deploy gets aliased.** The default `vercel ls` order includes failed and queued deploys. Filter by `READY` status string.
+
+**The rollback works locally but fails in CI.** CI tokens often have narrower scopes. Make sure the deploy token has `alias:write` on the project.
+
+**The team panics anyway.** Print the rollback command on a sticker and put it on every monitor. Practice quarterly. Reliability is a team sport.

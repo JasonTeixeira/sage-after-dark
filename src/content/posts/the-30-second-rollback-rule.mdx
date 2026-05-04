@@ -1,0 +1,21 @@
+---
+title: "The 30-second rollback rule"
+dek: "If you can't undo it that fast, don't ship it. Make 'undo' a deploy gate, not a guideline."
+slug: "the-30-second-rollback-rule"
+template: dispatch
+pillar: signal
+tags: [reliability, principles]
+published: "2026-04-30"
+status: published
+featured: false
+---
+
+A dispatch makes one move. Here's the move:
+
+We don't ship anything that can't be rolled back in under 30 seconds. Not as a guideline — as a deploy gate. CI runs `pnpm panic` against the new deploy on every pull request and fails the build if the rollback can't restore the previous version inside the budget.
+
+That single test changes the whole conversation about risk. We don't argue about whether a change is "scary." We measure whether the seatbelt works.
+
+Two years in, we've used the rollback five times in production. Average time to restore: 14 seconds. The rule pays its rent.
+
+If your stack can't roll back fast, your stack has a feature gap, not a culture gap. Fix the stack.

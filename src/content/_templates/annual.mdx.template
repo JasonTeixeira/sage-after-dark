@@ -1,0 +1,56 @@
+---
+# ─────────────────────────────────────────────────────────────
+# ANNUAL · multi-page magazine artifact, end-of-year review
+# ─────────────────────────────────────────────────────────────
+# Use for: the once-a-year long read. Magazine-style hero,
+# section dividers, photo essay capability, multi-column where
+# warranted. 5,000+ words is fine. This template is heavy by
+# design — annuals should feel like an event.
+# ─────────────────────────────────────────────────────────────
+
+title: "Annual: 2026"
+dek: "What I built, what I learned, what I'd do over."
+slug: "annual-2026"
+
+template: annual
+pillar: mind
+tags: [retro, annual]
+
+published: "2026-12-31"
+status: draft
+featured: true
+
+related: []
+---
+
+<DropCap letter="A">nnuals are the cathedral of the blog. Once a year, you stop, you take stock, you write the long thing. The opener should feel like the first page of a magazine — confident, slow, sure of itself.</DropCap>
+
+The dek paragraph carries forward — the second beat of the cathedral. Set the stakes. Promise the journey.
+
+---
+
+## I. What I built
+
+The first chapter. Use H2s as chapter markers. Keep individual sections at essay length — 800–1,500 words.
+
+> A pull-quote inside an annual gets to be operatic. Use the one sentence you most want carved on something.
+
+## II. What I learned
+
+The reflective chapter. Numbered lessons work well here.
+
+1. The lesson stated as a one-line aphorism
+2. The receipt — the story or data that taught it
+3. The next move — what you'll change because of it
+
+## III. What I'd do over
+
+The vulnerable chapter. List the regrets. Write them like a friend would tell them at a bar at 1am.
+
+## IV. The next year
+
+The forward-looking chapter. Three to five concrete bets you're making — public enough that people can hold you to them.
+
+---
+
+A closing image. One paragraph. No "thanks for reading."

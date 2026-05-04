@@ -72,13 +72,14 @@ export default function Home() {
 
           <Lead className="mt-8">
             Every primitive is built, typed, and on display at{" "}
-            <a href="/dev" className="text-cyan hover:underline">/dev</a>. Phases 2 through 5
-            assemble what already exists.
+            <a href="/dev" className="text-cyan hover:underline">/dev</a>. Phase 2 ships the
+            content engine — six post templates and the first essays already live.
           </Lead>
 
           <div className="mt-10 flex flex-wrap items-center gap-4">
-            <ButtonLink href="/dev" variant="primary">▸ View component library</ButtonLink>
-            <ButtonLink href="https://github.com/JasonTeixeira/sage-after-dark" variant="outline">
+            <ButtonLink href="/templates" variant="primary">▸ Browse the templates</ButtonLink>
+            <ButtonLink href="/dev" variant="outline">Component library</ButtonLink>
+            <ButtonLink href="https://github.com/JasonTeixeira/sage-after-dark" variant="ghost">
               GitHub
             </ButtonLink>
           </div>

@@ -1,0 +1,45 @@
+---
+# ─────────────────────────────────────────────────────────────
+# FIELD NOTE · monthly notebook spread, sketches encouraged
+# ─────────────────────────────────────────────────────────────
+# Use for: monthly retros, "what I've been seeing" entries, raw
+# notebook pages. 600–1,200 words. Lots of small headings. No
+# drop cap. Notebook spread aesthetic — looser, more personal.
+# ─────────────────────────────────────────────────────────────
+
+title: "Field note: April"
+dek: "What I read, what I shipped, what I noticed."
+slug: "field-note-april-2026"
+
+template: field_note
+pillar: signal
+tags: [retro, monthly]
+
+published: "2026-05-01"
+status: draft
+featured: false
+
+related: []
+---
+
+A two-sentence frame. What month it covers, what mood it's in.
+
+### What I shipped
+
+- Migrated three customer accounts off the legacy queue
+- Wrote 12,000 words of essays, kept 4,000
+- Killed two side projects (good)
+
+### What I read
+
+- *Working in Public* — Nadia Eghbal · still the most useful book on open source
+- *The Mom Test* — Rob Fitzpatrick · skim it again every six months
+- ~30 essays on the Substack "Construction Physics"
+
+### What I noticed
+
+A small observation about the work, the industry, the people. Field notes are for the things that don't justify their own essay yet.
+
+### What I'm tracking next month
+
+A short list. Three to five items. Hold yourself to it.

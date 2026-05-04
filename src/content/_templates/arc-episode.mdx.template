@@ -1,0 +1,49 @@
+---
+# ─────────────────────────────────────────────────────────────
+# ARC EPISODE · numbered, prev/next/index nav, episode counter
+# ─────────────────────────────────────────────────────────────
+# Use for: serialized writing — "Trayd, In Public," "The Quiet
+# Year," etc. Each episode declares which arc it belongs to and
+# its number. The layout shows EP 03 / 12 in the strip and links
+# to the arc index page.
+# ─────────────────────────────────────────────────────────────
+
+title: "EP 03 · The first pricing call I lost on purpose"
+dek: "Notes from the third week of building Trayd in public."
+slug: "trayd-ep-03-pricing-call"
+
+template: arc_episode
+pillar: build
+tags: [trayd, sales, founders]
+
+published: "2026-05-04"
+status: draft
+featured: false
+
+related: []
+
+# ─── Arc-specific (REQUIRED for template: arc_episode) ───
+arc:
+  arc_slug: "trayd-in-public"
+  arc_title: "Trayd, In Public"
+  episode: 3
+  total_episodes: 12
+---
+
+A two-sentence opener that catches you up if you missed the last episode but doesn't bore the people who didn't.
+
+## The setup
+
+The narrative beat. Where we left off, what changed this week.
+
+## The decision
+
+The choice you made and why. Show the receipts — the email, the Slack thread, the spreadsheet.
+
+## What it cost
+
+Be honest about the price. Money, time, sleep, relationships.
+
+## What's next
+
+A one-line teaser for next episode that promises something specific without spoiling.

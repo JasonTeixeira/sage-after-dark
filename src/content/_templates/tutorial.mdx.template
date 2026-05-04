@@ -1,0 +1,88 @@
+---
+# ─────────────────────────────────────────────────────────────
+# TUTORIAL · how-to, prereqs box, step counter, outcome box
+# ─────────────────────────────────────────────────────────────
+# Use for: "build X in Y minutes" guides. Tutorials own the //teach
+# pillar by default. Always include a prerequisites list, time
+# estimate, difficulty, and the post-condition outcome. Each H2
+# becomes a numbered step automatically.
+# ─────────────────────────────────────────────────────────────
+
+title: "How to ship a rollback in under 30 seconds"
+dek: "A reproducible recipe for atomic swap deploys with a working starter repo."
+slug: "30-second-rollback"
+
+template: tutorial
+pillar: teach
+tags: [deploys, devops, reliability]
+
+published: "2026-05-04"
+# updated:
+
+status: draft
+featured: false
+
+related:
+  - "why-we-roll-back"
+
+# ─── Tutorial-specific (REQUIRED for template: tutorial) ───
+tutorial:
+  prerequisites:
+    - "Node 20+ and pnpm installed"
+    - "Vercel CLI authenticated (`vercel login`)"
+    - "A Next.js app deployed at least once"
+  time_estimate: "~15 min"
+  difficulty: intermediate
+  outcome: "You'll have a one-keystroke rollback that swaps to the last green deploy in under 30 seconds."
+  starter_repo: "https://github.com/sageideas/30-second-rollback-starter"
+---
+
+A short paragraph framing the problem. Why this matters, what hurts when you don't have it, what you'll have when we're done.
+
+## Set up the deploy alias
+
+Each H2 is a step. Open the project root and create a stable alias that always points at production.
+
+```bash
+vercel alias set $(vercel ls --prod | head -1) prod.example.com
+```
+
+The alias decouples the URL from the immutable deploy ID — that decoupling is the entire trick.
+
+## Write the rollback script
+
+Drop this in `scripts/rollback.ts`:
+
+```ts
+import { execSync } from "node:child_process";
+
+const previous = execSync("vercel ls --prod --limit 2 | tail -1")
+  .toString()
+  .trim();
+
+execSync(`vercel alias set ${previous} prod.example.com`);
+console.log("✓ rolled back to", previous);
+```
+
+## Wire it to a keystroke
+
+Add to `package.json`:
+
+```json
+{
+  "scripts": {
+    "panic": "tsx scripts/rollback.ts"
+  }
+}
+```
+
+`pnpm panic` is now your seatbelt.
+
+## Verify it actually works
+
+Run `pnpm panic` against a known-good deploy on a Friday at 11pm before you need it on a Saturday at 2am. Time it. If it's slower than 30 seconds, the alias is wrong.
+
+## Troubleshooting
+
+**Alias doesn't update:** Vercel caches at the edge for ~10s. Wait, then re-curl with `?v=$(date +%s)`.
+**Wrong deploy gets aliased:** `vercel ls` orders by recency including failed deploys. Filter by `READY`.

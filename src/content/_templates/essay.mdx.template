@@ -1,0 +1,68 @@
+---
+# ─────────────────────────────────────────────────────────────
+# ESSAY · long-form, drop cap, margin notes, related posts
+# ─────────────────────────────────────────────────────────────
+# Use for: argued positions, manifestos, deep-dives where the
+# point lives in the prose. 1,200–4,000 words. One pull-quote
+# every ~700 words. Margin notes for asides you'd cut otherwise.
+#
+# Copy this file to src/content/posts/<your-slug>.mdx and edit.
+# ─────────────────────────────────────────────────────────────
+
+# Identity
+title: "The provocative thesis that names a real tension"
+dek: "One sub-headline sentence that earns the click without spoiling the punchline."
+slug: "the-provocative-thesis"
+
+# Taxonomy — see src/lib/tokens.ts for pillar colors
+template: essay
+pillar: mind            # build · signal · mind · world · taste · learning · teach
+tags: [thinking, craft, opinion]
+
+# Dates — ISO format, UTC
+published: "2026-05-04"
+# updated: "2026-05-12"
+
+# Status
+status: draft           # draft · published · archived
+featured: false
+
+# Optional
+# og_image: "/og/the-provocative-thesis.png"
+# canonical: "https://example.com/original"
+# soundtrack: "https://open.spotify.com/album/..."
+related:                # slugs of related posts
+  - "another-essay"
+  - "a-tutorial-that-pairs-well"
+---
+
+<DropCap letter="T">he opening paragraph carries the entire essay. It states the thesis without hedging, drops a concrete image, and earns the next paragraph. No throat-clearing. No "in this post we will explore." The drop cap renders only on the first paragraph.</DropCap>
+
+The second paragraph proves you mean it. Here you cite the receipt — the data, the war story, the quote. Margin notes float on the right at lg+ and inline below the paragraph on mobile.
+
+<MarginNote number={1}>
+Margin notes are for the asides you'd cut from a magazine version. Keep them under 40 words.
+</MarginNote>
+
+## A heading is a promise
+
+The H2 reframes the section. Each section runs 200–500 words. Don't go longer without a payoff.
+
+> A pull-quote is reserved for the one sentence you'd put on a t-shirt. Use it sparingly — once per ~700 words, never twice in a row.
+
+Continue the argument. End the section with a sentence that earns the next H2.
+
+## Receipts, not vibes
+
+Use real numbers, real screenshots, real quotes. Inline `code` for terms of art, fenced blocks for actual code.
+
+```ts
+// Show the smallest version that proves the point.
+function rollback(deployId: string) {
+  return atomicSwap(currentVersion, previous(deployId));
+}
+```
+
+## Land the plane
+
+The closer restates the thesis in a sharper form than the opener. One image. One sentence. No "in conclusion."

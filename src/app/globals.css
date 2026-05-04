@@ -138,3 +138,58 @@ a {
 .cursor-blink {
   animation: cursor-blink 1s steps(2, end) infinite;
 }
+
+/* ============================================================
+   Tutorial step counter — H2s inside .tutorial-steps auto-number
+   ============================================================ */
+
+.tutorial-steps {
+  counter-reset: step;
+}
+.tutorial-steps h2 {
+  counter-increment: step;
+  position: relative;
+  padding-left: 3.5rem;
+}
+.tutorial-steps h2::before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0.4em;
+  font-family: var(--font-mono);
+  font-size: 0.7em;
+  letter-spacing: 0.08em;
+  color: var(--color-cyan);
+  border: 1px solid var(--color-cyan);
+  padding: 0.25rem 0.5rem;
+  line-height: 1;
+}
+
+/* ============================================================
+   Field-note prose — H3s get a tactical tick
+   ============================================================ */
+
+.fieldnote-prose h3 {
+  position: relative;
+  padding-left: 1.4rem;
+}
+.fieldnote-prose h3::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  top: 0.05em;
+  color: var(--color-cyan);
+  font-family: var(--font-mono);
+}
+
+/* ============================================================
+   Annual prose — bigger, slower
+   ============================================================ */
+
+.annual-prose h2 {
+  margin-top: 4rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-rule);
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+}
