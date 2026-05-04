@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Sage After Dark · Theme tokens
+   These map design tokens into Tailwind v4 utilities.
+   ============================================================ */
+
+@theme {
+  /* Background / surface scale */
+  --color-ink-0: #05070A;
+  --color-ink-1: #0A0E14;
+  --color-ink-2: #11161E;
+
+  /* Hairlines & rules */
+  --color-rule: #1C232E;
+  --color-rule-hi: #2A3340;
+
+  /* Text scale */
+  --color-bone: #E8E6E0;
+  --color-mute: #8A8F98;
+  --color-faint: #4F5563;
+
+  /* Accents — restraint required */
+  --color-cyan: #00E5FF;
+  --color-ember: #F59E0B;
+
+  /* Pillar colors — used only as borders, chips, progress bars */
+  --color-pillar-build: #00E5FF;
+  --color-pillar-signal: #F59E0B;
+  --color-pillar-mind: #A78BFA;
+  --color-pillar-world: #34D399;
+  --color-pillar-taste: #F472B6;
+  --color-pillar-learning: #A3E635;
+  --color-pillar-teach: #EAB308;
+
+  /* Type stack — set by next/font on <html> as CSS variables */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Type scale — modular, tactical-editorial */
+  --text-display: clamp(2.5rem, 6vw, 5rem);
+  --text-h1: clamp(2rem, 4.5vw, 3.5rem);
+  --text-h2: clamp(1.5rem, 3vw, 2.25rem);
+  --text-h3: 1.375rem;
+  --text-body: 1.0625rem; /* 17px — editorial reading size */
+  --text-small: 0.9375rem;
+  --text-tactical: 0.75rem; /* mono/uppercase */
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 400ms;
+}
+
+/* ============================================================
+   Base layer
+   ============================================================ */
+
+html {
+  background: var(--color-ink-0);
+  color: var(--color-bone);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: var(--font-sans);
+  /* Numerals: lining + tabular for status strips, scores, dates */
+  font-feature-settings: "ss01", "cv11";
+}
+
+body {
+  background: var(--color-ink-0);
+  color: var(--color-bone);
+  font-size: var(--text-body);
+  line-height: 1.65;
+  font-family: var(--font-sans);
+}
+
+/* Selection */
+::selection {
+  background: var(--color-cyan);
+  color: var(--color-ink-0);
+}
+
+/* Default link */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Focus — accessibility floor */
+:focus-visible {
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   Subtle background grid — 24px tactical grid at ~1% alpha
+   ============================================================ */
+
+.tactical-grid {
+  background-image:
+    linear-gradient(to right, rgba(0, 229, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 229, 255, 0.025) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* ============================================================
+   Tactical text utility — uppercase mono labels
+   ============================================================ */
+
+.text-tactical {
+  font-family: var(--font-mono);
+  font-size: var(--text-tactical);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Cursor blink — used in terminal prompts */
+@keyframes cursor-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: cursor-blink 1s steps(2, end) infinite;
+}
