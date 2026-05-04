@@ -90,9 +90,8 @@ export function EssayStickyBar({
       aria-label="Subscribe to Sage After Dark"
       className={cn(
         "fixed bottom-0 left-0 right-0 z-40 border-t border-rule bg-ink-0/95 backdrop-blur-md",
-        "[print-color-adjust:exact] data-[print-hide=true]:hidden",
+        "print:hidden",
       )}
-      data-print-hide
     >
       <div className="max-w-[88rem] mx-auto px-4 sm:px-8 py-3 flex items-center gap-3">
         <span className="hidden sm:flex h-2 w-2 rounded-full bg-cyan animate-pulse shrink-0" />
