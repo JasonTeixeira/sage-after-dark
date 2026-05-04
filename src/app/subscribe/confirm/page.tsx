@@ -42,13 +42,14 @@ export default async function ConfirmPage() {
           <TerminalPrompt path="/subscribe/confirm" mode="live" />
           <StripSep />
           <span>SUBSCRIPTION · CONFIRMED</span>
-          <span className="ml-auto flex items-center gap-3">
+          <span className="ml-auto hidden md:flex items-center gap-3">
             <span className="text-cyan">● HANDSHAKE OK</span>
             <StripSep />
             <span>YEAR {counts.yearLabel.replace("Year ", "")}</span>
             <StripSep />
             <span>SUBSCRIBERS · {counts.subscribersLabel}</span>
           </span>
+          <span className="ml-auto md:hidden text-cyan">● HANDSHAKE OK</span>
         </TacticalStrip>
       </Container>
 

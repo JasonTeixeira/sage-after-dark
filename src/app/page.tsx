@@ -55,8 +55,8 @@ export default async function HomePage() {
         <TacticalStrip variant="live">
           <TerminalPrompt path="/sageafterdark" mode="live" />
           <StripSep />
-          <span>ONE-PERSON STUDIO</span>
-          <span className="ml-auto flex items-center gap-3">
+          <span className="truncate">ONE-PERSON STUDIO</span>
+          <span className="ml-auto hidden md:flex items-center gap-3">
             <span>EST {counts.yearLabel.toUpperCase()} · 2026</span>
             <StripSep />
             <span>SUBSCRIBERS · {counts.subscribersLabel}</span>
@@ -68,6 +68,7 @@ export default async function HomePage() {
             <span>SEARCH</span>
             <span className="bg-rule-hi px-1.5 py-0.5 text-faint">/</span>
           </span>
+          <span className="ml-auto md:hidden">ESSAYS · {counts.postsLabel}</span>
         </TacticalStrip>
       </Container>
 

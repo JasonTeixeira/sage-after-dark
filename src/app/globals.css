@@ -371,3 +371,11 @@ html[data-reading-mode="parchment"] ::selection {
   border-bottom: 1px solid var(--color-rule);
   font-size: clamp(1.75rem, 3.5vw, 2.5rem);
 }
+
+/* ============================================================
+   Mobile overflow guard + scrollbar utilities
+   ============================================================ */
+html, body { overflow-x: hidden; }
+
+.scrollbar-none::-webkit-scrollbar { display: none; }
+.scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }

@@ -66,7 +66,7 @@ export default function TastePage() {
           <TerminalPrompt path="sageafterdark.com/taste" mode="breadcrumb" />
           <StripSep />
           <span>NOW PLAYING · UPDATES</span>
-          <span className="ml-auto flex items-center gap-3">
+          <span className="ml-auto hidden md:flex items-center gap-3">
             <span>UPDATED · {updated.toUpperCase()}</span>
             <StripSep />
             <span>SPOTIFY</span>
@@ -75,6 +75,7 @@ export default function TastePage() {
             <StripSep />
             <span>GOODREADS</span>
           </span>
+          <span className="ml-auto md:hidden">UPDATED · {updated.toUpperCase()}</span>
         </TacticalStrip>
 
         {/* Hero */}

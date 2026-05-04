@@ -31,7 +31,7 @@ export function TacticalStrip({
   return (
     <div
       className={cn(
-        "flex items-center gap-3 px-3 py-2",
+        "flex items-center gap-3 px-3 py-2 min-w-0 overflow-x-auto whitespace-nowrap scrollbar-none",
         "bg-ink-1 border border-rule",
         "font-mono text-[10px] uppercase tracking-[0.08em] tabular-nums",
         "text-mute",

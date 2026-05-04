@@ -113,7 +113,7 @@ export default async function ArchivePage({
           <span>{counts.yearLabel.toUpperCase()} · ESSAYS · {counts.postsLabel}</span>
           <StripSep />
           <span>ACTIVE ARCS · {String(activeArcsCount).padStart(2, "0")}</span>
-          <span className="ml-auto flex items-center gap-3">
+          <span className="ml-auto hidden md:flex items-center gap-3">
             <span>FILTER · F</span>
             <StripSep />
             <span>SEARCH</span>
