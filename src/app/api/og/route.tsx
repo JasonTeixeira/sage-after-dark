@@ -153,8 +153,9 @@ export async function GET(req: Request) {
   // Auto-size title so it never overflows.
   const totalLen = title.length;
   const titleFontSize = totalLen > 64 ? 84 : totalLen > 44 ? 102 : 118;
+  // Keep dek to a single line at this width; punchy beats complete.
   const dekTrimmed =
-    dek.length > 130 ? dek.slice(0, 130).trimEnd() + "…" : dek;
+    dek.length > 95 ? dek.slice(0, 92).trimEnd() + "…" : dek;
 
   // Deterministic mini-oscilloscope bars — sine-like envelope.
   const bars = Array.from({ length: 56 }, (_, i) => {
@@ -335,10 +336,11 @@ export async function GET(req: Request) {
             display: "flex",
             alignItems: "flex-end",
             gap: 4,
-            height: 38,
-            marginBottom: 14,
+            height: 32,
+            marginBottom: 18,
+            marginTop: 8,
             zIndex: 1,
-            opacity: 0.5,
+            opacity: 0.45,
           }}
         >
           {bars.map((h, i) => (
