@@ -17,7 +17,7 @@ export const NOW = {
     "Ship Trayd v2 paywall + checkout flow",
     "Write EP 02 of Trayd, In Public (subject: the first pricing call I lost on purpose)",
     "Record one tutorial: atomic-swap deploys end-to-end",
-    "First 100 newsletter subscribers — currently 43",
+    "First 100 newsletter subscribers — founding window now open",
   ],
   reading: ["Working in Public — Nadia Eghbal", "The Mom Test — Rob Fitzpatrick"],
   listening: ["Floating Points — Promises", "Nils Frahm — All Melody"],

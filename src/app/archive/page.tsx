@@ -24,6 +24,7 @@ import {
 import { getAllPosts } from "@/content/loader";
 import { ARCS } from "@/content/site-data";
 import type { PillarKey } from "@/lib/tokens";
+import { getSiteCounts } from "@/lib/live-counts";
 import Link from "next/link";
 
 export const metadata = {
@@ -90,14 +91,17 @@ export default async function ArchivePage({
     count: allPosts.filter((post) => post.frontmatter.template === f).length,
   })).filter((f) => f.count > 0);
 
-  // Stats
-  const totalWords = allPosts.reduce((acc, p) => acc + p.word_count, 0);
-  const activeArcsCount = ARCS.filter(
-    (a) => a.episodes_done < a.episodes_total,
+  // Stats — every number sourced from getSiteCounts (real corpus + Resend audience).
+  const counts = await getSiteCounts();
+  const totalWords = counts.totalWords;
+  const activeArcsCount = counts.activeArcs;
+  const inProgress = ARCS.filter(
+    (a) => a.episodes_done > 0 && a.episodes_done < a.episodes_total,
   ).length;
-  const subscribers = "9.4k"; // aspirational; from strategy doc — wire to real count later
-  const readThrough = "71%"; // aspirational
-  const totalEssaysDisplay = 217; // strategy-doc target visual
+  const completed = ARCS.filter((a) => a.episodes_done >= a.episodes_total).length;
+
+  // Word-count of the longest published post — a real "depth" stat.
+  const longest = allPosts.reduce((m, p) => Math.max(m, p.word_count ?? 0), 0);
 
   return (
     <Page>
@@ -106,7 +110,7 @@ export default async function ArchivePage({
         <TacticalStrip>
           <TerminalPrompt path="sageafterdark.com/archive" mode="breadcrumb" />
           <StripSep />
-          <span>EST ESSAYS · {String(totalEssaysDisplay).padStart(3, "0")}</span>
+          <span>{counts.yearLabel.toUpperCase()} · ESSAYS · {counts.postsLabel}</span>
           <StripSep />
           <span>ACTIVE ARCS · {String(activeArcsCount).padStart(2, "0")}</span>
           <span className="ml-auto flex items-center gap-3">
@@ -129,18 +133,41 @@ export default async function ArchivePage({
             The <em>archive.</em>
           </EditorialDisplay>
           <Lead className="[font-family:var(--font-sans)]">
-            Two hundred seventeen essays since the first transmission. Filter by
-            pillar, arc, or month. Or just scroll.
+            {counts.totalPosts} {counts.totalPosts === 1 ? "essay" : "essays"}
+            {" "}since the first transmission — {counts.yearLabel.toLowerCase()} of
+            a one-person studio writing in public. Filter by pillar, arc, or
+            month. Or just scroll.
           </Lead>
         </header>
 
-        {/* Stats panel */}
+        {/* Stats panel — all numbers come from getSiteCounts (real). */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-12">
-          <StatCell label="Total essays" value={String(totalEssaysDisplay)} delta="+12 THIS MONTH" />
-          <StatCell label="Words published" value={`${Math.round(totalWords / 1000) || 412}k`} delta="+8 ROUND" />
-          <StatCell label="Active arcs" value={String(activeArcsCount).padStart(2, "0")} delta={`${ARCS.length} IN PROGRESS · 1 DONE`} />
-          <StatCell label="Subscribers" value={subscribers} delta="+12 / WK" tone="cyan" />
-          <StatCell label="Avg read-through" value={readThrough} delta="≈ 4 PT" />
+          <StatCell
+            label="Total essays"
+            value={String(counts.totalPosts)}
+            delta={`+${counts.postsThisMonth} THIS MONTH`}
+          />
+          <StatCell
+            label="Words published"
+            value={counts.wordsLabel}
+            delta={`AVG ${counts.avgWords.toLocaleString()} / POST`}
+          />
+          <StatCell
+            label="Active arcs"
+            value={String(activeArcsCount).padStart(2, "0")}
+            delta={`${inProgress} IN PROGRESS · ${completed} DONE`}
+          />
+          <StatCell
+            label="Subscribers"
+            value={counts.subscribersLabel}
+            delta={counts.founding ? "FOUNDING WINDOW" : "+ THIS WEEK"}
+            tone="cyan"
+          />
+          <StatCell
+            label="Longest essay"
+            value={longest ? longest.toLocaleString() : "—"}
+            delta={longest ? "WORDS" : "NONE YET"}
+          />
         </div>
 
         {/* Two-column layout: filter sidebar + list */}

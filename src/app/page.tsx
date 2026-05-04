@@ -35,17 +35,17 @@ import {
 import { getAllPosts } from "@/content/loader";
 import { NOW, ARCS, PRODUCTS, NOW_PLAYING } from "@/content/site-data";
 import { pillar as pillarTokens } from "@/lib/tokens";
+import { getSiteCounts } from "@/lib/live-counts";
 
 const PILLAR_LABELS = ["build", "signal", "mind", "world", "taste"] as const;
 
 export default async function HomePage() {
   const posts = await getAllPosts();
+  const counts = await getSiteCounts();
   const featured = posts.find((p) => p.frontmatter.featured) ?? posts[0];
   const dispatches = posts
     .filter((p) => p.frontmatter.slug !== featured?.frontmatter.slug)
     .slice(0, 4);
-  const postCount = posts.length;
-  const totalNumber = 217; // total essays counter from strategy doc
 
   return (
     <Page>
@@ -56,11 +56,11 @@ export default async function HomePage() {
           <StripSep />
           <span>ONE-PERSON STUDIO</span>
           <span className="ml-auto flex items-center gap-3">
-            <span>EST 2026</span>
+            <span>EST {counts.yearLabel.toUpperCase()} · 2026</span>
             <StripSep />
-            <span>NEWSLETTER · {Math.floor(43)}</span>
+            <span>SUBSCRIBERS · {counts.subscribersLabel}</span>
             <StripSep />
-            <span>ESSAYS · {String(postCount).padStart(3, "0")}</span>
+            <span>ESSAYS · {counts.postsLabel}</span>
             <StripSep />
             <span>LOG IN</span>
             <StripSep />
@@ -248,12 +248,13 @@ export default async function HomePage() {
               href="/archive"
               className="font-mono text-[11px] uppercase tracking-[0.08em] text-cyan hover:text-bone transition-colors hidden md:inline-flex"
             >
-              SEE ARCHIVE · {String(postCount).padStart(3, "0")} →
+              SEE ARCHIVE · {counts.postsLabel} →
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {dispatches.map((p, i) => {
-              const num = totalNumber - i;
+              // Real transmission number = position in published order, newest = totalPosts.
+              const num = counts.totalPosts - i;
               return (
                 <Link
                   key={p.frontmatter.slug}
@@ -284,7 +285,7 @@ export default async function HomePage() {
                       <div className="mt-auto pt-4 flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.08em] text-faint">
                         <span>{format(new Date(p.frontmatter.published), "dd MMM").toUpperCase()}</span>
                         <span>· {p.reading_minutes} MIN</span>
-                        <span className="ml-auto text-cyan">● {200 + ((num * 37) % 700)}</span>
+                        <span className="ml-auto text-cyan">● {p.word_count.toLocaleString()} W</span>
                       </div>
                     </div>
                   </NotchedCard>
