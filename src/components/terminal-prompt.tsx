@@ -27,18 +27,18 @@ export function TerminalPrompt({
   return (
     <div
       className={cn(
-        "inline-flex items-center gap-2 font-mono text-[13px] tabular-nums",
+        "inline-flex items-center gap-2 font-mono text-[13px] tabular-nums min-w-0 max-w-full",
         "text-mute",
         className,
       )}
     >
-      <span className="text-cyan">
+      <span className="text-cyan shrink-0">
         {user}@{host}
       </span>
-      <span className="text-rule-hi">~</span>
-      <span className="text-bone">{path}</span>
+      <span className="text-rule-hi shrink-0" aria-hidden="true">~</span>
+      <span className="text-bone truncate min-w-0">{path}</span>
       {mode === "live" && (
-        <span className="cursor-blink ml-0.5 inline-block h-3 w-1.5 bg-cyan align-middle" />
+        <span className="cursor-blink ml-0.5 inline-block h-3 w-1.5 bg-cyan align-middle shrink-0" aria-hidden="true" />
       )}
     </div>
   );
