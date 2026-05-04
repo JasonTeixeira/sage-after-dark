@@ -161,6 +161,14 @@ html[data-reading-mode="parchment"] article a {
   text-decoration-thickness: 1px;
   text-underline-offset: 2px;
 }
+/* Heading anchors (rehype-autolink-headings wraps headings in <a>) shouldn't get underlines */
+html[data-reading-mode="parchment"] [data-highlightable] h1 a,
+html[data-reading-mode="parchment"] [data-highlightable] h2 a,
+html[data-reading-mode="parchment"] [data-highlightable] h3 a,
+html[data-reading-mode="parchment"] [data-highlightable] h4 a {
+  color: inherit !important;
+  text-decoration: none !important;
+}
 /* Floating TOC + header readable in parchment */
 html[data-reading-mode="parchment"] nav[aria-label="Table of contents"],
 html[data-reading-mode="parchment"] nav[aria-label="Table of contents"] * {
