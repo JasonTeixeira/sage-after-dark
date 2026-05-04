@@ -15,6 +15,7 @@ import { mdxComponents } from "@/content/mdx-components";
 import { LAYOUT_BY_TEMPLATE } from "@/components/layouts";
 import { Paywall } from "@/components/paywall";
 import { JsonLd, articleLd, breadcrumbsLd } from "@/components/json-ld";
+import { EssayStickyBar } from "@/components/essay-sticky-bar";
 import { getSessionEmail } from "@/lib/auth";
 import { memberStatus } from "@/lib/supabase";
 import type { Metadata } from "next";
@@ -134,22 +135,26 @@ export default async function PostPage({
       {showPaywall ? (
         <Paywall pillar={post.frontmatter.pillar} signedIn={signedIn} />
       ) : (
-        <MDXRemote
-          source={post.source}
-          components={mdxComponents}
-          options={{
-            mdxOptions: {
-              remarkPlugins: [remarkGfm],
-              rehypePlugins: [
-                rehypeSlug,
-                [
-                  rehypeAutolinkHeadings,
-                  { behavior: "wrap", properties: { className: ["heading-anchor"] } },
+        <>
+          <MDXRemote
+            source={post.source}
+            components={mdxComponents}
+            options={{
+              mdxOptions: {
+                remarkPlugins: [remarkGfm],
+                rehypePlugins: [
+                  rehypeSlug,
+                  [
+                    rehypeAutolinkHeadings,
+                    { behavior: "wrap", properties: { className: ["heading-anchor"] } },
+                  ],
                 ],
-              ],
-            },
-          }}
-        />
+              },
+            }}
+          />
+          {/* Sticky bottom subscribe bar — shows after 50% scroll, dismissible. */}
+          <EssayStickyBar source={`essay:${fm.slug}`} />
+        </>
       )}
     </Layout>
   );

@@ -30,6 +30,7 @@ import {
   NotchedCard,
   Reticle,
   NewsletterForm,
+  HeroSubscribe,
   Reveal,
 } from "@/components";
 import { getAllPosts } from "@/content/loader";
@@ -105,6 +106,31 @@ export default async function HomePage() {
               >
                 · Explore the arcs
               </Link>
+            </div>
+
+            {/* In-hero subscribe — premium one-line CLI capture */}
+            <div className="mt-10 max-w-[44ch]">
+              <div className="mb-3 flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.12em] text-faint">
+                <span className="text-cyan">●</span>
+                <span>FOUNDING WINDOW · OPEN</span>
+                <span className="text-rule-hi">·</span>
+                <span>SUBSCRIBE</span>
+              </div>
+              <HeroSubscribe source="home_hero" />
+              <ul className="mt-4 space-y-1.5 text-[12px] text-mute font-mono">
+                <li>
+                  <span className="text-cyan">▸</span>{" "}
+                  One essay or one field note · every Sunday
+                </li>
+                <li>
+                  <span className="text-cyan">▸</span>{" "}
+                  What I&apos;m reading + one thing I shipped that week
+                </li>
+                <li>
+                  <span className="text-cyan">▸</span>{" "}
+                  Zero growth-hacks · unsubscribe in one click
+                </li>
+              </ul>
             </div>
           </section>
 
