@@ -1,0 +1,39 @@
+---
+title: "Field note: February"
+dek: "Two outages, one apology email, and a surprisingly good week off."
+slug: "field-note-february-2026"
+template: field_note
+pillar: signal
+tags: [retro, monthly, incidents]
+published: "2026-02-28"
+status: published
+featured: false
+---
+
+February had two production incidents. Both were our fault. Both were fixable. One took eleven minutes to resolve; the other took two hours and cost us three customers we'll probably never get back. I'm more interested in the differences than the similarities.
+
+The eleven-minute incident had three things going for it: a clear alert that named the problem, a runbook we'd written in December and actually maintained, and an on-call engineer who'd been through something similar before. The two-hour incident had none of those. The alert fired on a symptom, not a cause. The runbook was out of date by four months. The person paged had never seen this failure mode before. By the time we understood what was wrong, the damage was done.
+
+The lesson isn't "write runbooks" — everyone knows that. The lesson is that runbooks decay and almost no one schedules the work to refresh them.
+
+### What I shipped
+
+- **Trayd incident runbook refresh** — after the February outages, I blocked a full day and went through every runbook we had. Rewrote four of them, deleted two that no longer applied, added three new ones. Set a quarterly calendar reminder to do it again.
+- **Apology email to affected customers** — I wrote this myself. Not a template, not marketing's version. Direct, specific, no passive voice, no "we apologize for any inconvenience." Here's what broke, here's how long it was broken, here's what we changed so it won't happen again. Six people replied to say thank you. That's not nothing.
+- **A week off** — I took a week off in the second half of February. First real week off in eighteen months. I didn't work. I read, walked, and ate breakfast at a normal pace. The product did not collapse.
+
+### What I read
+
+- *The Phoenix Project* — Gene Kim, Kevin Behr, George Spafford · The fiction format is dated but the incident response patterns in chapters 14–17 are still the most useful compressed version of "why fires keep happening" I've read.
+- *Accelerate* — Nicole Forsgren, Jez Humble, Gene Kim · Chapter on change failure rate. Our change failure rate in February was higher than it had been in six months. This book gave me the vocabulary to say why.
+- *How to Take a Vacation as a Founder* — not a book, a blog post I can't remember the URL for. The advice: tell your team three weeks in advance, write down the ten things only you know, give someone else the decision rights for the week. I did all three. It worked.
+
+### What I noticed
+
+The two-hour incident happened because we had a dependency we didn't know was fragile. A third-party data sync had been running reliably for eight months, so we stopped watching it. The moment it broke, we had no context — no metrics, no history, no prior examples. Reliability without observability is just luck that hasn't run out yet.
+
+The week off confirmed something I'd been told but hadn't believed: the stuff I thought only I could handle mostly handled itself. The two things that actually needed me waited. The rest resolved without my involvement. I came back to a list of decisions I'd been holding up for want of focus, made them in an afternoon, and closed the backlog. The week off made the week after more productive than any week I'd had in the previous month.
+
+The apology email is still the thing I'm proudest of from February. Transparency isn't a communications strategy. It's a choice about what kind of company you want to run.
+
+**February score: 6/10.** Two incidents is two too many. The runbook work and the week off mean March will be better. The apology email was right.

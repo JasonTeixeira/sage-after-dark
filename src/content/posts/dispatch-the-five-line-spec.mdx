@@ -1,0 +1,31 @@
+---
+title: "The five-line spec"
+dek: "Most features deserve a sticky note, not a doc."
+slug: "dispatch-the-five-line-spec"
+template: dispatch
+pillar: build
+tags: [specs, focus, principles]
+published: "2026-04-15"
+status: published
+featured: false
+---
+
+Every spec template I've tried had the same failure mode: the format filled itself in. You create sections because sections feel responsible. You add a background section, a success metrics section, a stakeholder matrix. Before long, the spec is twelve pages and the feature is still not built. Worse, the spec has the appearance of rigor without the substance of it.
+
+The five-line spec came from desperation. I needed to decide on four features in one afternoon and couldn't afford to write four documents. So I wrote each one on a sticky note.
+
+The format I landed on:
+
+```
+Problem:      One sentence. What's broken or missing for whom.
+Smallest fix: One sentence. The minimum thing that addresses it.
+Done when:    One sentence. The observable outcome that closes this.
+Won't do:     One sentence. The adjacent thing we're explicitly cutting.
+Rollback:     One sentence. How we undo this if it's wrong.
+```
+
+Five lines. Every line forced. No filler.
+
+The "Won't do" line is the most important one. Writing it forces a decision you'd otherwise defer until the middle of the build, when it costs ten times as much to make. The "Rollback" line forces you to think about failure before you're committed, which is the only time you'll think about it honestly.
+
+If you can't fill in all five lines in fifteen minutes, you don't understand the feature yet. Long specs don't show rigor — they hide uncertainty under volume.

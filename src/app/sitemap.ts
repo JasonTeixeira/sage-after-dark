@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getAllPosts } from "@/content/loader";
+import { getAllPosts, getAllTags, getAllSeries } from "@/content/loader";
 
 const SITE = "https://www.sageafterdark.com";
 
@@ -23,6 +23,9 @@ const STATIC_PATHS = [
   "/reading",
   "/search",
   "/templates",
+  "/best",
+  "/tags",
+  "/series",
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -49,5 +52,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: p.frontmatter.featured ? 0.8 : 0.7,
   }));
 
-  return [...staticEntries, ...pillarEntries, ...postEntries];
+  const tags = await getAllTags();
+  const series = await getAllSeries();
+
+  const tagEntries: MetadataRoute.Sitemap = tags.map((t) => ({
+    url: `${SITE}/tags/${encodeURIComponent(t.tag)}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.4,
+  }));
+
+  const seriesEntries: MetadataRoute.Sitemap = series.map((s) => ({
+    url: `${SITE}/series/${s.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.5,
+  }));
+
+  return [
+    ...staticEntries,
+    ...pillarEntries,
+    ...postEntries,
+    ...tagEntries,
+    ...seriesEntries,
+  ];
 }

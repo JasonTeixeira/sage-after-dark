@@ -1,0 +1,106 @@
+---
+title: "Shipping a killable feature"
+dek: "How to launch something you might delete in two weeks — without breaking trust."
+slug: "tutorial-shipping-a-killable-feature"
+template: tutorial
+pillar: build
+tags: [tutorial, deploys, reliability]
+published: "2026-04-08"
+status: published
+featured: false
+tutorial:
+  prerequisites:
+    - "A feature flag system (LaunchDarkly, Unleash, or a homemade table works)"
+    - "A way to read flag state on both client and server"
+  time_estimate: "~25 min"
+  difficulty: "intermediate"
+  outcome: "You'll be able to ship a feature behind a kill-switch, measure it for 14 days, and remove it (or commit) without a panic."
+---
+
+Shipping something you might delete is the honest version of shipping. Most features that survive long-term started as experiments where the team gave themselves an out. The discipline isn't in the code — it's in the ritual you run around the flag.
+
+Here's the full pattern I use. Adapt the specifics to your stack; the shape holds across tools.
+
+### Step 1: Name the flag with a sunset date
+
+Before writing a line of code, create the flag with a date in the name.
+
+```
+feature_new_dashboard_2026_05_01
+```
+
+The date is not a deadline — it's a forcing function. When May 1st arrives, someone has to make a decision: ship it, extend it, or kill it. Without the date in the name, flags outlive their authors. I've inherited flags from engineers who left the company, running on production, with no one able to explain what they did. A named date makes the flag self-auditing.
+
+### Step 2: Gate it server-side first
+
+Wrap the feature at the data layer before touching the UI. If your flag controls a new endpoint or query path, gate the server logic first.
+
+```typescript
+const flagEnabled = await flags.get('feature_new_dashboard_2026_05_01', userId)
+if (!flagEnabled) return existingHandler(req, res)
+return newHandler(req, res)
+```
+
+Gating server-side means a kill-switch actually kills the feature — not just hides it. A UI-only gate that still runs the underlying logic is a cosmetic kill-switch. It won't protect you when something breaks at 2am.
+
+### Step 3: Log every exposure
+
+Every time the flag is evaluated and returns `true`, log it. The event should include: user ID, timestamp, flag name, and the variant (if you're running A/B). This is your measurement foundation.
+
+```typescript
+if (flagEnabled) {
+  analytics.track('flag_exposed', {
+    flag: 'feature_new_dashboard_2026_05_01',
+    userId,
+    variant: 'new'
+  })
+}
+```
+
+Without exposure logging, you can't answer "how many users actually saw this?" — which means you can't answer "did it work?" Build the logging before you build the feature.
+
+### Step 4: Gate the UI with the same flag
+
+Once the server gate is in place, add the client-side gate. Pass the flag state from your server response or from a client SDK, and render conditionally.
+
+```tsx
+{flagEnabled && <NewDashboard />}
+```
+
+The UI gate should use the same flag state that the server evaluated — not a separate evaluation. Two independent evaluations of the same flag can diverge under network conditions or caching, and they will diverge at the worst possible moment.
+
+### Step 5: Run the 14-day measurement window
+
+The flag exists for 14 days. During that window, watch three numbers:
+
+- **Adoption rate** — what percentage of exposed users actually use the feature? Under 10% on day 7 is a warning sign.
+- **Error rate** — is the new path producing more errors than the old one? Compare flag-exposed users to unexposed.
+- **Qualitative signal** — are support tickets rising? Are users asking questions that indicate confusion? Metrics lie; tickets don't.
+
+Schedule the decision review on the calendar the day you ship. Don't wing it at the 14-day mark.
+
+### Step 6: The deletion ritual
+
+If you kill the feature, don't just flip the flag to `false`. Delete the code. All of it — the handler, the component, the database migration if you can safely reverse it, the flag definition itself. Remove the exposure log calls last.
+
+A dead flag with live code is not a deletion — it's a coma. The code will sit there, un-tested, un-maintained, slowly diverging from the rest of the system until someone accidentally enables it and breaks something they can't explain.
+
+The deletion ritual:
+1. Set flag to `false` for 100% of users
+2. Watch error rate for 30 minutes
+3. Delete the guarded code
+4. Delete the flag from the flag system
+5. Archive the exposure data (don't delete it — you'll want the learning later)
+6. Write one sentence in the commit message about why it was killed
+
+### Step 7: The commit path
+
+If the feature survives 14 days and you're keeping it, commit it properly. Remove the flag gate, move the new handler from behind the condition to the main path, delete the old handler, and update the tests.
+
+Don't leave the flag in place as a "just in case" switch. A flag that will never be flipped is documentation debt. The commit is the signal that this feature is now load-bearing and will be maintained.
+
+### What you have now
+
+A feature that was built to be reversed. The flag name tells you when the decision is due. The server gate means the kill-switch actually kills. The exposure logging means you have data before you make the call. The deletion ritual means "we killed it" leaves no ghost code behind. And the commit path means "we kept it" is a real commitment, not a flag you forgot about.
+
+Most features that fail do so silently — they stay on because no one scheduled the decision to turn them off. This pattern forces the decision onto the calendar the day it ships.

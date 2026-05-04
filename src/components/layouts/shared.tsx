@@ -72,12 +72,13 @@ export function PostHeader({ post }: { post: Post }) {
       {fm.tags.length > 0 && (
         <div className="mt-6 flex flex-wrap gap-2">
           {fm.tags.map((t) => (
-            <span
+            <Link
               key={t}
-              className="font-mono text-[10px] uppercase tracking-[0.08em] text-mute border border-rule px-2 py-1"
+              href={`/tags/${encodeURIComponent(t)}`}
+              className="font-mono text-[10px] uppercase tracking-[0.08em] text-mute border border-rule px-2 py-1 hover:text-cyan hover:border-cyan/40 transition-colors"
             >
-              {t}
-            </span>
+              #{t}
+            </Link>
           ))}
         </div>
       )}

@@ -15,6 +15,9 @@ import {
 
 const FOOTER_LINKS = [
   { label: "essays", href: "/archive" },
+  { label: "best", href: "/best" },
+  { label: "tags", href: "/tags" },
+  { label: "series", href: "/series" },
   { label: "now", href: "/now" },
   { label: "taste", href: "/taste" },
   { label: "reading", href: "/reading" },

@@ -100,6 +100,61 @@ export async function getPostsByTemplate(
   return all.filter((p) => p.frontmatter.template === template);
 }
 
+/* -----------------------------------------------------------
+ * Tag helpers — power /tags/[tag] dynamic routes.
+ * --------------------------------------------------------- */
+
+export async function getAllTags(): Promise<{ tag: string; count: number }[]> {
+  const all = await getAllPosts();
+  const counts: Record<string, number> = {};
+  for (const p of all) {
+    for (const t of p.frontmatter.tags) counts[t] = (counts[t] ?? 0) + 1;
+  }
+  return Object.entries(counts)
+    .map(([tag, count]) => ({ tag, count }))
+    .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
+}
+
+export async function getPostsByTag(tag: string): Promise<Post[]> {
+  const all = await getAllPosts();
+  const lower = tag.toLowerCase();
+  return all.filter((p) =>
+    p.frontmatter.tags.some((t) => t.toLowerCase() === lower),
+  );
+}
+
+/* -----------------------------------------------------------
+ * Series helpers — thematic groupings (looser than arcs).
+ * --------------------------------------------------------- */
+
+export async function getAllSeries(): Promise<
+  { slug: string; title: string; count: number }[]
+> {
+  const all = await getAllPosts();
+  const map = new Map<string, { slug: string; title: string; count: number }>();
+  for (const p of all) {
+    const s = p.frontmatter.series;
+    if (!s) continue;
+    const existing = map.get(s.slug);
+    if (existing) existing.count += 1;
+    else map.set(s.slug, { slug: s.slug, title: s.title, count: 1 });
+  }
+  return Array.from(map.values()).sort((a, b) => b.count - a.count);
+}
+
+export async function getPostsBySeries(slug: string): Promise<Post[]> {
+  const all = await getAllPosts();
+  return all
+    .filter((p) => p.frontmatter.series?.slug === slug)
+    .sort(
+      (a, b) =>
+        (a.frontmatter.series?.order ?? 999) -
+          (b.frontmatter.series?.order ?? 999) ||
+        new Date(a.frontmatter.published).getTime() -
+          new Date(b.frontmatter.published).getTime(),
+    );
+}
+
 export async function getArcEpisodes(arcSlug: string): Promise<Post[]> {
   const all = await getAllPosts();
   return all

@@ -99,6 +99,16 @@ export const FrontmatterSchema = z
     soundtrack: z.string().url().optional(), // Spotify/Apple Music link
     related: z.array(z.string()).default([]), // slugs
 
+    // series — optional grouping for multi-part essays (different from arcs).
+    // arcs are numbered episode chains; series are loose thematic groupings.
+    series: z
+      .object({
+        slug: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/),
+        title: z.string(),
+        order: z.number().int().nonnegative().optional(),
+      })
+      .optional(),
+
     // template-specific (validated conditionally below)
     tutorial: TutorialMetaSchema.optional(),
     arc: ArcMetaSchema.optional(),
