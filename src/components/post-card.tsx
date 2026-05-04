@@ -79,7 +79,6 @@ export function PostCard({
       <Link href={href} className="group block focus:outline-none">
         <NotchedCard
           notch="tl"
-          label={`//${fm.pillar}`}
           pillarKey={fm.pillar}
           className="h-full"
           interactive
@@ -115,7 +114,6 @@ export function PostCard({
     <Link href={href} className="group block focus:outline-none h-full">
       <NotchedCard
         notch="tl"
-        label={`//${fm.pillar}`}
         pillarKey={fm.pillar}
         className="h-full"
         interactive

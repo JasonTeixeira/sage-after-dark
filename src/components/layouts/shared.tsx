@@ -99,7 +99,6 @@ export async function RelatedPosts({ slugs }: { slugs: string[] }) {
           >
             <NotchedCard
               notch="tl"
-              label={`//${p.frontmatter.pillar}`}
               pillarKey={p.frontmatter.pillar}
               className="h-full"
               interactive

@@ -45,7 +45,7 @@ export default function ColophonPage() {
 
         <Section label="// the stack">
           <NotchedCard notch="tl" label="STACK" pillarKey="build">
-            <ul className="divide-y divide-rule">
+            <ul className="divide-y divide-rule pt-2">
               {COLOPHON.stack.map((s) => (
                 <li
                   key={s.tier}

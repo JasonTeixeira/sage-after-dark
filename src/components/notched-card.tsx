@@ -49,16 +49,20 @@ export function NotchedCard({
     }
   })();
 
-  const labelPos = (() => {
+  // Label is positioned just past the bevel — outside the clipped surface
+  // region so it never overlaps the card's padded content.
+  const labelStyle = (() => {
+    const off = size + 8; // 8px past the bevel terminus
     switch (notch) {
       case "tl":
-        return "top-2 left-2";
+        return { top: "6px", left: `${off}px` } as const;
       case "tr":
-        return "top-2 right-2";
+        return { top: "6px", right: `${off}px` } as const;
       case "bl":
-        return "bottom-2 left-2";
+        return { bottom: "6px", left: `${off}px` } as const;
       case "br":
-        return "bottom-2 right-2";
+      default:
+        return { bottom: "6px", right: `${off}px` } as const;
     }
   })();
 
@@ -90,19 +94,30 @@ export function NotchedCard({
           margin: "1px",
         }}
       >
-        {label && (
-          <div
-            className={cn(
-              "absolute font-mono uppercase tracking-[0.08em] text-cyan/80",
-              "text-[10px] leading-none pointer-events-none",
-              labelPos,
-            )}
-          >
-            {label}
-          </div>
-        )}
         {children}
       </div>
+      {/*
+        Corner label — rendered OUTSIDE the clipped surface, anchored to the
+        notch edge so it sits in the bevel zone rather than overlapping the
+        card's padded content. Pillar-tinted when pillarKey is set so it reads
+        as part of the corner stamp.
+      */}
+      {label && (
+        <div
+          className={cn(
+            "absolute font-mono uppercase tracking-[0.08em]",
+            "text-[10px] leading-none pointer-events-none select-none",
+            !pillarKey && "text-cyan/80",
+          )}
+          style={{
+            ...labelStyle,
+            color: pillarKey ? pillar[pillarKey] : undefined,
+          }}
+          aria-hidden="true"
+        >
+          {label}
+        </div>
+      )}
     </div>
   );
 }

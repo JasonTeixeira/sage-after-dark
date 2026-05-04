@@ -175,7 +175,6 @@ export default async function HomePage() {
               >
                 <NotchedCard
                   notch="tl"
-                  label={p.label}
                   pillarKey={p.key}
                   className="h-full"
                   interactive

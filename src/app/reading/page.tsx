@@ -65,7 +65,7 @@ export default function ReadingPage() {
                 label={`// ${shelf.shelf.toLowerCase()}`}
               >
                 <NotchedCard notch="tl" label="SHELF" pillarKey={pillar}>
-                  <ul className="divide-y divide-rule">
+                  <ul className="divide-y divide-rule pt-2">
                     {shelf.items.map((item, i) => (
                       <li
                         key={`${shelf.shelf}-${i}`}
