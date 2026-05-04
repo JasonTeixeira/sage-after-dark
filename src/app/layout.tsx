@@ -40,7 +40,7 @@ export const metadata: Metadata = {
       "A tactical-editorial publication by Jason Teixeira. Field notes from building Sage Ideas.",
     images: [
       {
-        url: "/api/og?title=Sage%20After%20Dark&dek=Field%20notes%20from%20building%20in%20the%20open",
+        url: "/api/og?head=I%20write&italic=at%20night.&pillar=signal&template=essay&dek=After-hours%20essays%20from%20a%20one-person%20studio.",
         width: 1200,
         height: 630,
         alt: "Sage After Dark",
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     description:
       "A tactical-editorial publication by Jason Teixeira. Field notes from building Sage Ideas.",
     images: [
-      "/api/og?title=Sage%20After%20Dark&dek=Field%20notes%20from%20building%20in%20the%20open",
+      "/api/og?head=I%20write&italic=at%20night.&pillar=signal&template=essay&dek=After-hours%20essays%20from%20a%20one-person%20studio.",
     ],
   },
   robots: { index: true, follow: true },
