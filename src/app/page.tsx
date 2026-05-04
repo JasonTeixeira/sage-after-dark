@@ -1,4 +1,21 @@
-import { pillar } from "@/lib/tokens";
+import {
+  Page,
+  Container,
+  Section,
+  Display,
+  H2,
+  Body,
+  Lead,
+  Caption,
+  Tactical,
+  Reticle,
+  TerminalPrompt,
+  StripSep,
+  PillarTag,
+  PillarBorder,
+  ButtonLink,
+} from "@/components";
+import type { PillarKey } from "@/lib/tokens";
 
 const swatches = [
   { name: "INK 0", hex: "#05070A", role: "Page background" },
@@ -11,133 +28,123 @@ const swatches = [
   { name: "EMBER", hex: "#F59E0B", role: "Live · WIP" },
 ];
 
-const pillarList: { key: keyof typeof pillar; label: string; desc: string }[] = [
-  { key: "build", label: "//build", desc: "Engineering, architecture, the work itself" },
-  { key: "signal", label: "//signal", desc: "Status, dispatches, /now updates" },
-  { key: "mind", label: "//mind", desc: "Essays, theses, what I believe" },
-  { key: "world", label: "//world", desc: "Industry, observations, the broader weather" },
-  { key: "taste", label: "//taste", desc: "Music, film, design — the obsessions" },
-  { key: "learning", label: "//learning", desc: "What I'm learning, in the open" },
-  { key: "teach", label: "//teach", desc: "Tutorials, how-tos, evergreen craft" },
+const pillarList: { key: PillarKey; desc: string }[] = [
+  { key: "build", desc: "Engineering, architecture, the work itself" },
+  { key: "signal", desc: "Status, dispatches, /now updates" },
+  { key: "mind", desc: "Essays, theses, what I believe" },
+  { key: "world", desc: "Industry, observations, the broader weather" },
+  { key: "taste", desc: "Music, film, design — the obsessions" },
+  { key: "learning", desc: "What I'm learning, in the open" },
+  { key: "teach", desc: "Tutorials, how-tos, evergreen craft" },
 ];
 
-export default function Page() {
+export default function Home() {
   return (
-    <main className="tactical-grid min-h-screen">
+    <Page>
       {/* Top tactical strip */}
       <div className="border-b border-rule">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
-          <div className="flex items-center gap-3 text-tactical text-mute">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-cyan" />
-            <span className="text-cyan">SAGE@AFTERDARK</span>
-            <span className="hidden sm:inline">~ /system</span>
-            <span className="hidden md:inline">· STATUS · ONLINE</span>
+        <Container>
+          <div className="flex items-center justify-between py-3">
+            <div className="flex items-center gap-3">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-cyan" />
+              <TerminalPrompt path="/" mode="live" />
+            </div>
+            <Tactical>PHASE 01 · DESIGN SYSTEM</Tactical>
           </div>
-          <div className="text-tactical text-mute tabular-nums">
-            PHASE 00 · FOUNDATION
-          </div>
-        </div>
+        </Container>
       </div>
 
-      {/* Hero */}
-      <section className="mx-auto max-w-6xl px-6 pt-24 pb-20">
-        <div className="text-tactical text-cyan mb-6">
-          $ sage init —phase=0 —ok
-        </div>
+      <Container>
+        {/* Hero */}
+        <section className="pt-24 pb-20 relative">
+          <div className="absolute top-6 right-0 hidden md:block">
+            <Reticle size={20} />
+          </div>
 
-        <h1 className="font-sans font-medium tracking-tight text-bone leading-[0.95]"
-            style={{ fontSize: "var(--text-display)" }}>
-          The foundation is live.
-          <br />
-          <span className="text-mute">Everything else stacks on top.</span>
-          <span className="cursor-blink ml-2 inline-block h-[0.85em] w-[0.5ch] translate-y-[-0.05em] bg-cyan align-middle" />
-        </h1>
+          <Tactical className="text-cyan mb-6 block">$ sage init —phase=1 —ok</Tactical>
 
-        <p className="mt-8 max-w-[60ch] text-bone/80 leading-relaxed">
-          Next.js 15 · Tailwind v4 · Geist + Geist Mono · TypeScript strict.
-          Design tokens wired end-to-end. Reduced-motion respected. Tactical
-          grid at 2.5% alpha. Vercel deploy live.
-        </p>
+          <Display>
+            The system is live.
+            <br />
+            <span className="text-mute">Now we build.</span>
+            <span className="cursor-blink ml-2 inline-block h-[0.85em] w-[0.5ch] translate-y-[-0.05em] bg-cyan align-middle" />
+          </Display>
 
-        <div className="mt-10 flex flex-wrap gap-x-6 gap-y-2 text-tactical text-mute">
-          <span><span className="text-cyan">▸</span> repo · github</span>
-          <span><span className="text-cyan">▸</span> deploy · vercel</span>
-          <span><span className="text-cyan">▸</span> font · geist</span>
-          <span><span className="text-cyan">▸</span> a11y · wcag aa</span>
-        </div>
-      </section>
+          <Lead className="mt-8">
+            Every primitive is built, typed, and on display at{" "}
+            <a href="/dev" className="text-cyan hover:underline">/dev</a>. Phases 2 through 5
+            assemble what already exists.
+          </Lead>
 
-      {/* Color system check */}
-      <section className="mx-auto max-w-6xl px-6 pb-20">
-        <div className="border-t border-rule pt-10">
-          <div className="text-tactical text-cyan mb-2">// COLOR · LOCKED</div>
-          <h2 className="font-sans font-medium text-bone tracking-tight"
-              style={{ fontSize: "var(--text-h2)" }}>
-            Eight tokens. Two accents.
-          </h2>
-        </div>
+          <div className="mt-10 flex flex-wrap items-center gap-4">
+            <ButtonLink href="/dev" variant="primary">▸ View component library</ButtonLink>
+            <ButtonLink href="https://github.com/JasonTeixeira/sage-after-dark" variant="outline">
+              GitHub
+            </ButtonLink>
+          </div>
 
-        <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-8">
-          {swatches.map((s) => (
-            <div key={s.name} className="flex flex-col gap-2">
-              <div
-                className="h-20 w-full border border-rule"
-                style={{ background: s.hex }}
-              />
-              <div>
-                <div className="text-tactical text-bone">{s.name}</div>
-                <div className="text-tactical text-mute">{s.hex}</div>
-                <div className="mt-1 text-[11px] text-mute leading-snug">
-                  {s.role}
+          <div className="mt-10 flex flex-wrap gap-x-6 gap-y-2 text-mute">
+            <Tactical><span className="text-cyan">▸</span> next.js 15</Tactical>
+            <Tactical><span className="text-cyan">▸</span> tailwind v4</Tactical>
+            <Tactical><span className="text-cyan">▸</span> geist</Tactical>
+            <Tactical><span className="text-cyan">▸</span> typescript strict</Tactical>
+            <Tactical><span className="text-cyan">▸</span> wcag aa</Tactical>
+          </div>
+        </section>
+
+        {/* Color check */}
+        <Section label="// COLOR · LOCKED">
+          <H2>Eight tokens. Two accents.</H2>
+          <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-8">
+            {swatches.map((s) => (
+              <div key={s.name} className="flex flex-col gap-2">
+                <div
+                  className="h-20 w-full border border-rule"
+                  style={{ background: s.hex }}
+                />
+                <div>
+                  <Tactical className="text-bone block">{s.name}</Tactical>
+                  <Tactical className="block">{s.hex}</Tactical>
+                  <Caption className="mt-1 block leading-snug">{s.role}</Caption>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </section>
+            ))}
+          </div>
+        </Section>
 
-      {/* Pillar color system check */}
-      <section className="mx-auto max-w-6xl px-6 pb-24">
-        <div className="border-t border-rule pt-10">
-          <div className="text-tactical text-cyan mb-2">// PILLARS · 7 TOPICS</div>
-          <h2 className="font-sans font-medium text-bone tracking-tight"
-              style={{ fontSize: "var(--text-h2)" }}>
-            Each topic gets its own hairline.
-          </h2>
-          <p className="mt-3 max-w-[60ch] text-mute">
+        {/* Pillars check */}
+        <Section label="// PILLARS · 7 TOPICS">
+          <H2>Each topic gets its own hairline.</H2>
+          <Body className="mt-3 text-mute max-w-[60ch]">
             Pillar colors appear only as 1px borders, tag chips, and the reading-progress
             bar on each post. Cyan stays the global accent. Identity stays unified.
-          </p>
-        </div>
+          </Body>
 
-        <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {pillarList.map((p) => (
-            <div
-              key={p.key}
-              className="border-l-2 bg-ink-1 px-5 py-4 transition-colors hover:bg-ink-2"
-              style={{ borderLeftColor: pillar[p.key] }}
-            >
-              <div className="text-tactical" style={{ color: pillar[p.key] }}>
-                {p.label}
-              </div>
-              <div className="mt-1 text-bone">{p.desc}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {pillarList.map((p) => (
+              <PillarBorder key={p.key} pillar={p.key} className="bg-ink-1 py-4 pr-4 transition-colors hover:bg-ink-2">
+                <PillarTag pillar={p.key} size="sm" />
+                <Body className="mt-2 text-bone">{p.desc}</Body>
+              </PillarBorder>
+            ))}
+          </div>
+        </Section>
+      </Container>
 
       {/* Footer */}
       <footer className="border-t border-rule">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-6 py-6 text-tactical text-mute">
-          <div>© SAGE AFTER DARK · PHASE 00 · FOUNDATION</div>
-          <div className="flex items-center gap-2">
-            <span className="text-cyan">sage@afterdark</span>
-            <span>~</span>
-            <span>/system</span>
-            <span className="cursor-blink ml-1 inline-block h-3 w-1.5 bg-cyan" />
+        <Container>
+          <div className="flex flex-wrap items-center justify-between gap-3 py-6">
+            <Tactical>© SAGE AFTER DARK · PHASE 01</Tactical>
+            <div className="flex items-center gap-3">
+              <Tactical>
+                <StripSep /> /system
+              </Tactical>
+              <TerminalPrompt path="/" mode="live" />
+            </div>
           </div>
-        </div>
+        </Container>
       </footer>
-    </main>
+    </Page>
   );
 }
