@@ -313,11 +313,11 @@ export async function GET(req: Request) {
           <div
             style={{
               display: "flex",
-              marginTop: 18,
-              fontSize: 23,
-              lineHeight: 1.32,
+              marginTop: 22,
+              fontSize: 22,
+              lineHeight: 1.4,
               color: "#A1A8B3",
-              maxWidth: "78%",
+              maxWidth: "82%",
               fontFamily: "Georgia, serif",
               zIndex: 1,
             }}
@@ -335,10 +335,10 @@ export async function GET(req: Request) {
             display: "flex",
             alignItems: "flex-end",
             gap: 4,
-            height: 50,
-            marginBottom: 18,
+            height: 38,
+            marginBottom: 14,
             zIndex: 1,
-            opacity: 0.6,
+            opacity: 0.5,
           }}
         >
           {bars.map((h, i) => (
@@ -371,7 +371,19 @@ export async function GET(req: Request) {
           }}
         >
           <span>SAGEAFTERDARK.COM</span>
-          <span style={{ color: accent }}>● TRANSMISSION</span>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <span
+              style={{
+                width: 8,
+                height: 8,
+                borderRadius: "50%",
+                background: accent,
+                boxShadow: `0 0 10px ${accent}`,
+                display: "flex",
+              }}
+            />
+            <span style={{ color: accent }}>TRANSMISSION</span>
+          </div>
         </div>
       </div>
     ),
