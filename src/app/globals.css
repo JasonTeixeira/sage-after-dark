@@ -24,7 +24,9 @@
   --color-cyan: #00E5FF;
   --color-ember: #F59E0B;
 
-  /* Pillar colors — used only as borders, chips, progress bars */
+  /* Pillar colors — used only as borders, chips, progress bars.
+     Both prefixed (pillar-*) and short aliases are exposed so callers can
+     write either text-pillar-teach or text-teach. */
   --color-pillar-build: #00E5FF;
   --color-pillar-signal: #F59E0B;
   --color-pillar-mind: #A78BFA;
@@ -32,6 +34,14 @@
   --color-pillar-taste: #F472B6;
   --color-pillar-learning: #A3E635;
   --color-pillar-teach: #EAB308;
+  --color-build: #00E5FF;
+  --color-signal: #F59E0B;
+  --color-mind: #A78BFA;
+  --color-world: #34D399;
+  --color-taste: #F472B6;
+  --color-learning: #A3E635;
+  --color-teach: #EAB308;
+  --color-ink: #05070A; /* alias of ink-0 for `text-ink` / `bg-ink` */
 
   /* Type stack — set by next/font on <html> as CSS variables */
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
