@@ -14,6 +14,7 @@ import { getAllPosts, getPostBySlug } from "@/content/loader";
 import { mdxComponents } from "@/content/mdx-components";
 import { LAYOUT_BY_TEMPLATE } from "@/components/layouts";
 import { Paywall } from "@/components/paywall";
+import { JsonLd, articleLd, breadcrumbsLd } from "@/components/json-ld";
 import { getSessionEmail } from "@/lib/auth";
 import { memberStatus } from "@/lib/supabase";
 import type { Metadata } from "next";
@@ -103,8 +104,33 @@ export default async function PostPage({
   }
   const showPaywall = post.frontmatter.members_only && !isMember;
 
+  const fm = post.frontmatter;
+  const url = `https://www.sageafterdark.com/${fm.pillar}/${fm.slug}`;
+  const ogImage = fm.og_image ?? `https://www.sageafterdark.com/api/og?slug=${encodeURIComponent(fm.slug)}`;
+
   return (
     <Layout post={post}>
+      <JsonLd
+        data={articleLd({
+          title: fm.title,
+          description: fm.dek,
+          url,
+          datePublished: fm.published,
+          dateModified: fm.updated,
+          pillar: fm.pillar,
+          tags: fm.tags,
+          wordCount: post.word_count,
+          readingMinutes: post.reading_minutes,
+          ogImage,
+        })}
+      />
+      <JsonLd
+        data={breadcrumbsLd([
+          { name: "Sage After Dark", url: "/" },
+          { name: fm.pillar, url: `/${fm.pillar}` },
+          { name: fm.title, url: `/${fm.pillar}/${fm.slug}` },
+        ])}
+      />
       {showPaywall ? (
         <Paywall pillar={post.frontmatter.pillar} signedIn={signedIn} />
       ) : (

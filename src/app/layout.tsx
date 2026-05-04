@@ -11,7 +11,7 @@ const instrumentSerif = Instrument_Serif({
   variable: "--font-serif",
   display: "swap",
 });
-import { SiteHeader, SiteFooter, KeyboardShortcuts, HeroReticle, Konami } from "@/components";
+import { SiteHeader, SiteFooter, KeyboardShortcuts, HeroReticle, Konami, JsonLd, WEBSITE_LD, PERSON_LD } from "@/components";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://sageafterdark.com"),
@@ -69,6 +69,8 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="bg-ink-0 text-bone antialiased flex flex-col min-h-screen">
+        <JsonLd data={WEBSITE_LD} />
+        <JsonLd data={PERSON_LD} />
         <SiteHeader />
         <div className="flex-1">{children}</div>
         <SiteFooter />
