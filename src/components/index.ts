@@ -67,3 +67,5 @@ export { Sidenote } from "./sidenote";
 export { PullQuote } from "./pullquote-editorial";
 export { HighlightToShare } from "./highlight-to-share";
 export { EssaySignoff } from "./essay-signoff";
+export { ReadingModeToggle } from "./reading-mode-toggle";
+export { RouterTransitions } from "./router-transitions";

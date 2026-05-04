@@ -106,6 +106,86 @@ a {
   border-radius: 2px;
 }
 
+/* ============================================================
+   Reading Mode — parchment theme overrides for long-form reading.
+   Activated by ReadingModeToggle setting `data-reading-mode="parchment"`
+   on <html>. Targets only the article surface so site chrome remains
+   familiar; uses a warm sepia palette tuned for reduced eye strain.
+   ============================================================ */
+html[data-reading-mode="parchment"] {
+  background: #F4EFE3;
+  color: #2A2520;
+  color-scheme: light;
+}
+html[data-reading-mode="parchment"] body {
+  background: #F4EFE3;
+  color: #2A2520;
+}
+html[data-reading-mode="parchment"] .tactical-grid {
+  background-image:
+    linear-gradient(to right, rgba(120, 90, 30, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(120, 90, 30, 0.04) 1px, transparent 1px);
+}
+html[data-reading-mode="parchment"] header[data-print-hide] {
+  background: rgba(244, 239, 227, 0.92) !important;
+  border-bottom-color: #C9BFA7 !important;
+  color: #2A2520;
+}
+html[data-reading-mode="parchment"] article,
+html[data-reading-mode="parchment"] [data-highlightable] {
+  color: #2A2520;
+}
+html[data-reading-mode="parchment"] article h1,
+html[data-reading-mode="parchment"] article h2,
+html[data-reading-mode="parchment"] article h3,
+html[data-reading-mode="parchment"] article h4 {
+  color: #1A1612;
+}
+html[data-reading-mode="parchment"] article a {
+  color: #8B4513;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+html[data-reading-mode="parchment"] .sidenote-anchor {
+  color: #8B4513 !important;
+}
+html[data-reading-mode="parchment"] .sidenote-aside {
+  color: rgba(42, 37, 32, 0.78) !important;
+  border-left-color: #B8956A !important;
+}
+html[data-reading-mode="parchment"] blockquote {
+  color: #3A3128;
+  border-left-color: #B8956A !important;
+}
+html[data-reading-mode="parchment"] code,
+html[data-reading-mode="parchment"] pre {
+  background: #ECE4D0 !important;
+  color: #2A2520 !important;
+  border-color: #C9BFA7 !important;
+}
+html[data-reading-mode="parchment"] hr,
+html[data-reading-mode="parchment"] .border-rule,
+html[data-reading-mode="parchment"] [class*="border-rule"] {
+  border-color: #C9BFA7 !important;
+}
+html[data-reading-mode="parchment"] ::selection {
+  background: #B8956A;
+  color: #1A1612;
+}
+/* The floating TOC stays usable in parchment mode */
+html[data-reading-mode="parchment"] aside[aria-label="Table of contents"] {
+  color: #2A2520;
+}
+/* View Transitions — root crossfade between modes */
+@supports (view-transition-name: root) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 220ms;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,

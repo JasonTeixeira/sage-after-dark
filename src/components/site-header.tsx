@@ -8,6 +8,7 @@
 
 import Link from "next/link";
 import { TacticalStrip, StripSep, TerminalPrompt, Kbd } from "@/components";
+import { ReadingModeToggle } from "./reading-mode-toggle";
 
 const NAV = [
   { label: "essays", href: "/archive" },
@@ -55,6 +56,8 @@ export function SiteHeader({ path = "/" }: { path?: string }) {
                 ▸ {n.label}
               </Link>
             ))}
+            <StripSep />
+            <ReadingModeToggle />
             <StripSep />
             <Link
               href="/search"

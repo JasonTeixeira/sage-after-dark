@@ -54,8 +54,34 @@ export default function NotFound() {
           <Mono className="text-mute block">
             <span className="text-cyan">$</span> ls /
           </Mono>
-          <Mono className="text-bone/80 block">
-            archive/ now/ taste/ reading/ about/ colophon/ search/
+          <Mono className="text-bone/80 block flex flex-wrap gap-x-3 gap-y-1">
+            {[
+              { name: "archive/", href: "/archive" },
+              { name: "now/", href: "/now" },
+              { name: "taste/", href: "/taste" },
+              { name: "reading/", href: "/reading" },
+              { name: "about/", href: "/about" },
+              { name: "colophon/", href: "/colophon" },
+              { name: "search/", href: "/search" },
+              { name: "membership/", href: "/membership" },
+              { name: "build/", href: "/archive?pillar=build" },
+              { name: "signal/", href: "/archive?pillar=signal" },
+              { name: "mind/", href: "/archive?pillar=mind" },
+              { name: "world/", href: "/archive?pillar=world" },
+              { name: "learning/", href: "/archive?pillar=learning" },
+              { name: "teach/", href: "/archive?pillar=teach" },
+            ].map((d) => (
+              <Link
+                key={d.href}
+                href={d.href}
+                className="text-bone/80 hover:text-cyan hover:underline underline-offset-2 transition-colors"
+              >
+                {d.name}
+              </Link>
+            ))}
+          </Mono>
+          <Mono className="text-mute block pt-2">
+            <span className="text-cyan">$</span> _<span className="cursor-blink">█</span>
           </Mono>
         </div>
 
