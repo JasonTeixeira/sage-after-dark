@@ -118,6 +118,51 @@ a {
 }
 
 /* ============================================================
+   Print stylesheet — strip chrome, keep content readable on paper.
+   ============================================================ */
+@media print {
+  :root {
+    color-scheme: light;
+  }
+  html, body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  /* Hide site chrome + interactive elements */
+  header[role="banner"],
+  nav,
+  footer,
+  .reading-progress,
+  [data-reticle-zone] svg,
+  [data-print-hide],
+  form,
+  button,
+  .tactical-grid {
+    display: none !important;
+  }
+  a {
+    color: #000 !important;
+    text-decoration: underline;
+  }
+  /* Show absolute URLs after links */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: #555;
+  }
+  /* Block widows/orphans */
+  h1, h2, h3 { page-break-after: avoid; }
+  p, li { orphans: 3; widows: 3; }
+  pre, blockquote, table, figure, .notched-card { page-break-inside: avoid; }
+  /* Restore generous reading width */
+  main, article {
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+/* ============================================================
    Subtle background grid — 24px tactical grid at ~1% alpha
    ============================================================ */
 

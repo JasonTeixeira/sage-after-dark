@@ -1,0 +1,66 @@
+---
+title: "Taste as a deploy gate"
+dek: "If you can't articulate what 'good' looks like before you ship, you'll spend the rest of the quarter discovering it in production."
+slug: "taste-as-a-deploy-gate"
+template: essay
+pillar: taste
+tags: ["taste", "shipping", "craft"]
+published: "2026-05-04"
+status: published
+featured: false
+related:
+  - "why-we-roll-back"
+  - "the-half-life-of-a-good-tool"
+---
+
+<DropCap letter="T">he hardest test to pass before a release ships is not the unit suite. It is not the QA checklist. It is not the security review. It is the test where someone with taste looks at the thing and says: *yes, this is good, ship it*. We have automated everything else. We have not automated this, and we keep pretending we have.</DropCap>
+
+The reason we keep pretending is that taste is uncomfortable to talk about. It feels subjective. It feels elitist. It feels like the kind of thing senior people use to gatekeep junior people. So we build elaborate rubrics — design review, accessibility audit, performance budget, brand guidelines — and we pretend the rubrics replace the judgment. They don't. They just slow the judgment down.
+
+## Taste is not opinion
+
+Let me try to define taste more carefully, because the word is doing a lot of work and most of the work is bad.
+
+Taste, in the sense that ships products, is a calibrated sensitivity to a small number of attributes that distinguish good work from work that is merely correct. It is *learnable*. It is *transferable*. It is *legible*, if the person with it bothers to make it legible. The thing that makes it look like opinion is that the calibration takes years and most people who develop it never write it down.
+
+A senior designer doesn't reject a layout because she "feels it isn't right." She rejects it because the type stack is fighting itself, the hierarchy collapses below the fold, the spacing is inconsistent at three breakpoints, and the brand voice and the visual voice are pulling in opposite directions. If you ask her, she will tell you. She just won't tell you unprompted, because nobody asked her to teach when they hired her.
+
+This is the operational gap. Taste exists in your team. It is sitting in two or three people. It does not get applied as a deploy gate because nobody has named it as a gate, and so it gets applied as a complaint after the fact.
+
+## Make the gate explicit
+
+The fix is not subtle. You name the gate. You assign it. You give it a budget.
+
+For us, on the product team I work with, the gate is two questions, asked before any feature ships to anyone who will be invoiced for it:
+
+1. **Is this clearly the work of one team?** Meaning: would a stranger looking at this feature recognize it as belonging to the rest of our product, or would they think we acquired it from someone else? Visual coherence. Voice coherence. Information density coherence. The product should feel like one thing.
+
+2. **Is this the version we'd rather other people copy?** Meaning: if a competitor saw this and made the same thing tomorrow, would we be proud or embarrassed? This is the version-of-myself test. The thing you ship is the thing your reputation is made of, and most of what we ship is good enough to ship and not good enough to want copied.
+
+These two questions take ten minutes per feature. They are answered by one person whose taste we trust on this product, in this market, at this stage. They are not democratic. They are answered, and the feature either ships or goes back.
+
+## The objections
+
+There are three objections to this and they all sound reasonable until you push on them.
+
+**"Taste is subjective."** Sometimes. Mostly not. The taste required to ship a B2B fintech product is wildly different from the taste required to ship a games studio's website, and within each domain there is broad professional agreement on what good looks like. The subjectivity is in the edge cases, which are 5% of decisions. The other 95% is craft, and craft can be taught.
+
+**"This will slow us down."** It will, by ten minutes per feature, and it will save you weeks per quarter that you'd otherwise spend re-doing things that should have been caught the first time. The accounting almost always favors the gate. Teams that resist this are usually the teams whose pipelines are the most jammed with rework.
+
+**"You're concentrating power in one person."** Yes. That is the point. You can't have a coherent product if every decision is up for vote. The taste gate is the place you concentrate power explicitly, in service of the work, instead of pretending it's distributed when it isn't. The person holding the gate should be named, accountable, and replaceable.
+
+## What it looks like in practice
+
+The first month you do this, half the features you were about to ship will go back. The senior person at the gate will feel like a villain. The team will resent the bottleneck. You will be tempted to abandon the experiment.
+
+Don't. The second month, the rejection rate will drop, because the team will start noticing the things the gate notices. By the third month, your rejection rate will be near zero, and the work going to the gate will be visibly better than the work that was shipping before.
+
+The thing the gate teaches is not "what does this senior person like." It is "what does *good* look like in this context." That knowledge transfers. People who pass features through the gate enough times start applying the gate to themselves, before submission. The gate, eventually, is the team's shared sensibility, written into the muscle of how they ship.
+
+That is what taste-as-a-deploy-gate buys you: not approval, but the slow installation of a higher floor.
+
+## The closing move
+
+If your team ships a product whose surfaces don't feel like the same product, you don't have a design system problem. You have a taste-gate problem, and a design system isn't going to fix it. The gate is upstream of the system.
+
+Name the gate. Staff the gate. Pay the ten minutes. Ship the version of yourself you'd want copied.

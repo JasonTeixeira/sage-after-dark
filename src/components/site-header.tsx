@@ -21,7 +21,7 @@ const RIGHT_NAV = [{ label: "members", href: "/membership" }];
 
 export function SiteHeader({ path = "/" }: { path?: string }) {
   return (
-    <header className="border-b border-rule bg-ink-0/80 backdrop-blur-sm sticky top-0 z-40">
+    <header className="border-b border-rule bg-ink-0/80 backdrop-blur-sm sticky top-0 z-40" data-print-hide>
       <div className="mx-auto max-w-7xl px-6">
         <TacticalStrip className="!border-0 !bg-transparent !px-0">
           <Link

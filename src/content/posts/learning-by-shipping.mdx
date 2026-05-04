@@ -1,0 +1,78 @@
+---
+title: "Learning by shipping"
+dek: "The fastest way to know if you understand a thing is to put it in front of a user and watch what they do. Tutorials are an inferior substitute for the embarrassment of releasing too early."
+slug: "learning-by-shipping"
+template: essay
+pillar: learning
+tags: ["learning", "shipping", "feedback"]
+published: "2026-05-04"
+status: published
+featured: false
+related:
+  - "the-half-life-of-a-good-tool"
+  - "taste-as-a-deploy-gate"
+---
+
+<DropCap letter="I">have learned more from shipping things I shouldn't have shipped than from any tutorial, course, or carefully read book. The book teaches you what the author thinks they know. Shipping teaches you what the world thinks you know. Those are not the same thing, and the gap between them is the only education that actually changes how you work.</DropCap>
+
+The argument for shipping early is usually framed as a productivity argument — get to market faster, iterate on real feedback, don't polish in the dark. Those arguments are correct, but they undersell the deeper point. Shipping early is not primarily about speed. It is about *the only feedback loop that catches the things you don't know you don't know*. Every other learning method is bounded by the limits of the learner; shipping is bounded only by the limits of the audience, which is much larger.
+
+## The four kinds of knowledge
+
+To explain why this matters, it helps to be precise about what shipping teaches. There are four useful categories of knowledge, and they have very different relationships to the act of releasing something.
+
+**Things you know you know.** These are the easy parts of the work. The framework you've used for five years. The deployment pipeline you wrote. The shape of the database you designed. Shipping doesn't teach you these. You already had them. They are the foundation, not the lesson.
+
+**Things you know you don't know.** These are the parts you can identify as gaps before you start. You know you don't know how the legal team will respond to the data model. You know you don't know how the new payment provider handles refunds. You can read the documentation. You can ask experts. Shipping helps a little here, but mostly the lesson is available in advance, if you go looking for it.
+
+**Things you don't know you know.** These are the silent successes. The decision you made that everyone now relies on, without you realizing how much load it carries. The pattern you established that the rest of the team adopted as canonical. Shipping reveals these mostly in retrospect — when somebody copies the thing and you realize the thing was good. They are flattering and they are useless as guidance, because by the time you see them you've already done the right thing.
+
+**Things you don't know you don't know.** This is the only category that justifies shipping early, and it justifies it completely. These are the assumptions you didn't realize you were making, the workflows you didn't realize existed, the user behaviors that have no representation in your team's collective imagination. There is no method — no review, no testing, no expert consultation — that surfaces these reliably. The only thing that surfaces them is the work meeting reality.
+
+The first three categories can be learned without shipping. The fourth cannot. And the fourth is where the entire interesting space of failure modes lives.
+
+## The case against tutorials
+
+I write tutorials. I'll keep writing them. They're useful for a specific job: compressing the things-you-know-you-don't-know into a transferable form so other people don't have to discover them painfully. A good tutorial is a load-bearing piece of infrastructure, and I'm grateful to the people who write them.
+
+But tutorials are limited by the imagination of the author. The author can teach you what they wish they had known. They cannot teach you what they don't know they know — because they have absorbed it into instinct and stopped articulating it — and they cannot teach you what they don't know they don't know, because by definition they don't know it.
+
+This means tutorials are useful for *catching up*. They are not useful for *getting ahead*. If you are following a tutorial, you are by definition learning what someone has already discovered and decided was worth writing down. The interesting questions are downstream of that. They are the questions the tutorial doesn't answer, because the author didn't think to ask them.
+
+Shipping is what teaches you to ask those questions. The first time a user does something you didn't design for, you learn that the design space was larger than you thought. You can't get that lesson from a book. The book is the thing the user is going to render obsolete.
+
+## The discipline of releasing too early
+
+Shipping early is uncomfortable. There is a name for the feeling — *exposure* — and the feeling is honest. You are exposing something you know is not done to people who will form opinions about you based on the not-done thing. That cost is real, and pretending otherwise is dishonest.
+
+The discipline is to ship early *anyway*, because the cost of waiting until you're confident is higher than the cost of being seen working.
+
+Three rules I've collected for myself:
+
+**One: define done as 'someone uses it.'** Not 'someone could use it.' Not 'someone reviewed it.' Someone — a real person, with a real problem, who didn't help you build it — uses the thing for its intended purpose. Until that has happened, the thing is hypothetical, no matter how complete it looks.
+
+**Two: optimize for the next loop, not the current one.** The version you're about to ship is going to be wrong. The question is not whether it's wrong; the question is whether the next iteration will benefit from this one having been seen. If yes, ship. If the lesson is already available without exposure, you might be polishing in the dark.
+
+**Three: write down what you learned.** Shipping teaches you, but the lessons evaporate fast. Within a week, you'll be able to tell the story of what you released. Within a month, you'll have rewritten the story to be more flattering. Within six months, you'll think you knew what you were doing the whole time. The only defense is to write the lesson down at the moment of impact.
+
+## What shipping has actually taught me
+
+A list, not exhaustive, of things I learned by releasing too early and watching what happened:
+
+- Most users do not read the introductory paragraph. The introductory paragraph is for people deciding whether to keep reading, not for people who already started.
+- A "save" button placed below the form is invisible to half the audience on a 13-inch laptop.
+- People will copy and paste the example code without changing the variable names.
+- Nobody reads the email confirmation. The next page after the form is the only confirmation that registers.
+- The feature you are most proud of is rarely the feature that gets used the most.
+- The feature you almost cut for time is sometimes the only one that matters.
+- Users do not call you when something is broken. They leave.
+
+Every one of those was discovered by shipping something I thought was right and finding out otherwise. A tutorial could have given me one or two of them. The rest came from the work meeting reality, and there was no shortcut.
+
+## The closing move
+
+The fastest way to know if you understand a thing is to put it in front of a user and watch what they do. Tutorials are an inferior substitute for the embarrassment of releasing too early.
+
+Ship. Watch. Write the lesson down. Ship again, with the lesson incorporated. That is the only learning loop that scales beyond the limits of your own imagination, and it is the one most teams are not running because the embarrassment is too high a tax to pay every Tuesday.
+
+Pay it. The compounded return is the only kind of expertise the rest of us can't catch up to.

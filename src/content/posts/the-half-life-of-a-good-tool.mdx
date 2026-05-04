@@ -1,0 +1,57 @@
+---
+title: "The half-life of a good tool"
+dek: "Every tool you adopt this year will be wrong about something in three years. The discipline isn't picking the right one — it's noticing when a good one has gone bad."
+slug: "the-half-life-of-a-good-tool"
+template: essay
+pillar: world
+tags: ["tools", "decisions", "longevity"]
+published: "2026-05-04"
+status: published
+featured: true
+related:
+  - "why-we-roll-back"
+---
+
+<DropCap letter="T">he tool you choose today is not the tool you will be using in three years. It might still have the same name. It might still live in the same corner of your stack. But the thing you reach for in 2029 will be a different shape than the thing you adopted in 2026, and the difference will be invisible until the day you find yourself fighting it for an hour over something that used to take a minute.</DropCap>
+
+Every tool has a half-life. Not in the radioactive sense — nothing decays on a clock. But in the practical sense: the moment you adopt a tool, the value it gives you starts declining, slowly at first and then suddenly. Your context grows around it. The team grows. The product grows. The tool grows too, but in directions chosen by people who don't have your problem. Eventually the curves diverge, and you're paying interest on a decision you made when the tool fit you perfectly.
+
+The problem is nobody teaches you to notice this. The discourse about tools is almost entirely about adoption — the choice between A and B, the migration from C to D, the heroic rewrite that finally got rid of E. We celebrate the moment of decision and we celebrate the moment of escape, but we say almost nothing about the long middle, where 80% of the cost lives.
+
+## The three signs
+
+Here is what I have learned to watch for. They show up gradually, never all at once, and any one of them is forgivable. Two is a warning. Three is a decision.
+
+### One: you can't onboard someone in an afternoon.
+
+Not the senior who's seen it before. The junior who's never seen anything. If your tool has accumulated enough institutional knowledge that you have to explain it for half a day before they can do anything useful, the tool is no longer a tool. It is a system, and systems require maintenance you didn't budget for.
+
+This is not a complaint about complexity for its own sake. Some problems are hard, and the tools for hard problems are unavoidably complicated. But there is a difference between *the problem is complicated* and *we have made a simple problem complicated by accumulating fifty pieces of glue around it*. The onboarding test catches the second case before it becomes the first.
+
+### Two: the wrong question is the most common one.
+
+Every tool answers some questions cheaply and others expensively. When a tool fits, the cheap questions are the ones you ask all day; the expensive ones come up rarely and are worth the cost when they do. When a tool stops fitting, that ratio inverts. You find yourself asking expensive questions over and over and getting the wrong answers, while the questions the tool was built to answer have stopped being the ones you have.
+
+The smell here is workarounds. One workaround is a hack. Three workarounds is a pattern. Five workarounds is a tool that doesn't fit anymore — you just haven't admitted it.
+
+### Three: the upgrade path scares you.
+
+Healthy tools improve. Their owners ship versions, fix bugs, add features, sometimes break things in service of getting better. When a tool fits, you read the changelog and you're a little excited and a little annoyed and you upgrade in a Tuesday afternoon. When a tool doesn't fit anymore, the changelog is a threat assessment. You start pinning versions. You skip releases. You build a small fortress of compatibility shims.
+
+The upgrade path is the most honest signal a tool gives you about whether it still belongs in your life. If improvements feel like attacks, the tool isn't yours anymore.
+
+## What you do about it
+
+The expensive answer is to migrate. Migration is brutal — most rewrites die, and the ones that survive cost three times what you estimated. But sometimes the right answer is the expensive one, and the tax of a wrong tool is invisible until the year you finally pay to get out from under it. If the rewrite would pay back inside two years, do it. Most never do, which is why most don't get done.
+
+The cheap answer is to bend the tool back into shape. Sometimes you can — a config flag here, a workflow change there, a deliberate retreat from the part of the tool that's wandered off in the wrong direction. Most teams underuse this option. They treat their tooling as immutable infrastructure when it is, in fact, code, and code can be changed by reading documentation and writing patches.
+
+The honest answer is the one nobody likes: live with it for now, write down what's wrong, and revisit it on a schedule. Half-decisions about tools accumulate into 60% of your engineering time being spent on tooling instead of product. If you don't put the decision on the calendar, it will rebook itself indefinitely.
+
+## The meta-lesson
+
+The thing I want you to take from this is not a process for evaluating tools. It is a posture: **expect every good tool to go bad**, and build the watchful muscle that catches the moment when the goodness ends.
+
+This is hard, because watching for the end of a thing feels disloyal. We choose tools the way we choose collaborators — there is investment, there is sunk cost, there is a quiet pride in having committed. The tools that fail us in the long run are usually the ones we believed in too thoroughly to question. Loyalty to a tool is a category error. The tool doesn't care, and your team doesn't get the years back.
+
+Pick the tool that fits today. Use it well. Watch for the three signs. When they show up, *notice*. The discipline is not picking right. The discipline is paying attention.

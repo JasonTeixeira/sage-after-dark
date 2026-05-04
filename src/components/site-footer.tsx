@@ -32,7 +32,7 @@ const SOCIAL = [
 export function SiteFooter() {
   const year = new Date().getFullYear();
   return (
-    <footer className="border-t border-rule mt-24">
+    <footer className="border-t border-rule mt-24" data-print-hide>
       <Container size="wide" className="py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div>

@@ -89,6 +89,7 @@ export function HeroReticle() {
       ref={ref}
       aria-hidden="true"
       className="pointer-events-none fixed top-0 left-0 z-40 transition-opacity duration-300 ease-out"
+      data-print-hide
       style={{
         opacity: visible ? 1 : 0,
         willChange: "transform, opacity",
