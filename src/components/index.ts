@@ -60,3 +60,10 @@ export { JsonLd, PERSON_LD, WEBSITE_LD, articleLd, breadcrumbsLd } from "./json-
 // Newsletter funnel
 export { HeroSubscribe } from "./hero-subscribe";
 export { EssayStickyBar } from "./essay-sticky-bar";
+
+// Magazine essay primitives (Phase 13)
+export { FloatingTOC } from "./floating-toc";
+export { Sidenote } from "./sidenote";
+export { PullQuote } from "./pullquote-editorial";
+export { HighlightToShare } from "./highlight-to-share";
+export { EssaySignoff } from "./essay-signoff";

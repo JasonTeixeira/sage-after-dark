@@ -18,6 +18,8 @@ import {
   MarginNote,
   Tactical,
   DropCap,
+  Sidenote,
+  PullQuote,
 } from "@/components";
 
 export const mdxComponents: MDXComponents = {
@@ -166,7 +168,9 @@ export const mdxComponents: MDXComponents = {
 
   /* ---------- expose custom components for inline use ---------- */
   Pullquote,
+  PullQuote, // editorial magazine variant with attribution
   MarginNote,
+  Sidenote, // Tufte-style margin note with mobile fallback
   Tactical,
   InlineLink,
   DropCap,

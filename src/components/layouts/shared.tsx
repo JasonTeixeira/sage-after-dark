@@ -22,7 +22,7 @@ import {
   NotchedCard,
 } from "@/components";
 import type { Post } from "@/content/schema";
-import { getPostBySlug } from "@/content/loader";
+import { getPostBySlug, getAllPosts } from "@/content/loader";
 import { NewsletterForm } from "@/components/newsletter-form";
 import { Comments } from "@/components/comments";
 import { ReadingProgress } from "@/components/reading-progress";
@@ -85,12 +85,63 @@ export function PostHeader({ post }: { post: Post }) {
   );
 }
 
-export async function RelatedPosts({ slugs }: { slugs: string[] }) {
-  if (!slugs || slugs.length === 0) return null;
-  const posts = (await Promise.all(slugs.map((s) => getPostBySlug(s)))).filter(
-    (p): p is Post => p !== null,
-  );
+/**
+ * RelatedPosts — bottom rail of related work.
+ *
+ * Strategy:
+ *   1. If `slugs` are provided in frontmatter, use them verbatim.
+ *   2. Otherwise, auto-recommend by pillar + tag overlap against the
+ *      current post (passed via `currentSlug`). Same-pillar posts get
+ *      +3 affinity; each shared tag gives +2; recency gives +1 if
+ *      published within the last 90 days.
+ *   3. Fall back to the most recent posts in the same pillar.
+ *
+ * Always returns up to 4 posts, never includes the current post.
+ */
+export async function RelatedPosts({
+  slugs,
+  currentSlug,
+  limit = 4,
+}: {
+  slugs: string[];
+  currentSlug?: string;
+  limit?: number;
+}) {
+  let posts: Post[] = [];
+
+  if (slugs && slugs.length > 0) {
+    posts = (await Promise.all(slugs.map((s) => getPostBySlug(s)))).filter(
+      (p): p is Post => p !== null,
+    );
+  } else if (currentSlug) {
+    // Auto-recommend.
+    const all = await getAllPosts();
+    const current = all.find((p) => p.frontmatter.slug === currentSlug);
+    if (current) {
+      const currentTags = new Set(current.frontmatter.tags);
+      const ninetyDaysAgo = Date.now() - 90 * 24 * 3600 * 1000;
+      const scored = all
+        .filter((p) => p.frontmatter.slug !== currentSlug)
+        .map((p) => {
+          let score = 0;
+          if (p.frontmatter.pillar === current.frontmatter.pillar) score += 3;
+          for (const t of p.frontmatter.tags) {
+            if (currentTags.has(t)) score += 2;
+          }
+          const ts = new Date(p.frontmatter.published).getTime();
+          if (ts > ninetyDaysAgo) score += 1;
+          return { p, score };
+        })
+        .sort((a, b) => b.score - a.score || (
+          new Date(b.p.frontmatter.published).getTime() -
+          new Date(a.p.frontmatter.published).getTime()
+        ));
+      posts = scored.slice(0, limit).map((s) => s.p);
+    }
+  }
+
   if (posts.length === 0) return null;
+  posts = posts.slice(0, limit);
 
   return (
     <section className="mt-20 border-t border-rule pt-10">

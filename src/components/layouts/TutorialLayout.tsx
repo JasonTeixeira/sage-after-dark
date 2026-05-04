@@ -132,7 +132,7 @@ export function TutorialLayout({
             <ColophonLine post={post} />
           </EditorialColumn>
           <div className="mx-auto" style={{ maxWidth: "66ch" }}>
-            <RelatedPosts slugs={fm.related} />
+            <RelatedPosts slugs={fm.related} currentSlug={fm.slug} />
           </div>
           <PostFooter post={post} />
         </Section>

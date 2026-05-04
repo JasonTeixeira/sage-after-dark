@@ -50,12 +50,17 @@ export function Container({
 export function EditorialColumn({
   children,
   className,
+  ...rest
 }: {
   children: ReactNode;
   className?: string;
-}) {
+} & React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cn("mx-auto", className)} style={{ maxWidth: "66ch" }}>
+    <div
+      className={cn("mx-auto", className)}
+      style={{ maxWidth: "66ch" }}
+      {...rest}
+    >
       {children}
     </div>
   );
