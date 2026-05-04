@@ -162,12 +162,12 @@ export default async function HomePage() {
                     href={`/${featured.frontmatter.pillar}/${featured.frontmatter.slug}`}
                     className="block mt-3 group"
                   >
-                    <h3
+                    <h2
                       className="text-bone leading-[1.15] group-hover:text-cyan transition-colors [font-family:var(--font-editorial)]"
                       style={{ fontSize: "clamp(1.4rem, 2.2vw, 1.85rem)" }}
                     >
                       {featured.frontmatter.title}
-                    </h3>
+                    </h2>
                   </Link>
                   {featured.frontmatter.dek && (
                     <p className="mt-3 text-bone/70 leading-relaxed text-[15px]">
@@ -243,6 +243,7 @@ export default async function HomePage() {
                       {arc.title.replace(arc.italic, "")}
                       <em className="italic">{arc.italic}</em>
                     </h3>
+
                     <div className="mt-3 flex items-center gap-2 text-[11px] font-mono uppercase tracking-[0.08em] text-mute">
                       <span>EPISODE {String(arc.episodes_done).padStart(2, "0")} / {arc.episodes_total}</span>
                       <span>·</span>

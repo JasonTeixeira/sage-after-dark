@@ -18,9 +18,9 @@ function btnClasses(variant: ButtonVariant) {
     "focus-visible:outline-2 focus-visible:outline-cyan focus-visible:outline-offset-2";
   switch (variant) {
     case "primary":
-      // text-ink is the explicit alias (--color-ink) — avoids any
-      // chance of `ink-0` being parsed unexpectedly by Tailwind v4.
-      return `${base} bg-cyan text-ink hover:bg-cyan/90`;
+      // Use arbitrary value to guarantee the dark text wins over the
+      // global `a { color: inherit }` rule and any utility ordering.
+      return `${base} bg-cyan !text-[#05070A] hover:bg-cyan/90`;
     case "outline":
       return `${base} border border-rule-hi text-bone hover:border-cyan hover:text-cyan`;
     case "ghost":
