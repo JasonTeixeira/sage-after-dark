@@ -22,6 +22,7 @@ import {
   NotchedCard,
   Reticle,
   NewsletterForm,
+  Reveal,
 } from "@/components";
 import { getAllPosts } from "@/content/loader";
 import { NOW } from "@/content/site-data";
@@ -68,7 +69,7 @@ export default async function HomePage() {
         </TacticalStrip>
 
         {/* Hero */}
-        <section className="relative mt-12 mb-20 max-w-4xl">
+        <section className="relative mt-12 mb-20 max-w-4xl" data-reticle-zone>
           <div className="absolute top-0 right-0 hidden md:block">
             <Reticle size={20} />
           </div>
@@ -102,13 +103,16 @@ export default async function HomePage() {
       <Container size="wide" className="pb-16">
         {/* Featured */}
         {featured && (
-          <Section label="// featured transmission" className="border-t-0 pt-0">
-            <PostCard post={featured} variant="featured" />
-          </Section>
+          <Reveal>
+            <Section label="// featured transmission" className="border-t-0 pt-0">
+              <PostCard post={featured} variant="featured" />
+            </Section>
+          </Reveal>
         )}
 
         {/* Latest grid */}
         {latest.length > 0 && (
+          <Reveal>
           <Section label="// latest essays + tutorials">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {latest.map((p) => (
@@ -124,10 +128,12 @@ export default async function HomePage() {
               </Link>
             </div>
           </Section>
+          </Reveal>
         )}
 
         {/* Dispatches rail */}
         {dispatches.length > 0 && (
+          <Reveal>
           <Section label="// dispatches">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {dispatches.map((p) => (
@@ -154,9 +160,11 @@ export default async function HomePage() {
               ))}
             </div>
           </Section>
+          </Reveal>
         )}
 
         {/* Pillars */}
+        <Reveal>
         <Section label="// the seven pillars">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {PILLARS.map((p) => (
@@ -188,13 +196,16 @@ export default async function HomePage() {
             ))}
           </div>
         </Section>
+        </Reveal>
 
         {/* Newsletter */}
+        <Reveal>
         <Section label="// dispatches">
           <div className="max-w-2xl">
             <NewsletterForm source="home" variant="card" />
           </div>
         </Section>
+        </Reveal>
       </Container>
     </Page>
   );

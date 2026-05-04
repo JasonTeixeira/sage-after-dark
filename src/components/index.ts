@@ -46,3 +46,9 @@ export { PostCard } from "./post-card";
 export { NewsletterForm } from "./newsletter-form";
 export { Comments } from "./comments";
 export { KeyboardShortcuts } from "./keyboard-shortcuts";
+
+// Motion
+export { ReadingProgress } from "./reading-progress";
+export { HeroReticle } from "./hero-reticle";
+export { Reveal } from "./reveal";
+export { Konami } from "./konami";

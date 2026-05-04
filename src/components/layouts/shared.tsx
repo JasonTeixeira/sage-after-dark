@@ -25,6 +25,7 @@ import type { Post } from "@/content/schema";
 import { getPostBySlug } from "@/content/loader";
 import { NewsletterForm } from "@/components/newsletter-form";
 import { Comments } from "@/components/comments";
+import { ReadingProgress } from "@/components/reading-progress";
 
 export function PostStrip({
   post,
@@ -57,7 +58,8 @@ export function PostStrip({
 export function PostHeader({ post }: { post: Post }) {
   const fm = post.frontmatter;
   return (
-    <header className="mt-8 mb-12">
+    <header className="mt-8 mb-12" data-reticle-zone>
+      <ReadingProgress pillar={fm.pillar} />
       <PillarBorder pillar={fm.pillar} className="pl-6">
         <Display className="mb-4">{fm.title}</Display>
         {fm.dek && <Lead className="text-bone/70 max-w-[60ch]">{fm.dek}</Lead>}

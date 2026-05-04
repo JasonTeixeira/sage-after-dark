@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
-import { SiteHeader, SiteFooter, KeyboardShortcuts } from "@/components";
+import { SiteHeader, SiteFooter, KeyboardShortcuts, HeroReticle, Konami } from "@/components";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://sageafterdark.com"),
@@ -65,6 +65,8 @@ export default function RootLayout({
         <div className="flex-1">{children}</div>
         <SiteFooter />
         <KeyboardShortcuts />
+        <HeroReticle />
+        <Konami />
       </body>
     </html>
   );
