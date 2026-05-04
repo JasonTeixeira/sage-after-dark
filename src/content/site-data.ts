@@ -162,9 +162,12 @@ export const READING = {
 export const ABOUT = {
   updated: "2026-05-04",
   bio: [
-    "I'm Jason Teixeira. I run Sage Ideas, where I build software for people who don't have time for software.",
-    "Sage After Dark is the late-night studio — essays, tutorials, dispatches, and one annual cathedral. The day job is shipping product. The night job is figuring out what the day job means.",
-    "I write about reliability, taste, building in public, and the texture of work. I publish on cadence. I roll back in under 30 seconds.",
+    "I'm Jason Teixeira. By day I run Sage Ideas — a one-person software studio building product for people who don't have time for product. By night, I write here, at this desk, with the lamp on.",
+    "Sage After Dark is the late-night studio. Essays, tutorials, dispatches, one annual cathedral, and the occasional field note from a Tuesday that did not go as planned. The day job is shipping. The night job is figuring out what shipping means.",
+    "I have spent the last decade building production software in financial systems, contractor operations, and AI tooling. Most of what I write here is downstream of that work — the lessons that survived the second incident, the templates that survived the second hire, the tools that survived the second year.",
+    "My obsessions are reliability, taste, the texture of small teams, and the half-life of decisions. I am suspicious of advice that has not been ridden through a 2am page. I am suspicious of writing that has not been ridden through a Sunday revision.",
+    "What you'll find here is the long version. The five-line spec dispatched on Friday becomes the 3,000-word essay published on Sunday. The system that broke at 11:42 on Tuesday becomes the runbook by Saturday. The book I'm reading this month becomes the margin notes you can read in twenty minutes.",
+    "I publish on cadence. I roll back in under 30 seconds. I reply to every email that comes back to a dispatch. The list is small on purpose, and the founding window is still open.",
   ],
   contact: [
     { label: "Email", value: "sage@sageideas.org", href: "mailto:sage@sageideas.org" },
@@ -178,6 +181,9 @@ export const ABOUT = {
     "The infrastructure of low-trust collaboration is the only infrastructure worth investing in.",
     "Cadence > intensity.",
     "Pay your attention tax with care.",
+    "Name the gate before you build the build.",
+    "The half-life of a good tool is shorter than you think.",
+    "Ship the smallest reversible thing.",
   ],
 };
 

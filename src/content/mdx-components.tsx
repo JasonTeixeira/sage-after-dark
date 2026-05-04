@@ -21,6 +21,12 @@ import {
   Sidenote,
   PullQuote,
 } from "@/components";
+import {
+  DiagramTasteGate,
+  DiagramLearningLoop,
+  DiagramHalfLife,
+  DiagramSystem,
+} from "@/components/diagrams";
 
 export const mdxComponents: MDXComponents = {
   /* ---------- headings ---------- */
@@ -174,4 +180,9 @@ export const mdxComponents: MDXComponents = {
   Tactical,
   InlineLink,
   DropCap,
+  // Anchor essay diagrams
+  DiagramTasteGate,
+  DiagramLearningLoop,
+  DiagramHalfLife,
+  DiagramSystem,
 };

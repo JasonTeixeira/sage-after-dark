@@ -70,5 +70,6 @@ export { EssaySignoff } from "./essay-signoff";
 export { ReadingModeToggle } from "./reading-mode-toggle";
 export { RouterTransitions } from "./router-transitions";
 export { ShareButtons } from "./share-buttons";
+export { Monogram } from "./monogram";
 export { RollbackBuilder } from "./rollback-builder";
 export { AskForm } from "./ask-form";
