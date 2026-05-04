@@ -27,7 +27,7 @@ export function TerminalPrompt({
   return (
     <div
       className={cn(
-        "inline-flex items-center gap-2 font-mono text-[13px] tabular-nums min-w-0 max-w-full",
+        "inline-flex items-center gap-2 font-mono text-[13px] tabular-nums shrink-0",
         "text-mute",
         className,
       )}
@@ -36,7 +36,7 @@ export function TerminalPrompt({
         {user}@{host}
       </span>
       <span className="text-rule-hi shrink-0" aria-hidden="true">~</span>
-      <span className="text-bone truncate min-w-0">{path}</span>
+      <span className="text-bone shrink-0">{path}</span>
       {mode === "live" && (
         <span className="cursor-blink ml-0.5 inline-block h-3 w-1.5 bg-cyan align-middle shrink-0" aria-hidden="true" />
       )}
