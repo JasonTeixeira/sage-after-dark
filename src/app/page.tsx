@@ -1,151 +1,193 @@
+/**
+ * Home — the front page.
+ *
+ * Hero strip · Featured essay · Latest grid · Dispatches rail · Pillars
+ */
+
+import Link from "next/link";
+import { format } from "date-fns";
 import {
   Page,
   Container,
   Section,
   Display,
-  H2,
-  Body,
   Lead,
-  Caption,
   Tactical,
-  Reticle,
-  TerminalPrompt,
+  TacticalStrip,
   StripSep,
+  TerminalPrompt,
   PillarTag,
-  PillarBorder,
+  PostCard,
   ButtonLink,
+  NotchedCard,
+  Reticle,
 } from "@/components";
-import type { PillarKey } from "@/lib/tokens";
+import { getAllPosts } from "@/content/loader";
+import { NOW } from "@/content/site-data";
+import { pillar as pillarTokens, type PillarKey } from "@/lib/tokens";
 
-const swatches = [
-  { name: "INK 0", hex: "#05070A", role: "Page background" },
-  { name: "INK 1", hex: "#0A0E14", role: "Surfaces" },
-  { name: "INK 2", hex: "#11161E", role: "Elevated" },
-  { name: "RULE", hex: "#1C232E", role: "Hairlines" },
-  { name: "BONE", hex: "#E8E6E0", role: "Primary text" },
-  { name: "MUTE", hex: "#8A8F98", role: "Secondary" },
-  { name: "CYAN", hex: "#00E5FF", role: "Accent · CTAs" },
-  { name: "EMBER", hex: "#F59E0B", role: "Live · WIP" },
+const PILLARS: { key: PillarKey; label: string; tagline: string }[] = [
+  { key: "build", label: "//build", tagline: "Engineering, architecture, the work itself" },
+  { key: "signal", label: "//signal", tagline: "Status, dispatches, /now updates" },
+  { key: "mind", label: "//mind", tagline: "Essays, theses, what I believe" },
+  { key: "world", label: "//world", tagline: "Industry, observations, the broader weather" },
+  { key: "taste", label: "//taste", tagline: "Music, film, design — the obsessions" },
+  { key: "learning", label: "//learning", tagline: "What I'm learning, in the open" },
+  { key: "teach", label: "//teach", tagline: "Tutorials, how-tos, evergreen craft" },
 ];
 
-const pillarList: { key: PillarKey; desc: string }[] = [
-  { key: "build", desc: "Engineering, architecture, the work itself" },
-  { key: "signal", desc: "Status, dispatches, /now updates" },
-  { key: "mind", desc: "Essays, theses, what I believe" },
-  { key: "world", desc: "Industry, observations, the broader weather" },
-  { key: "taste", desc: "Music, film, design — the obsessions" },
-  { key: "learning", desc: "What I'm learning, in the open" },
-  { key: "teach", desc: "Tutorials, how-tos, evergreen craft" },
-];
+export default async function HomePage() {
+  const posts = await getAllPosts();
+  const featured = posts.find((p) => p.frontmatter.featured) ?? posts[0];
+  const latest = posts
+    .filter(
+      (p) =>
+        p.frontmatter.slug !== featured?.frontmatter.slug &&
+        p.frontmatter.template !== "dispatch",
+    )
+    .slice(0, 4);
+  const dispatches = posts
+    .filter((p) => p.frontmatter.template === "dispatch")
+    .slice(0, 3);
+  const postCount = posts.length;
 
-export default function Home() {
   return (
     <Page>
-      {/* Top tactical strip */}
-      <div className="border-b border-rule">
-        <Container>
-          <div className="flex items-center justify-between py-3">
-            <div className="flex items-center gap-3">
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-cyan" />
-              <TerminalPrompt path="/" mode="live" />
-            </div>
-            <Tactical>PHASE 01 · DESIGN SYSTEM</Tactical>
-          </div>
-        </Container>
-      </div>
+      <Container size="wide" className="pt-10 pb-8">
+        {/* Hero strip */}
+        <TacticalStrip variant="live">
+          <TerminalPrompt path="/sageafterdark" mode="live" />
+          <StripSep />
+          <span>{postCount.toString().padStart(3, "0")} POSTS LIVE</span>
+          <StripSep />
+          <span>SYS · OK</span>
+          <span className="ml-auto">
+            UPDATED · {format(new Date(NOW.updated), "yyyy-MM-dd").toUpperCase()}
+          </span>
+        </TacticalStrip>
 
-      <Container>
         {/* Hero */}
-        <section className="pt-24 pb-20 relative">
-          <div className="absolute top-6 right-0 hidden md:block">
+        <section className="relative mt-12 mb-20 max-w-4xl">
+          <div className="absolute top-0 right-0 hidden md:block">
             <Reticle size={20} />
           </div>
-
-          <Tactical className="text-cyan mb-6 block">$ sage init —phase=1 —ok</Tactical>
-
-          <Display>
-            The system is live.
+          <Tactical className="text-cyan mb-6 block">
+            // late-night transmissions from sage ideas
+          </Tactical>
+          <Display className="mb-6">
+            Field notes from
             <br />
-            <span className="text-mute">Now we build.</span>
+            <span className="text-mute">building in the open.</span>
             <span className="cursor-blink ml-2 inline-block h-[0.85em] w-[0.5ch] translate-y-[-0.05em] bg-cyan align-middle" />
           </Display>
-
-          <Lead className="mt-8">
-            Every primitive is built, typed, and on display at{" "}
-            <a href="/dev" className="text-cyan hover:underline">/dev</a>. Phase 2 ships the
-            content engine — six post templates and the first essays already live.
+          <Lead className="mt-6">
+            Essays, tutorials, and dispatches from the desk of Jason Teixeira.
+            Written in Geist, served at 60fps, rolled back in under 30 seconds.
           </Lead>
-
-          <div className="mt-10 flex flex-wrap items-center gap-4">
-            <ButtonLink href="/templates" variant="primary">▸ Browse the templates</ButtonLink>
-            <ButtonLink href="/dev" variant="outline">Component library</ButtonLink>
-            <ButtonLink href="https://github.com/JasonTeixeira/sage-after-dark" variant="ghost">
-              GitHub
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            <ButtonLink href="/archive" variant="primary">
+              ▸ Read the archive
+            </ButtonLink>
+            <ButtonLink href="/now" variant="outline">
+              What I&apos;m on now
+            </ButtonLink>
+            <ButtonLink href="/about" variant="ghost">
+              About
             </ButtonLink>
           </div>
-
-          <div className="mt-10 flex flex-wrap gap-x-6 gap-y-2 text-mute">
-            <Tactical><span className="text-cyan">▸</span> next.js 15</Tactical>
-            <Tactical><span className="text-cyan">▸</span> tailwind v4</Tactical>
-            <Tactical><span className="text-cyan">▸</span> geist</Tactical>
-            <Tactical><span className="text-cyan">▸</span> typescript strict</Tactical>
-            <Tactical><span className="text-cyan">▸</span> wcag aa</Tactical>
-          </div>
         </section>
+      </Container>
 
-        {/* Color check */}
-        <Section label="// COLOR · LOCKED">
-          <H2>Eight tokens. Two accents.</H2>
-          <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-8">
-            {swatches.map((s) => (
-              <div key={s.name} className="flex flex-col gap-2">
-                <div
-                  className="h-20 w-full border border-rule"
-                  style={{ background: s.hex }}
-                />
-                <div>
-                  <Tactical className="text-bone block">{s.name}</Tactical>
-                  <Tactical className="block">{s.hex}</Tactical>
-                  <Caption className="mt-1 block leading-snug">{s.role}</Caption>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Section>
+      <Container size="wide" className="pb-16">
+        {/* Featured */}
+        {featured && (
+          <Section label="// featured transmission" className="border-t-0 pt-0">
+            <PostCard post={featured} variant="featured" />
+          </Section>
+        )}
 
-        {/* Pillars check */}
-        <Section label="// PILLARS · 7 TOPICS">
-          <H2>Each topic gets its own hairline.</H2>
-          <Body className="mt-3 text-mute max-w-[60ch]">
-            Pillar colors appear only as 1px borders, tag chips, and the reading-progress
-            bar on each post. Cyan stays the global accent. Identity stays unified.
-          </Body>
+        {/* Latest grid */}
+        {latest.length > 0 && (
+          <Section label="// latest essays + tutorials">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {latest.map((p) => (
+                <PostCard key={p.frontmatter.slug} post={p} />
+              ))}
+            </div>
+            <div className="mt-8">
+              <Link
+                href="/archive"
+                className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.08em] text-cyan hover:text-bone transition-colors"
+              >
+                See the full archive →
+              </Link>
+            </div>
+          </Section>
+        )}
 
-          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {pillarList.map((p) => (
-              <PillarBorder key={p.key} pillar={p.key} className="bg-ink-1 py-4 pr-4 transition-colors hover:bg-ink-2">
-                <PillarTag pillar={p.key} size="sm" />
-                <Body className="mt-2 text-bone">{p.desc}</Body>
-              </PillarBorder>
+        {/* Dispatches rail */}
+        {dispatches.length > 0 && (
+          <Section label="// dispatches">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {dispatches.map((p) => (
+                <Link
+                  key={p.frontmatter.slug}
+                  href={`/${p.frontmatter.pillar}/${p.frontmatter.slug}`}
+                  className="group block border border-rule hover:border-cyan transition-colors p-5"
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <PillarTag pillar={p.frontmatter.pillar} size="sm" />
+                    <Tactical>
+                      {format(new Date(p.frontmatter.published), "yyyy-MM-dd")}
+                    </Tactical>
+                  </div>
+                  <h4 className="font-sans text-bone leading-snug text-lg group-hover:text-cyan transition-colors">
+                    {p.frontmatter.title}
+                  </h4>
+                  {p.frontmatter.dek && (
+                    <p className="mt-2 text-sm text-bone/70 leading-relaxed line-clamp-2">
+                      {p.frontmatter.dek}
+                    </p>
+                  )}
+                </Link>
+              ))}
+            </div>
+          </Section>
+        )}
+
+        {/* Pillars */}
+        <Section label="// the seven pillars">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            {PILLARS.map((p) => (
+              <Link
+                key={p.key}
+                href={`/${p.key}`}
+                className="group block focus:outline-none h-full"
+              >
+                <NotchedCard
+                  notch="tl"
+                  label={p.label}
+                  pillarKey={p.key}
+                  className="h-full"
+                  interactive
+                >
+                  <div className="p-5">
+                    <div
+                      className="text-base font-medium font-sans group-hover:text-cyan transition-colors"
+                      style={{ color: pillarTokens[p.key] }}
+                    >
+                      {p.label}
+                    </div>
+                    <p className="mt-2 text-bone/70 text-sm leading-relaxed">
+                      {p.tagline}
+                    </p>
+                  </div>
+                </NotchedCard>
+              </Link>
             ))}
           </div>
         </Section>
       </Container>
-
-      {/* Footer */}
-      <footer className="border-t border-rule">
-        <Container>
-          <div className="flex flex-wrap items-center justify-between gap-3 py-6">
-            <Tactical>© SAGE AFTER DARK · PHASE 01</Tactical>
-            <div className="flex items-center gap-3">
-              <Tactical>
-                <StripSep /> /system
-              </Tactical>
-              <TerminalPrompt path="/" mode="live" />
-            </div>
-          </div>
-        </Container>
-      </footer>
     </Page>
   );
 }

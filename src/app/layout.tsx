@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
+import { SiteHeader, SiteFooter } from "@/components";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://sageafterdark.com"),
@@ -42,7 +43,11 @@ export default function RootLayout({
       className={`${GeistSans.variable} ${GeistMono.variable}`}
       suppressHydrationWarning
     >
-      <body className="bg-ink-0 text-bone antialiased">{children}</body>
+      <body className="bg-ink-0 text-bone antialiased flex flex-col min-h-screen">
+        <SiteHeader />
+        <div className="flex-1">{children}</div>
+        <SiteFooter />
+      </body>
     </html>
   );
 }
