@@ -55,42 +55,57 @@ export function CountUp({
       return;
     }
 
-    // Reset to 0 on the client and let the IO start the count-up.
-    setN(0);
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting && !startedRef.current) {
-            startedRef.current = true;
-            const start = performance.now();
-            const tick = (now: number) => {
-              const t = Math.min(1, (now - start) / duration);
-              const eased = 1 - Math.pow(1 - t, 3);
-              setN(Math.round(eased * to));
-              if (t < 1) requestAnimationFrame(tick);
-            };
-            requestAnimationFrame(tick);
-          }
-        });
-      },
-      { threshold: 0.4 }
-    );
-    io.observe(node);
-
-    // Safety: if observer doesn't fire within 1.5s (e.g. element is
-    // already on screen and IntersectionObserver missed it), force final.
-    const fallback = setTimeout(() => {
-      if (!startedRef.current) {
-        startedRef.current = true;
-        setN(to);
-      }
-    }, 1500);
-
-    return () => {
-      io.disconnect();
-      clearTimeout(fallback);
+    const startAnim = () => {
+      if (startedRef.current) return;
+      startedRef.current = true;
+      const start = performance.now();
+      const tick = (now: number) => {
+        const t = Math.min(1, (now - start) / duration);
+        const eased = 1 - Math.pow(1 - t, 3);
+        setN(Math.round(eased * to));
+        if (t < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
     };
+
+    // If the element is already in the viewport on mount, start immediately.
+    const rect = node.getBoundingClientRect();
+    const inView =
+      rect.top < window.innerHeight && rect.bottom > 0 && rect.left < window.innerWidth && rect.right > 0;
+
+    if (inView) {
+      setN(0);
+      startAnim();
+    } else {
+      // Otherwise reset to 0 and wait for the user to scroll it into view.
+      setN(0);
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              startAnim();
+              io.disconnect();
+              break;
+            }
+          }
+        },
+        { threshold: 0.4 }
+      );
+      io.observe(node);
+
+      // Safety net: force final value after 2s if observer never fires.
+      const fallback = setTimeout(() => {
+        if (!startedRef.current) {
+          startedRef.current = true;
+          setN(to);
+        }
+      }, 2000);
+
+      return () => {
+        io.disconnect();
+        clearTimeout(fallback);
+      };
+    }
   }, [to, duration]);
 
   return (

@@ -1,7 +1,12 @@
 {
-  "generatedAt": "2026-05-05T17:48:46.823Z",
-  "count": 60,
+  "generatedAt": "2026-05-05T17:51:33.881Z",
+  "count": 61,
   "entries": [
+    {
+      "hash": "fe62744",
+      "date": "2026-05-05",
+      "subject": "fix(about): tighten hero spacing + remove Reveal wrapping stats"
+    },
     {
       "hash": "2f067c7",
       "date": "2026-05-05",
