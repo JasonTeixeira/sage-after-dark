@@ -6,7 +6,7 @@
  */
 
 import { execSync } from "node:child_process";
-import { writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { writeFileSync, mkdirSync, existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -35,6 +35,24 @@ try {
     });
 } catch (err) {
   console.warn("[changelog] git log failed:", err.message);
+}
+
+// On Vercel, git history is shallow (often 1 commit). If we'd overwrite
+// a richer existing snapshot with a thinner one, keep the existing.
+let existingCount = 0;
+if (existsSync(OUT)) {
+  try {
+    existingCount = JSON.parse(readFileSync(OUT, "utf8")).count ?? 0;
+  } catch {
+    /* ignore */
+  }
+}
+
+if (entries.length <= existingCount) {
+  console.log(
+    `[changelog] git produced ${entries.length} entries; keeping existing ${existingCount}-entry snapshot`,
+  );
+  process.exit(0);
 }
 
 writeFileSync(

@@ -1,7 +1,17 @@
 {
-  "generatedAt": "2026-05-05T03:30:32.387Z",
-  "count": 47,
+  "generatedAt": "2026-05-05T03:36:20.489Z",
+  "count": 49,
   "entries": [
+    {
+      "hash": "fc93cf2",
+      "date": "2026-05-05",
+      "subject": "chore: cache bust"
+    },
+    {
+      "hash": "e231bd0",
+      "date": "2026-05-05",
+      "subject": "fix(p26): bake changelog at prebuild — git history unavailable in Vercel runtime, snapshot to JSON"
+    },
     {
       "hash": "552461e",
       "date": "2026-05-05",
