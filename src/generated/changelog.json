@@ -1,7 +1,12 @@
 {
-  "generatedAt": "2026-05-05T14:43:06.005Z",
-  "count": 53,
+  "generatedAt": "2026-05-05T16:01:21.476Z",
+  "count": 54,
   "entries": [
+    {
+      "hash": "c228a01",
+      "date": "2026-05-05",
+      "subject": "fix(p29): tolerate empty PostgREST responses for RETURNS void RPCs"
+    },
     {
       "hash": "2dacecd",
       "date": "2026-05-05",

@@ -27,3 +27,13 @@ export async function requireAdmin(): Promise<string> {
 export function getAdminEmail(): string | null {
   return ADMIN_EMAIL || null;
 }
+
+/**
+ * Pure check: does this email match the admin? Synchronous — used by
+ * components that already have the email in hand and don't want to
+ * re-read the cookie.
+ */
+export function isAdminEmail(email: string | null | undefined): boolean {
+  if (!email || !ADMIN_EMAIL) return false;
+  return email.toLowerCase() === ADMIN_EMAIL;
+}

@@ -62,16 +62,25 @@ export default async function AccountPage({
             <Tactical className="text-cyan mb-4 block">// account</Tactical>
             <Display className="mb-6">Sign in.</Display>
             <Lead>
-              You&apos;ll need to sign in to see your member dashboard. We use
-              one-time magic links — no passwords.
+              You&apos;ll need to sign in to see your member dashboard.
+              Use your password — or grab a single-use email link from the
+              login page if you forgot it.
             </Lead>
           </header>
-          <a
-            href="/account/login"
-            className="font-mono text-[12px] uppercase tracking-[0.08em] px-5 py-3 border border-cyan text-cyan hover:bg-cyan hover:text-ink transition-colors rounded inline-block"
-          >
-            ▸ sign in
-          </a>
+          <div className="flex flex-wrap gap-3">
+            <a
+              href="/account/login"
+              className="font-mono text-[12px] uppercase tracking-[0.08em] px-5 py-3 border border-cyan text-cyan hover:bg-cyan hover:text-ink transition-colors rounded inline-block"
+            >
+              ▸ sign in
+            </a>
+            <a
+              href="/account/signup"
+              className="font-mono text-[12px] uppercase tracking-[0.08em] px-5 py-3 border border-teach text-teach hover:bg-teach hover:text-ink transition-colors rounded inline-block"
+            >
+              ▸ create account
+            </a>
+          </div>
           <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.08em] text-mute">
             // not a member?{" "}
             <a className="text-cyan underline decoration-cyan/40 underline-offset-2" href="/membership">
@@ -111,8 +120,8 @@ export default async function AccountPage({
           <Tactical className="text-cyan mb-4 block">// dashboard</Tactical>
           <Display className="mb-6">Account.</Display>
           <Lead>
-            Manage your membership, billing, and dispatches. Magic-link sign-in
-            keeps your session alive for 30 days.
+            Manage your membership, billing, and dispatches. Your password
+            sign-in keeps your session alive for 30 days.
           </Lead>
         </header>
 
@@ -174,6 +183,14 @@ export default async function AccountPage({
         {/* Actions */}
         <Section label="// actions" className="border-t-0 pt-0">
           <div className="flex flex-wrap gap-3">
+            {isActive && (
+              <a
+                href="/members"
+                className="font-mono text-[12px] uppercase tracking-[0.08em] px-5 py-3 border border-teach text-teach hover:bg-teach hover:text-ink transition-colors rounded"
+              >
+                ▸ members area
+              </a>
+            )}
             {isActive && (
               <form method="post" action="/api/portal">
                 <button
