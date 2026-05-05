@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: "Uses",
   description:
     "The exact stack behind Sage After Dark — hardware, editor, hosting, billing, and the small tools that make late-night writing possible.",
-  alternates: { canonical: "https://sageafterdark.com/uses" },
+  alternates: { canonical: "https://www.sageafterdark.com/uses" },
 };
 
 type Item = { name: string; note: string; href?: string };
@@ -81,8 +81,8 @@ export default function UsesPage() {
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",
           itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: "https://sageafterdark.com" },
-            { "@type": "ListItem", position: 2, name: "Uses", item: "https://sageafterdark.com/uses" },
+            { "@type": "ListItem", position: 1, name: "Home", item: "https://www.sageafterdark.com" },
+            { "@type": "ListItem", position: 2, name: "Uses", item: "https://www.sageafterdark.com/uses" },
           ],
         }}
       />

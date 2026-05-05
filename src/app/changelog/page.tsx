@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: "Changelog",
   description:
     "What changed and when. Auto-generated from git history — every commit, every shipped wave, every fix.",
-  alternates: { canonical: "https://sageafterdark.com/changelog" },
+  alternates: { canonical: "https://www.sageafterdark.com/changelog" },
 };
 
 // Static at build time. Re-generated whenever a new build deploys.
@@ -85,13 +85,13 @@ export default function ChangelogPage() {
               "@type": "ListItem",
               position: 1,
               name: "Home",
-              item: "https://sageafterdark.com",
+              item: "https://www.sageafterdark.com",
             },
             {
               "@type": "ListItem",
               position: 2,
               name: "Changelog",
-              item: "https://sageafterdark.com/changelog",
+              item: "https://www.sageafterdark.com/changelog",
             },
           ],
         }}

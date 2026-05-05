@@ -6,7 +6,7 @@ import { SiteFooter, KeyboardShortcuts, HeroReticle, JsonLd, WEBSITE_LD, PERSON_
 import { SiteHeader } from "@/components/site-header";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://sageafterdark.com"),
+  metadataBase: new URL("https://www.sageafterdark.com"),
   title: {
     default: "Sage After Dark",
     template: "%s · Sage After Dark",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://sageafterdark.com",
+    url: "https://www.sageafterdark.com",
     siteName: "Sage After Dark",
     title: "Sage After Dark",
     description:

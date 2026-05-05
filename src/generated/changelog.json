@@ -1,7 +1,12 @@
 {
-  "generatedAt": "2026-05-05T16:11:38.140Z",
-  "count": 55,
+  "generatedAt": "2026-05-05T16:43:19.967Z",
+  "count": 56,
   "entries": [
+    {
+      "hash": "28bdcb6",
+      "date": "2026-05-05",
+      "subject": "fix(admin): logout via form POST + remove GET handler (was silently clearing session via RSC prefetch)"
+    },
     {
       "hash": "b8103f8",
       "date": "2026-05-05",

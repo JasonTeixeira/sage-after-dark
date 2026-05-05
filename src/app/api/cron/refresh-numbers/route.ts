@@ -16,9 +16,18 @@ import { getPublicMetrics } from "@/lib/stripe";
 export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
+  // Vercel Cron sends Authorization: Bearer <CRON_SECRET>. We require it in
+  // production so the route isn't world-callable. In a preview/dev where the
+  // env isn't set, we still allow Vercel's own internal cron header.
   const auth = req.headers.get("authorization") ?? "";
+  const isVercelCron = req.headers.get("x-vercel-cron") === "1";
   const expected = process.env.CRON_SECRET;
-  if (expected && auth !== `Bearer ${expected}`) {
+  if (expected) {
+    if (auth !== `Bearer ${expected}`) {
+      return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+    }
+  } else if (!isVercelCron) {
+    // No secret configured and not coming from Vercel cron — reject.
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 

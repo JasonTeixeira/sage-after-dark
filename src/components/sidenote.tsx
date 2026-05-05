@@ -60,7 +60,10 @@ export function Sidenote({
        * On mobile (< lg) we hide this float entirely and surface the
        * note inline via the disclosure span below.
        */}
-      <aside
+      {/* Use <span> not <aside> so the note is legal inside <p> (block-in-paragraph
+          breaks hydration). The visual block effect comes from float + display rules. */}
+      <span
+        role="note"
         className={cn(
           "sidenote-aside hidden lg:block float-right clear-right",
           "w-[13rem] -mr-[15rem] ml-6 mb-3",
@@ -71,7 +74,7 @@ export function Sidenote({
       >
         <span className="block text-cyan/70 mb-1">[{label}]</span>
         {children}
-      </aside>
+      </span>
 
       {/* Mobile: inline disclosure (toggled by anchor) */}
       <span
