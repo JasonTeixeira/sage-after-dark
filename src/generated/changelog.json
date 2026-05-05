@@ -1,7 +1,12 @@
 {
-  "generatedAt": "2026-05-05T17:51:33.881Z",
-  "count": 61,
+  "generatedAt": "2026-05-05T17:53:05.407Z",
+  "count": 62,
   "entries": [
+    {
+      "hash": "e1881fd",
+      "date": "2026-05-05",
+      "subject": "fix(about): CountUp starts immediately when already in viewport on mount"
+    },
     {
       "hash": "fe62744",
       "date": "2026-05-05",

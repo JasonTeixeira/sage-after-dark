@@ -55,57 +55,58 @@ export function CountUp({
       return;
     }
 
-    const startAnim = () => {
-      if (startedRef.current) return;
-      startedRef.current = true;
-      const start = performance.now();
-      const tick = (now: number) => {
-        const t = Math.min(1, (now - start) / duration);
-        const eased = 1 - Math.pow(1 - t, 3);
-        setN(Math.round(eased * to));
-        if (t < 1) requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
-    };
-
-    // If the element is already in the viewport on mount, start immediately.
+    // Only animate when the element scrolls INTO view from off-screen.
+    // If it's already visible on mount (e.g. on the about page hero stats),
+    // leave the SSR'd final value and skip the count-up. This prevents
+    // any flash-of-zero on initial paint and keeps the page legible without JS.
     const rect = node.getBoundingClientRect();
     const inView =
-      rect.top < window.innerHeight && rect.bottom > 0 && rect.left < window.innerWidth && rect.right > 0;
+      rect.top < window.innerHeight &&
+      rect.bottom > 0 &&
+      rect.left < window.innerWidth &&
+      rect.right > 0;
 
     if (inView) {
-      setN(0);
-      startAnim();
-    } else {
-      // Otherwise reset to 0 and wait for the user to scroll it into view.
-      setN(0);
-      const io = new IntersectionObserver(
-        (entries) => {
-          for (const e of entries) {
-            if (e.isIntersecting) {
-              startAnim();
-              io.disconnect();
-              break;
-            }
-          }
-        },
-        { threshold: 0.4 }
-      );
-      io.observe(node);
-
-      // Safety net: force final value after 2s if observer never fires.
-      const fallback = setTimeout(() => {
-        if (!startedRef.current) {
-          startedRef.current = true;
-          setN(to);
-        }
-      }, 2000);
-
-      return () => {
-        io.disconnect();
-        clearTimeout(fallback);
-      };
+      // Already on screen — leave the SSR value alone.
+      startedRef.current = true;
+      setN(to);
+      return;
     }
+
+    setN(0);
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting && !startedRef.current) {
+            startedRef.current = true;
+            const start = performance.now();
+            const tick = (now: number) => {
+              const t = Math.min(1, (now - start) / duration);
+              const eased = 1 - Math.pow(1 - t, 3);
+              setN(Math.round(eased * to));
+              if (t < 1) requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+            io.disconnect();
+            break;
+          }
+        }
+      },
+      { threshold: 0.4 }
+    );
+    io.observe(node);
+
+    const fallback = setTimeout(() => {
+      if (!startedRef.current) {
+        startedRef.current = true;
+        setN(to);
+      }
+    }, 2000);
+
+    return () => {
+      io.disconnect();
+      clearTimeout(fallback);
+    };
   }, [to, duration]);
 
   return (
