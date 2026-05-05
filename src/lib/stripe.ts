@@ -8,9 +8,9 @@
 
 const STRIPE_BASE = "https://api.stripe.com/v1";
 
-export const STRIPE_PRODUCT_ID = "prod_USKqCDDFCJWkMj";
-export const STRIPE_PRICE_MONTHLY = "price_1TTQAlEDeyGfkojJflooVpCR";
-export const STRIPE_PRICE_ANNUAL = "price_1TTQAlEDeyGfkojJRN8EaiCG";
+export const STRIPE_PRODUCT_ID = "prod_USRifioJd71oZF";
+export const STRIPE_PRICE_MONTHLY = "price_1TTWp5EGpp4mxtd4u3SPwXcH";
+export const STRIPE_PRICE_ANNUAL = "price_1TTWp5EGpp4mxtd4EhfemchH";
 
 function key(): string {
   const k = process.env.STRIPE_SECRET_KEY;

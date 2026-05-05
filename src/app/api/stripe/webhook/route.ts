@@ -29,8 +29,8 @@ function planFromPriceId(priceId: string | undefined | null): string | null {
   if (!priceId) return null;
   if (priceId === process.env.STRIPE_PRICE_ANNUAL_OVERRIDE) return "annual";
   // Hard-coded fallback to the live IDs declared in lib/stripe.ts.
-  if (priceId === "price_1TTQAlEDeyGfkojJRN8EaiCG") return "annual";
-  if (priceId === "price_1TTQAlEDeyGfkojJflooVpCR") return "monthly";
+  if (priceId === "price_1TTWp5EGpp4mxtd4EhfemchH") return "annual";
+  if (priceId === "price_1TTWp5EGpp4mxtd4u3SPwXcH") return "monthly";
   return null;
 }
 

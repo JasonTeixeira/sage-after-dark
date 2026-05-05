@@ -40,6 +40,51 @@ export async function sendEmail(args: {
   }
 }
 
+/* ---- audience contacts ---- */
+
+/**
+ * Add (or upsert) a contact to the configured Resend audience.
+ * Best-effort: never throws on missing config; logs and returns false on failure.
+ */
+export async function addToAudience(args: {
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  unsubscribed?: boolean;
+}): Promise<boolean> {
+  const apiKey = process.env.RESEND_API_KEY;
+  const audienceId = process.env.RESEND_AUDIENCE_ID;
+  if (!apiKey || !audienceId) {
+    console.warn("[email] RESEND_API_KEY or RESEND_AUDIENCE_ID not set; skipping audience add");
+    return false;
+  }
+  const r = await fetch(
+    `https://api.resend.com/audiences/${audienceId}/contacts`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: args.email,
+        first_name: args.firstName,
+        last_name: args.lastName,
+        unsubscribed: args.unsubscribed ?? false,
+      }),
+      cache: "no-store",
+    },
+  );
+  if (!r.ok) {
+    const t = await r.text();
+    // Resend returns 422 if the contact already exists — treat as success.
+    if (r.status === 422 && /already exists/i.test(t)) return true;
+    console.warn(`[email] addToAudience failed ${r.status}: ${t}`);
+    return false;
+  }
+  return true;
+}
+
 /* ---- templates ---- */
 
 const SHELL = (inner: string, footerText: string) => `<!doctype html>

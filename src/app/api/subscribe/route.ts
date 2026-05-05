@@ -14,7 +14,7 @@
  * email server-side and upserts on conflict.
  */
 
-import { sendEmail, welcomeEmail } from "@/lib/email";
+import { addToAudience, sendEmail, welcomeEmail } from "@/lib/email";
 
 export const runtime = "nodejs";
 
@@ -78,6 +78,13 @@ export async function POST(req: Request) {
     const text = await r.text();
     console.error("[subscribe] supabase error", r.status, text);
     return json({ error: "Could not save right now. Try again." }, 500);
+  }
+
+  // Best-effort: add to the Resend audience so list-builds reflect this subscriber.
+  try {
+    await addToAudience({ email });
+  } catch (e) {
+    console.warn("[subscribe] audience add failed", e);
   }
 
   // Best-effort welcome dispatch — never blocks the response on email failure.
