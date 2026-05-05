@@ -38,7 +38,10 @@ export function CountUp({
   duration?: number;
   className?: string;
 }) {
-  const [n, setN] = useState(0);
+  // Render the final value during SSR + initial paint so screenshots,
+  // print, and no-JS clients always see the correct number. The animation
+  // re-runs from 0 -> target on first scroll-into-view (when JS is ready).
+  const [n, setN] = useState(to);
   const ref = useRef<HTMLSpanElement>(null);
   const startedRef = useRef(false);
 
@@ -51,6 +54,9 @@ export function CountUp({
       setN(to);
       return;
     }
+
+    // Reset to 0 on the client and let the IO start the count-up.
+    setN(0);
 
     const io = new IntersectionObserver(
       (entries) => {
@@ -71,7 +77,20 @@ export function CountUp({
       { threshold: 0.4 }
     );
     io.observe(node);
-    return () => io.disconnect();
+
+    // Safety: if observer doesn't fire within 1.5s (e.g. element is
+    // already on screen and IntersectionObserver missed it), force final.
+    const fallback = setTimeout(() => {
+      if (!startedRef.current) {
+        startedRef.current = true;
+        setN(to);
+      }
+    }, 1500);
+
+    return () => {
+      io.disconnect();
+      clearTimeout(fallback);
+    };
   }, [to, duration]);
 
   return (

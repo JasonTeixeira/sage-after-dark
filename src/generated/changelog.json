@@ -1,7 +1,12 @@
 {
-  "generatedAt": "2026-05-05T17:36:34.071Z",
-  "count": 58,
+  "generatedAt": "2026-05-05T17:40:22.531Z",
+  "count": 59,
   "entries": [
+    {
+      "hash": "45f42ac",
+      "date": "2026-05-05",
+      "subject": "feat(about): world-class redesign + enable Giscus comments"
+    },
     {
       "hash": "78b701f",
       "date": "2026-05-05",
