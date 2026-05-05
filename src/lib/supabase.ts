@@ -31,7 +31,16 @@ async function rpc<T = unknown>(name: string, body: Record<string, unknown>): Pr
     const text = await r.text();
     throw new Error(`supabase_${name}_${r.status}: ${text}`);
   }
-  return (await r.json()) as T;
+  // PostgREST returns an empty body (204 / 200 with no content) for RETURNS
+  // void functions. r.json() would throw SyntaxError on empty input.
+  if (r.status === 204) return undefined as T;
+  const text = await r.text();
+  if (!text) return undefined as T;
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    return undefined as T;
+  }
 }
 
 /* ---- subscribers ---- */
