@@ -82,17 +82,31 @@ export function Comments({
   useEffect(() => {
     if (mode !== "giscus") return;
 
+    // Only collapse on FATAL config errors (app not installed,
+    // repo not found, discussions disabled). "Discussion not found"
+    // is the NORMAL state for a post that hasn't been commented on
+    // yet — Giscus shows the comment box and creates a discussion
+    // on first reply. We must not hide the embed in that case.
+    const FATAL_PATTERNS = [
+      /not installed/i,
+      /repo.*not.*found/i,
+      /discussions.*not.*enabled/i,
+      /category.*not.*found/i,
+      /unauthorized/i,
+    ];
+
     const onMessage = (event: MessageEvent) => {
       if (!event.origin.includes("giscus.app")) return;
       const data = event.data;
       if (data && typeof data === "object" && "giscus" in data) {
-        // Giscus posts { giscus: { error: "..." } } when something
-        // is wrong (app not installed, repo private, etc.).
         const payload = (data as { giscus: { error?: string } }).giscus;
         if (payload && payload.error) {
+          const msg = String(payload.error);
           // eslint-disable-next-line no-console
-          console.warn("[comments] giscus error:", payload.error);
-          setMode("placeholder");
+          console.warn("[comments] giscus message:", msg);
+          if (FATAL_PATTERNS.some((re) => re.test(msg))) {
+            setMode("placeholder");
+          }
         }
       }
     };

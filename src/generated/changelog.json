@@ -1,7 +1,12 @@
 {
-  "generatedAt": "2026-05-05T18:08:52.299Z",
-  "count": 63,
+  "generatedAt": "2026-05-05T18:23:24.662Z",
+  "count": 64,
   "entries": [
+    {
+      "hash": "7bab2a5",
+      "date": "2026-05-05",
+      "subject": "fix(comments): gracefully fall back to placeholder when Giscus app missing"
+    },
     {
       "hash": "f9093cf",
       "date": "2026-05-05",
