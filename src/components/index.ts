@@ -55,6 +55,9 @@ export { ReadingProgress } from "./reading-progress";
 export { HeroReticle } from "./hero-reticle";
 export { Reveal } from "./reveal";
 export { Konami } from "./konami";
+export { TerminalPalette } from "./terminal-palette";
+export { StudioWidget } from "./studio-widget";
+export { TransmissionFooter } from "./transmission-footer";
 export { JsonLd, PERSON_LD, WEBSITE_LD, articleLd, breadcrumbsLd } from "./json-ld";
 
 // Newsletter funnel

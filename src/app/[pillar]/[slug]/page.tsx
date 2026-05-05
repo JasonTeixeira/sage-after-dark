@@ -16,6 +16,10 @@ import { LAYOUT_BY_TEMPLATE } from "@/components/layouts";
 import { Paywall } from "@/components/paywall";
 import { JsonLd, articleLd, breadcrumbsLd } from "@/components/json-ld";
 import { EssayStickyBar } from "@/components/essay-sticky-bar";
+import { StudioWidget } from "@/components/studio-widget";
+import { TransmissionFooter } from "@/components/transmission-footer";
+import { WRITING_NOW } from "@/content/studio-state";
+import { ARCS } from "@/content/site-data";
 import { getSessionEmail } from "@/lib/auth";
 import { memberStatus } from "@/lib/supabase";
 import type { Metadata } from "next";
@@ -152,8 +156,27 @@ export default async function PostPage({
               },
             }}
           />
+          {/* Cipher Layer 5 — signed transmission footer */}
+          <TransmissionFooter
+            source={post.source}
+            published={fm.published}
+            updated={fm.updated}
+            pillar={fm.pillar}
+            slug={fm.slug}
+          />
           {/* Sticky bottom subscribe bar — shows after 50% scroll, dismissible. */}
           <EssayStickyBar source={`essay:${fm.slug}`} />
+          {/* Studio widget — what's being written now + arc context */}
+          <StudioWidget
+            writingNow={WRITING_NOW.text}
+            writingNowKind={WRITING_NOW.kind}
+            pillar={fm.pillar}
+            arcCode={fm.arc ? ARCS.find((a) => a.slug === fm.arc!.arc_slug)?.code : undefined}
+            arcTitle={fm.arc?.arc_title}
+            arcSlug={fm.arc?.arc_slug}
+            episodeN={fm.arc?.episode}
+            episodeTotal={fm.arc?.total_episodes}
+          />
         </>
       )}
     </Layout>

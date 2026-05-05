@@ -134,3 +134,111 @@ export async function verifyStripeSignature(
   for (let i = 0; i < hex.length; i++) diff |= hex.charCodeAt(i) ^ v1.charCodeAt(i);
   return diff === 0;
 }
+
+/* -----------------------------------------------------------
+ * Public metrics — for /numbers dashboard.
+ *
+ * Pulls subscriptions.list (active only) + invoices.list (last 90 days)
+ * and computes MRR, sub count, churn proxy. Intentionally rounded to
+ * remove false precision and protect privacy.
+ * --------------------------------------------------------- */
+
+type StripeSubscription = {
+  id: string;
+  status: string;
+  items: { data: { price: { id: string; unit_amount: number; recurring?: { interval: string } } }[] };
+  canceled_at?: number | null;
+  created: number;
+};
+
+type StripeListResp<T> = { data: T[]; has_more: boolean };
+
+async function listAll<T>(path: string, params: Record<string, string> = {}): Promise<T[]> {
+  const all: T[] = [];
+  let starting_after: string | undefined;
+  for (let i = 0; i < 10; i++) {
+    const u = new URLSearchParams({ limit: "100", ...params });
+    if (starting_after) u.set("starting_after", starting_after);
+    const r = await api<StripeListResp<T> & { data: (T & { id?: string })[] }>(`${path}?${u}`);
+    all.push(...r.data);
+    if (!r.has_more || r.data.length === 0) break;
+    const last = r.data[r.data.length - 1] as { id?: string };
+    if (!last?.id) break;
+    starting_after = last.id;
+  }
+  return all;
+}
+
+export type PublicMetrics = {
+  /** Monthly recurring revenue, in dollars (rounded to nearest $5). */
+  mrrUsd: number;
+  /** Active subscribers (any active status). */
+  activeSubs: number;
+  /** Subs that started in the last 30 days. */
+  newSubs30d: number;
+  /** Subs that canceled in the last 30 days. */
+  canceledSubs30d: number;
+  /** Approx churn rate (canceled / start-of-period active), 0-1. Null if denominator is too small. */
+  churn30d: number | null;
+  /** Lifetime revenue, in dollars (rounded to nearest $10). */
+  lifetimeUsd: number;
+  /** When this snapshot was generated, ISO. */
+  asOf: string;
+};
+
+export async function getPublicMetrics(): Promise<PublicMetrics> {
+  const subs = await listAll<StripeSubscription>("/subscriptions", { status: "all" });
+
+  const now = Math.floor(Date.now() / 1000);
+  const thirtyDaysAgo = now - 30 * 24 * 60 * 60;
+
+  const active = subs.filter((s) => s.status === "active" || s.status === "trialing");
+  const activeCount = active.length;
+
+  // MRR — normalize annual prices to monthly
+  let mrrCents = 0;
+  for (const s of active) {
+    for (const item of s.items.data) {
+      const amt = item.price.unit_amount ?? 0;
+      const interval = item.price.recurring?.interval;
+      if (interval === "month") mrrCents += amt;
+      else if (interval === "year") mrrCents += Math.round(amt / 12);
+    }
+  }
+  const mrrUsd = roundTo(mrrCents / 100, 5);
+
+  const newSubs30d = subs.filter((s) => s.created >= thirtyDaysAgo).length;
+  const canceledSubs30d = subs.filter(
+    (s) => s.canceled_at && s.canceled_at >= thirtyDaysAgo,
+  ).length;
+
+  // start-of-period active = currently-active that existed before window
+  // + canceled-in-window (they were active at start)
+  const startActive = active.filter((s) => s.created < thirtyDaysAgo).length + canceledSubs30d;
+  const churn30d = startActive >= 5 ? canceledSubs30d / startActive : null;
+
+  // Lifetime revenue from invoices.list (last ~10 pages worth ≈ 1000 invoices)
+  type Invoice = { amount_paid: number; status: string };
+  let lifetimeCents = 0;
+  try {
+    const invoices = await listAll<Invoice>("/invoices", { status: "paid" });
+    for (const inv of invoices) lifetimeCents += inv.amount_paid ?? 0;
+  } catch {
+    // non-fatal — leave at 0 if invoice list fails
+  }
+  const lifetimeUsd = roundTo(lifetimeCents / 100, 10);
+
+  return {
+    mrrUsd,
+    activeSubs: activeCount,
+    newSubs30d,
+    canceledSubs30d,
+    churn30d,
+    lifetimeUsd,
+    asOf: new Date().toISOString(),
+  };
+}
+
+function roundTo(n: number, step: number): number {
+  return Math.round(n / step) * step;
+}

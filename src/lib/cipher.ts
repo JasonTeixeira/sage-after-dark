@@ -23,7 +23,7 @@ export const LIVE_UNLOCK_KEY = "decoder-2026-05-postgres";
 // 2026-01 → 7, 2026-02 → 11, 2026-03 → 13, 2026-04 → 17, 2026-05 → 5,
 // 2026-06 → 9, 2026-07 → 19, 2026-08 → 23, 2026-09 → 3, 2026-10 → 21,
 // 2026-11 → 15, 2026-12 → 25.
-const MONTHLY_SHIFTS: number[] = [7, 11, 13, 17, 5, 9, 19, 23, 3, 21, 15, 25];
+export const MONTHLY_SHIFTS: number[] = [7, 11, 13, 17, 5, 9, 19, 23, 3, 21, 15, 25];
 
 export function currentShift(now: Date = new Date()): number {
   return MONTHLY_SHIFTS[now.getUTCMonth()] ?? 5;
