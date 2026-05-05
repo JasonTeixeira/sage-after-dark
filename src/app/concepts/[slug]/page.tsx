@@ -30,6 +30,7 @@ import {
   Hr,
 } from "@/components";
 import { getAllPosts } from "@/content/loader";
+import { JsonLd, breadcrumbsLd } from "@/components/json-ld";
 
 type ConceptDef = {
   slug: string;
@@ -162,6 +163,24 @@ export default async function ConceptPage({
 
   return (
     <Page>
+      <JsonLd
+        data={breadcrumbsLd([
+          { name: "Sage After Dark", url: "/" },
+          { name: "Concepts", url: "/concepts" },
+          { name: c.title, url: `/concepts/${slug}` },
+        ])}
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "DefinedTerm",
+          name: c.title,
+          description: c.oneLiner,
+          url: `https://www.sageafterdark.com/concepts/${slug}`,
+          inDefinedTermSet: "https://www.sageafterdark.com/concepts",
+          termCode: c.code,
+        }}
+      />
       <Container size="wide" className="pt-10 pb-24">
         <TacticalStrip>
           <TerminalPrompt path={`~/concepts/${slug}`} mode="breadcrumb" />

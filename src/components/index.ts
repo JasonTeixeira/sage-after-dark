@@ -56,6 +56,8 @@ export { HeroReticle } from "./hero-reticle";
 export { Reveal } from "./reveal";
 export { Konami } from "./konami";
 export { TerminalPalette } from "./terminal-palette";
+export { CommandPalette } from "./command-palette";
+export { NotFoundSuggester } from "./not-found-suggester";
 export { StudioWidget } from "./studio-widget";
 export { TransmissionFooter } from "./transmission-footer";
 export { FootnotePopover } from "./footnote-popover";

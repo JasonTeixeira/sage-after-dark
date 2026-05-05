@@ -31,6 +31,7 @@ import Link from "next/link";
 import { getPublicMetrics, type PublicMetrics } from "@/lib/stripe";
 import { getSiteCounts } from "@/lib/live-counts";
 import { getAllPosts } from "@/content/loader";
+import { JsonLd, breadcrumbsLd } from "@/components/json-ld";
 
 // Revalidate hourly. Nightly cron will warm the cache.
 export const revalidate = 3600;
@@ -76,6 +77,12 @@ export default async function NumbersPage() {
 
   return (
     <Page>
+      <JsonLd
+        data={breadcrumbsLd([
+          { name: "Sage After Dark", url: "/" },
+          { name: "Numbers", url: "/numbers" },
+        ])}
+      />
       <Container size="default" className="pt-10 pb-24">
         <TacticalStrip variant="live">
           <span className="text-cyan">▸ NUMBERS · LIVE</span>

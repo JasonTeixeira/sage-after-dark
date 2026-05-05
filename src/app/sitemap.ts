@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getAllPosts, getAllTags, getAllSeries } from "@/content/loader";
+import { ARCS } from "@/content/site-data";
 
 const SITE = "https://www.sageafterdark.com";
 
@@ -13,33 +14,58 @@ const PILLARS = [
   "teach",
 ] as const;
 
-const STATIC_PATHS = [
-  "",
-  "/archive",
-  "/now",
-  "/taste",
-  "/about",
-  "/colophon",
-  "/reading",
-  "/search",
-  "/templates",
-  "/best",
-  "/tags",
-  "/series",
-  "/dispatch",
-  "/tools",
-  "/tools/30-second-rollback",
-  "/ask",
+/** path → priority. Higher priority = surfaced more by crawlers. */
+const STATIC_PATHS: Array<{ path: string; priority: number; changeFrequency: "daily" | "weekly" | "monthly" }> = [
+  { path: "", priority: 1.0, changeFrequency: "daily" },
+  { path: "/start", priority: 0.9, changeFrequency: "monthly" },
+  { path: "/archive", priority: 0.9, changeFrequency: "daily" },
+  { path: "/best", priority: 0.8, changeFrequency: "weekly" },
+  { path: "/concepts", priority: 0.8, changeFrequency: "weekly" },
+  { path: "/numbers", priority: 0.7, changeFrequency: "daily" },
+  { path: "/now", priority: 0.7, changeFrequency: "weekly" },
+  { path: "/about", priority: 0.7, changeFrequency: "monthly" },
+  { path: "/taste", priority: 0.6, changeFrequency: "monthly" },
+  { path: "/reading", priority: 0.6, changeFrequency: "monthly" },
+  { path: "/search", priority: 0.6, changeFrequency: "monthly" },
+  { path: "/tags", priority: 0.5, changeFrequency: "weekly" },
+  { path: "/series", priority: 0.5, changeFrequency: "weekly" },
+  { path: "/templates", priority: 0.5, changeFrequency: "monthly" },
+  { path: "/dispatch", priority: 0.5, changeFrequency: "monthly" },
+  { path: "/tools", priority: 0.5, changeFrequency: "monthly" },
+  { path: "/tools/30-second-rollback", priority: 0.5, changeFrequency: "monthly" },
+  { path: "/ask", priority: 0.4, changeFrequency: "monthly" },
+  { path: "/colophon", priority: 0.4, changeFrequency: "monthly" },
+];
+
+const CONCEPT_SLUGS = [
+  "taste-as-deploy-gate",
+  "learning-loop",
+  "half-life-of-a-tool",
+  "the-system",
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await getAllPosts();
 
   const staticEntries: MetadataRoute.Sitemap = STATIC_PATHS.map((p) => ({
-    url: `${SITE}${p}`,
+    url: `${SITE}${p.path}`,
     lastModified: new Date(),
-    changeFrequency: p === "" ? "daily" : "weekly",
-    priority: p === "" ? 1 : 0.6,
+    changeFrequency: p.changeFrequency,
+    priority: p.priority,
+  }));
+
+  const conceptEntries: MetadataRoute.Sitemap = CONCEPT_SLUGS.map((slug) => ({
+    url: `${SITE}/concepts/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  const arcEntries: MetadataRoute.Sitemap = ARCS.map((a) => ({
+    url: `${SITE}/arcs/${a.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
   }));
 
   const pillarEntries: MetadataRoute.Sitemap = PILLARS.map((k) => ({
@@ -75,6 +101,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...staticEntries,
+    ...conceptEntries,
+    ...arcEntries,
     ...pillarEntries,
     ...postEntries,
     ...tagEntries,

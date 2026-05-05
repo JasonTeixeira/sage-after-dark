@@ -26,6 +26,7 @@ import {
   Reveal,
 } from "@/components";
 import { ARCS, TRAYD_EPISODES } from "@/content/site-data";
+import { JsonLd, breadcrumbsLd } from "@/components/json-ld";
 
 export async function generateStaticParams() {
   return ARCS.map((a) => ({ slug: a.slug }));
@@ -63,6 +64,30 @@ export default async function ArcPage({
 
   return (
     <Page>
+      <JsonLd
+        data={breadcrumbsLd([
+          { name: "Sage After Dark", url: "/" },
+          { name: "Arcs", url: "/archive" },
+          { name: arc.title, url: `/arcs/${arc.slug}` },
+        ])}
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "CreativeWorkSeries",
+          name: arc.title,
+          alternateName: arc.code,
+          description: arc.summary,
+          url: `https://www.sageafterdark.com/arcs/${arc.slug}`,
+          numberOfEpisodes: arc.episodes_total,
+          startDate: arc.started,
+          author: {
+            "@type": "Person",
+            name: "Jason Teixeira",
+            url: "https://www.sageafterdark.com",
+          },
+        }}
+      />
       <Container size="wide" className="pt-6 pb-24">
         {/* Tactical strip */}
         <TacticalStrip>

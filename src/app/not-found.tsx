@@ -14,6 +14,7 @@ import {
   TerminalPrompt,
   ButtonLink,
   Mono,
+  NotFoundSuggester,
 } from "@/components";
 
 export const metadata = {
@@ -84,6 +85,9 @@ export default function NotFound() {
             <span className="text-cyan">$</span> _<span className="cursor-blink">█</span>
           </Mono>
         </div>
+
+        {/* Fuzzy-suggest 1-3 essays based on the requested URL. */}
+        <NotFoundSuggester />
 
         <div className="mt-12 flex flex-wrap gap-3">
           <ButtonLink href="/">← Home</ButtonLink>
