@@ -1,7 +1,12 @@
 {
-  "generatedAt": "2026-05-05T16:43:19.967Z",
-  "count": 56,
+  "generatedAt": "2026-05-05T16:46:46.251Z",
+  "count": 57,
   "entries": [
+    {
+      "hash": "7d6d984",
+      "date": "2026-05-05",
+      "subject": "fix(qa): hydration mismatch in Sidenote (block-in-p), gate /api/cron, normalize canonicals to www, surface /api/ask error detail"
+    },
     {
       "hash": "28bdcb6",
       "date": "2026-05-05",

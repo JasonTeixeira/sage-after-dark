@@ -5,7 +5,11 @@
  * inline (no MJML build step required). Plain-text alternative included.
  */
 
-const FROM_DEFAULT = "Sage After Dark <sage@sageafterdark.com>";
+// Sender address. Override with EMAIL_FROM in the environment, e.g.
+// "Sage After Dark <sage@sageideas.org>". Required to be a domain verified
+// in Resend; otherwise Resend returns 403 and every send fails.
+const FROM_DEFAULT =
+  process.env.EMAIL_FROM ?? "Sage After Dark <sage@sageafterdark.com>";
 
 export async function sendEmail(args: {
   to: string;

@@ -52,11 +52,9 @@ export async function POST(req: Request) {
       html,
     });
   } catch (err) {
-    const detail = err instanceof Error ? err.message : String(err);
-    console.error("[ask] send failed", detail);
-    // Temp: surface diagnostic so QA can see Resend's response. Reverted before final.
+    console.error("[ask] send failed", err);
     return Response.json(
-      { error: "Failed to send. Try again or email sage@sageideas.org directly.", _diag: detail },
+      { error: "Failed to send. Try again or email sage@sageideas.org directly." },
       { status: 500 },
     );
   }
