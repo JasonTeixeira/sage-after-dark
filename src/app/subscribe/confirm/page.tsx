@@ -24,6 +24,8 @@ import {
   Reticle,
 } from "@/components";
 import { getSiteCounts } from "@/lib/live-counts";
+import { getAllPosts } from "@/content/loader";
+import { format } from "date-fns";
 
 export const metadata: Metadata = {
   title: "Subscription confirmed — Sage After Dark",
@@ -34,6 +36,21 @@ export const metadata: Metadata = {
 
 export default async function ConfirmPage() {
   const counts = await getSiteCounts();
+  const posts = await getAllPosts();
+  // Curated welcome trio: latest field note + two highest-pillar essays.
+  const fieldNote = posts.find((p) => p.frontmatter.template === "field_note");
+  const others = posts
+    .filter(
+      (p) =>
+        p.frontmatter.template !== "field_note" &&
+        p.frontmatter.slug !== fieldNote?.frontmatter.slug,
+    )
+    .sort(
+      (a, b) =>
+        +new Date(b.frontmatter.published) -
+        +new Date(a.frontmatter.published),
+    );
+  const trio = ([fieldNote, ...others.slice(0, 2)].filter(Boolean) as typeof posts);
   return (
     <Page>
       {/* Tactical strip — matches home */}
@@ -160,6 +177,46 @@ export default async function ConfirmPage() {
           ))}
         </div>
       </Container>
+
+      {/* Curated next-3: where to start reading right now */}
+      {trio.length > 0 ? (
+        <Container size="wide" className="py-12">
+          <header className="mb-6 flex items-baseline justify-between border-b border-rule pb-3">
+            <Tactical className="text-cyan">// while you wait</Tactical>
+            <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-mute">
+              three to read tonight
+            </span>
+          </header>
+          <ol className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {trio.map((p, i) => {
+              const fm = p.frontmatter;
+              return (
+                <li key={fm.slug}>
+                  <Link
+                    href={`/${fm.pillar}/${fm.slug}`}
+                    className="group block h-full p-5 border border-rule hover:border-cyan/40 hover:bg-ink-1/40 transition-colors"
+                  >
+                    <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-cyan mb-3">
+                      0{i + 1} · {String(fm.pillar).toUpperCase()}
+                    </p>
+                    <h3 className="[font-family:var(--font-editorial)] text-bone text-[1.25rem] leading-snug mb-2 group-hover:text-cyan transition-colors">
+                      {fm.title}
+                    </h3>
+                    {fm.dek ? (
+                      <p className="text-bone/70 text-[13px] leading-[1.5] line-clamp-3">
+                        {fm.dek}
+                      </p>
+                    ) : null}
+                    <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.08em] text-mute">
+                      {format(new Date(fm.published), "MMM d, yyyy")}
+                    </p>
+                  </Link>
+                </li>
+              );
+            })}
+          </ol>
+        </Container>
+      ) : null}
 
       {/* Closing line */}
       <Container size="wide" className="py-12">

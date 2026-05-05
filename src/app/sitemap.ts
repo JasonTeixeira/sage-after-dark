@@ -24,6 +24,8 @@ const STATIC_PATHS: Array<{ path: string; priority: number; changeFrequency: "da
   { path: "/numbers", priority: 0.7, changeFrequency: "daily" },
   { path: "/now", priority: 0.7, changeFrequency: "weekly" },
   { path: "/about", priority: 0.7, changeFrequency: "monthly" },
+  { path: "/uses", priority: 0.6, changeFrequency: "monthly" },
+  { path: "/changelog", priority: 0.6, changeFrequency: "weekly" },
   { path: "/taste", priority: 0.6, changeFrequency: "monthly" },
   { path: "/reading", priority: 0.6, changeFrequency: "monthly" },
   { path: "/search", priority: 0.6, changeFrequency: "monthly" },

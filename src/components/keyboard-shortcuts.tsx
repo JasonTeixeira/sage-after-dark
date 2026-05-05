@@ -3,13 +3,16 @@
 /**
  * Global keyboard shortcuts.
  *
- *   /         focus the search input on /search, or jump to /search
+ *   /         open command palette  (handled by <CommandPalette />)
+ *   cmd+k     open command palette  (handled by <CommandPalette />)
  *   g h       go home
  *   g a       go to /archive
  *   g n       go to /now
  *   g s       go to /search
  *   g t       go to /taste
  *   g r       go to /reading
+ *   d         decoder ring          (handled by <DecoderRing />)
+ *   s         studio status         (handled by <StudioWidget />)
  *   ?         open shortcut help overlay
  *   esc       close overlay / blur input
  *
@@ -17,16 +20,19 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const SHORTCUTS: { keys: string; label: string }[] = [
-  { keys: "/", label: "Focus search" },
+  { keys: "⌘ k", label: "Command palette" },
+  { keys: "/", label: "Command palette" },
   { keys: "g h", label: "Go home" },
   { keys: "g a", label: "Go to archive" },
   { keys: "g n", label: "Go to /now" },
   { keys: "g s", label: "Go to search" },
   { keys: "g t", label: "Go to /taste" },
   { keys: "g r", label: "Go to /reading" },
+  { keys: "d", label: "Decoder ring" },
+  { keys: "s", label: "Studio status" },
   { keys: "?", label: "Show shortcuts" },
   { keys: "esc", label: "Close" },
 ];
@@ -52,7 +58,6 @@ function isTyping(target: EventTarget | null): boolean {
 
 export function KeyboardShortcuts() {
   const router = useRouter();
-  const pathname = usePathname();
   const [overlayOpen, setOverlayOpen] = useState(false);
   const gPending = useRef<number | null>(null);
 
@@ -100,22 +105,7 @@ export function KeyboardShortcuts() {
         return;
       }
 
-      if (e.key === "/") {
-        e.preventDefault();
-        if (pathname === "/search") {
-          // Focus the existing search input if mounted
-          const input = document.querySelector<HTMLInputElement>(
-            'input[aria-label="Search posts"]',
-          );
-          if (input) {
-            input.focus();
-            input.select();
-            return;
-          }
-        }
-        router.push("/search");
-        return;
-      }
+      // "/" is handled by <CommandPalette /> — do not intercept.
 
       if (e.key === "?" || (e.shiftKey && e.key === "/")) {
         e.preventDefault();
@@ -129,7 +119,7 @@ export function KeyboardShortcuts() {
       window.removeEventListener("keydown", onKey);
       clearG();
     };
-  }, [router, pathname, overlayOpen]);
+  }, [router, overlayOpen]);
 
   if (!overlayOpen) return null;
 

@@ -29,6 +29,8 @@ const PERSONAL = [
   { label: "About", href: "/about" },
   { label: "Now", href: "/now" },
   { label: "Numbers", href: "/numbers" },
+  { label: "Uses", href: "/uses" },
+  { label: "Changelog", href: "/changelog" },
   { label: "Reading", href: "/reading" },
   { label: "Taste", href: "/taste" },
 ];
