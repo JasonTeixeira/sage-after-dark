@@ -1,0 +1,241 @@
+{
+  "generatedAt": "2026-05-05T03:30:32.387Z",
+  "count": 47,
+  "entries": [
+    {
+      "hash": "552461e",
+      "date": "2026-05-05",
+      "subject": "feat(p26): waves 5+6 — keyboard fix, /changelog auto-from-git, /uses page, welcome trio on /subscribe/confirm, sitemap update, footer links"
+    },
+    {
+      "hash": "1028ff0",
+      "date": "2026-05-05",
+      "subject": "feat(p25): wave 4 — cmd+k palette, search index api, 404 suggester, jsonld breadcrumbs, sitemap update"
+    },
+    {
+      "hash": "4398cad",
+      "date": "2026-05-05",
+      "subject": "feat(p24): wave 3 — footnote popover, toc scrubber, related rail, anchor copy"
+    },
+    {
+      "hash": "1949dbc",
+      "date": "2026-05-05",
+      "subject": "feat(p23): wave 2 — studio widget, /numbers, terminal palette, transmission footer"
+    },
+    {
+      "hash": "f6a33a1",
+      "date": "2026-05-05",
+      "subject": "feat(p22): /start, /concepts, arc trailer, field notes scroll, recommender, cipher layer"
+    },
+    {
+      "hash": "7d3038f",
+      "date": "2026-05-05",
+      "subject": "feat(billing+resend): wire live Stripe price IDs and Resend audience subscribe"
+    },
+    {
+      "hash": "3579e76",
+      "date": "2026-05-05",
+      "subject": "P21: redesign footer - cut bloat, every link has purpose"
+    },
+    {
+      "hash": "2f0c19c",
+      "date": "2026-05-05",
+      "subject": "docs: comprehensive README — stack, architecture, env vars, phases shipped"
+    },
+    {
+      "hash": "b3088c1",
+      "date": "2026-05-05",
+      "subject": "P20: drop Instrument Serif - editorial font is now Geist Mono (modern terminal)"
+    },
+    {
+      "hash": "c938b2c",
+      "date": "2026-05-04",
+      "subject": "P19c: TerminalPrompt all children shrink-0 so TacticalStrip scrolls cleanly on mobile"
+    },
+    {
+      "hash": "985f144",
+      "date": "2026-05-04",
+      "subject": "P19c: TerminalPrompt truncates path on narrow viewports (320 overflow fix)"
+    },
+    {
+      "hash": "f6c864e",
+      "date": "2026-05-04",
+      "subject": "P19d: archive sidebar - cyan count when active for AA contrast"
+    },
+    {
+      "hash": "e5bed21",
+      "date": "2026-05-04",
+      "subject": "P19d: archive a11y - month label as h2, sidebar count text-mute for AA contrast"
+    },
+    {
+      "hash": "11ab7e0",
+      "date": "2026-05-04",
+      "subject": "P19d: a11y - button text contrast (!text-ink), faint #7A828F (AA), home featured h2 to fix heading order"
+    },
+    {
+      "hash": "6513c7d",
+      "date": "2026-05-04",
+      "subject": "P19a11y: fix Lighthouse contrast + heading-order issues"
+    },
+    {
+      "hash": "cbcaf45",
+      "date": "2026-05-04",
+      "subject": "P19: mobile pass — fix horizontal overflow on header strips at <md breakpoints"
+    },
+    {
+      "hash": "366373d",
+      "date": "2026-05-04",
+      "subject": "P18: analytics + Cusdis comments + full-text search + next/image + Stripe idempotency"
+    },
+    {
+      "hash": "d5b4739",
+      "date": "2026-05-04",
+      "subject": "Phase 17: SVG diagrams, About rebuild, monogram, favicon"
+    },
+    {
+      "hash": "8d632e7",
+      "date": "2026-05-04",
+      "subject": "Phase 16: tools, dispatch, ask, share buttons, /r/ short-links"
+    },
+    {
+      "hash": "22a8aad",
+      "date": "2026-05-04",
+      "subject": "feat(p15): /tags + /series + /best routes, clickable tag chips, sitemap, +7 new posts"
+    },
+    {
+      "hash": "4047ce1",
+      "date": "2026-05-04",
+      "subject": "fix(p14): suppress underline on heading anchors in parchment"
+    },
+    {
+      "hash": "ce21cfd",
+      "date": "2026-05-04",
+      "subject": "fix(p14): parchment selectors target <nav> + force prose color override"
+    },
+    {
+      "hash": "c48577c",
+      "date": "2026-05-04",
+      "subject": "feat(p14): reading mode toggle + clickable 404 + view transitions + a11y skip-link"
+    },
+    {
+      "hash": "bcf8de3",
+      "date": "2026-05-04",
+      "subject": "fix(p13): pass Sidenote n as string so MDX expression evaluates"
+    },
+    {
+      "hash": "48b3cb6",
+      "date": "2026-05-04",
+      "subject": "fix(p13): sidenote uses float+negative-margin into right gutter; TOC moved to 2xl+ so it doesn't collide with sidenotes at xl"
+    },
+    {
+      "hash": "239ae36",
+      "date": "2026-05-04",
+      "subject": "Phase 13: essay magazine upgrade"
+    },
+    {
+      "hash": "342ee7b",
+      "date": "2026-05-04",
+      "subject": "chore: ignore local _screenshots dir"
+    },
+    {
+      "hash": "d00c925",
+      "date": "2026-05-04",
+      "subject": "fix(p12): sticky bar — replace broken data-attr hide with print:hidden so it shows on screen"
+    },
+    {
+      "hash": "9531af0",
+      "date": "2026-05-04",
+      "subject": "Phase 12: hero subscribe + sticky bar + confirm page + welcome sequence"
+    },
+    {
+      "hash": "7f65e77",
+      "date": "2026-05-04",
+      "subject": "Phase 11: home OG default uses signature 'I write at night.' card"
+    },
+    {
+      "hash": "c39bf0f",
+      "date": "2026-05-04",
+      "subject": "Phase 11 polish: trim dek to 92 chars, lift oscilloscope, more breathing room"
+    },
+    {
+      "hash": "bc35aec",
+      "date": "2026-05-04",
+      "subject": "Phase 11 polish: real circle dot in OG bottom strip, tighter spacing"
+    },
+    {
+      "hash": "efd345a",
+      "date": "2026-05-04",
+      "subject": "Phase 11 polish: self-host Instrument Serif for OG, smarter italic split, tighter layout"
+    },
+    {
+      "hash": "889387e",
+      "date": "2026-05-04",
+      "subject": "Phase 11: per-post OG images (editorial brand) + JSON-LD + per-pillar RSS + Atom"
+    },
+    {
+      "hash": "43887f3",
+      "date": "2026-05-04",
+      "subject": "Phase 10: credibility pass — single source of truth for all numbers"
+    },
+    {
+      "hash": "606548f",
+      "date": "2026-05-04",
+      "subject": "Editorial redesign: Instrument Serif headlines, story arcs, dispatches grid, archive stats+heatmap, taste 4-panel, /arcs/[slug] timeline; remove Twitter from footer/about/metadata"
+    },
+    {
+      "hash": "44ad65b",
+      "date": "2026-05-04",
+      "subject": "Phase 7 print styles + Phase 8 anchor essays + launch kit"
+    },
+    {
+      "hash": "11379fa",
+      "date": "2026-05-04",
+      "subject": "Add short-name color aliases (text-teach, bg-teach, bg-ink, etc.)"
+    },
+    {
+      "hash": "b134257",
+      "date": "2026-05-04",
+      "subject": "Phase 6: membership pages, magic-link auth, Stripe checkout/webhook routes"
+    },
+    {
+      "hash": "dc0dbc7",
+      "date": "2026-05-04",
+      "subject": "Fix NotchedCard corner label overlap with content"
+    },
+    {
+      "hash": "999012e",
+      "date": "2026-05-04",
+      "subject": "Phase 5 · Motion: reading progress, hero reticle, reveal-on-scroll, konami easter egg"
+    },
+    {
+      "hash": "7e34dd7",
+      "date": "2026-05-04",
+      "subject": "Phase 4 · Engagement: RSS/JSON feeds, OG image route, newsletter signup + Supabase RPC, Giscus comments, keyboard shortcuts"
+    },
+    {
+      "hash": "2d99473",
+      "date": "2026-05-04",
+      "subject": "Phase 3 · Pages: home, archive, pillar index, /now, /taste, /about, /colophon, /reading, search, 404, sitemap, robots"
+    },
+    {
+      "hash": "9faf4aa",
+      "date": "2026-05-04",
+      "subject": "Phase 2 · Templates + content pipeline"
+    },
+    {
+      "hash": "bb954ab",
+      "date": "2026-05-04",
+      "subject": "Phase 1 · Design system as code"
+    },
+    {
+      "hash": "f4a81e5",
+      "date": "2026-05-04",
+      "subject": "Phase 0 · add Vercel CLI · gitignore · ready to deploy"
+    },
+    {
+      "hash": "31dc67f",
+      "date": "2026-05-04",
+      "subject": "Phase 0 · Foundation"
+    }
+  ]
+}

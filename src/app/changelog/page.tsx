@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { execSync } from "node:child_process";
 import { JsonLd } from "@/components";
+import changelogData from "@/generated/changelog.json";
 
 export const metadata: Metadata = {
   title: "Changelog",
@@ -32,24 +32,16 @@ function parseConventional(subject: string): Pick<Entry, "type" | "scope"> {
   return { type, scope: m[2] ?? null };
 }
 
-function getEntries(limit = 200): Entry[] {
-  try {
-    const raw = execSync(
-      `git log --pretty=format:"%h|%ad|%s" --date=short -n ${limit}`,
-      { encoding: "utf8", cwd: process.cwd() },
-    );
-    return raw
-      .split("\n")
-      .filter(Boolean)
-      .map((line) => {
-        const [hash, date, ...rest] = line.split("|");
-        const subject = rest.join("|");
-        return { hash, date, subject, ...parseConventional(subject) };
-      });
-  } catch {
-    // Build runs in environments without git (e.g. some sandboxes).
-    return [];
-  }
+type RawEntry = { hash: string; date: string; subject: string };
+
+function getEntries(): Entry[] {
+  const raw = (changelogData as { entries: RawEntry[] }).entries ?? [];
+  return raw.map((e) => ({
+    hash: e.hash,
+    date: e.date,
+    subject: e.subject,
+    ...parseConventional(e.subject),
+  }));
 }
 
 const TYPE_LABEL: Record<Entry["type"], string> = {
@@ -73,7 +65,7 @@ const TYPE_ACCENT: Record<Entry["type"], string> = {
 };
 
 export default function ChangelogPage() {
-  const entries = getEntries(300);
+  const entries = getEntries();
 
   // Group by date
   const grouped = entries.reduce<Record<string, Entry[]>>((acc, e) => {
