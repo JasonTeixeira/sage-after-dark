@@ -1,7 +1,12 @@
 {
-  "generatedAt": "2026-05-05T13:33:05.472Z",
-  "count": 51,
+  "generatedAt": "2026-05-05T14:24:18.653Z",
+  "count": 52,
   "entries": [
+    {
+      "hash": "a7ee2c4",
+      "date": "2026-05-05",
+      "subject": "feat(p28): living engine — supabase rotation tables, page-view counters, /admin cockpit"
+    },
     {
       "hash": "0d0aeb0",
       "date": "2026-05-05",

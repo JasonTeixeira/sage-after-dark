@@ -59,16 +59,16 @@ export async function SiteHeader({ path = "/" }: { path?: string }) {
             ) : (
               <>
                 <Link
-                  href="/membership"
-                  className="text-teach hover:opacity-80 transition-opacity"
-                >
-                  ▸ members
-                </Link>
-                <Link
                   href="/account/login"
                   className="hover:text-cyan transition-colors"
                 >
                   log in
+                </Link>
+                <Link
+                  href="/account/signup"
+                  className="font-mono text-[11px] uppercase tracking-[0.08em] px-3 py-1 border border-cyan text-cyan hover:bg-cyan hover:text-ink transition-colors rounded"
+                >
+                  ▸ sign up
                 </Link>
               </>
             )}

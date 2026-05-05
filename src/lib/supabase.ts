@@ -85,6 +85,104 @@ export async function consumeMagicLink(token: string): Promise<string | null> {
   return out ?? null;
 }
 
+/* ---- password auth ---- */
+
+export type PasswordRow = {
+  email: string;
+  password_hash: string | null;
+  status: string;
+  name: string | null;
+  email_verified_at: string | null;
+};
+
+export async function getPasswordRow(email: string): Promise<PasswordRow | null> {
+  const rows = await rpc<PasswordRow[]>("sage_after_dark_get_password", {
+    p_email: email,
+  });
+  return rows[0] ?? null;
+}
+
+export async function registerMember(args: {
+  email: string;
+  passwordHash: string;
+  name: string;
+  referrer: string;
+}): Promise<string> {
+  return await rpc<string>("sage_after_dark_register_member", {
+    p_email: args.email,
+    p_password_hash: args.passwordHash,
+    p_name: args.name,
+    p_referrer: args.referrer,
+  });
+}
+
+export async function recordLogin(email: string): Promise<void> {
+  await rpc("sage_after_dark_record_login", { p_email: email });
+}
+
+export async function createPasswordReset(args: {
+  email: string;
+  tokenHash: string;
+  purpose: "reset" | "set";
+  ttlMinutes: number;
+}): Promise<void> {
+  await rpc("sage_after_dark_create_password_reset", {
+    p_email: args.email,
+    p_token_hash: args.tokenHash,
+    p_purpose: args.purpose,
+    p_ttl_minutes: args.ttlMinutes,
+  });
+}
+
+export async function consumePasswordReset(
+  tokenHash: string,
+): Promise<string | null> {
+  const out = await rpc<string | null>(
+    "sage_after_dark_consume_password_reset",
+    { p_token_hash: tokenHash },
+  );
+  return out ?? null;
+}
+
+export async function setMemberPassword(
+  email: string,
+  passwordHash: string,
+): Promise<void> {
+  await rpc("sage_after_dark_set_password", {
+    p_email: email,
+    p_password_hash: passwordHash,
+  });
+}
+
+export async function updateProfile(args: {
+  email: string;
+  name: string | null;
+  referrer: string | null;
+}): Promise<void> {
+  await rpc("sage_after_dark_update_profile", {
+    p_email: args.email,
+    p_name: args.name ?? "",
+    p_referrer: args.referrer ?? "",
+  });
+}
+
+export type WhoamiRow = {
+  email: string;
+  name: string | null;
+  status: string;
+  plan: string | null;
+  current_period_end: string | null;
+  has_password: boolean;
+  created_at: string;
+};
+
+export async function whoami(email: string): Promise<WhoamiRow | null> {
+  const rows = await rpc<WhoamiRow[]>("sage_after_dark_whoami", {
+    p_email: email,
+  });
+  return rows[0] ?? null;
+}
+
 /* ---- stripe event idempotency ----
  * Returns true the FIRST time we see this event id, false on every retry.
  * Lets the webhook handler skip side effects on duplicates.

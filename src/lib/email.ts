@@ -167,6 +167,57 @@ export function magicLinkEmail(args: { url: string }): {
   return { html: SHELL(inner, footer), text: `Sign in: ${args.url}\n\nLink expires in 15 minutes.`, subject };
 }
 
+export function passwordResetEmail(args: { url: string }): {
+  html: string;
+  text: string;
+  subject: string;
+} {
+  const subject = "Reset your password · Sage After Dark";
+  const inner = `
+    <span class="tag">▸ AUTH · PASSWORD RESET</span>
+    <h1>Reset your password.</h1>
+    <p>Click the button below within 60 minutes to choose a new password. The link is single-use.</p>
+    <p><a class="btn" href="${args.url}">▸ Reset password</a></p>
+    <p class="mute">Or paste this into your browser:</p>
+    <p class="mute"><a class="lnk" href="${args.url}">${args.url}</a></p>
+    <hr/>
+    <p class="mute">If you didn't request this, ignore the email — your current password still works and the link expires on its own.</p>
+  `;
+  const footer = `// AUTH GENERATED ${new Date().toISOString().slice(0, 19).replace("T", " ")}`;
+  return {
+    html: SHELL(inner, footer),
+    text: `Reset your password: ${args.url}\n\nLink expires in 60 minutes.`,
+    subject,
+  };
+}
+
+export function setPasswordEmail(args: {
+  url: string;
+  audience: "admin" | "member";
+}): { html: string; text: string; subject: string } {
+  const role = args.audience === "admin" ? "administrator" : "member";
+  const subject =
+    args.audience === "admin"
+      ? "Set your admin password · Sage After Dark"
+      : "Set your password · Sage After Dark";
+  const inner = `
+    <span class="tag">▸ AUTH · INITIAL PASSWORD</span>
+    <h1>Choose your password.</h1>
+    <p>Your ${role} account is ready. Click the button below within 2 hours to set your password and sign in.</p>
+    <p><a class="btn" href="${args.url}">▸ Set password</a></p>
+    <p class="mute">Or paste this into your browser:</p>
+    <p class="mute"><a class="lnk" href="${args.url}">${args.url}</a></p>
+    <hr/>
+    <p class="mute">After setting your password you'll be signed in automatically — no email round-trips on future logins.</p>
+  `;
+  const footer = `// AUTH GENERATED ${new Date().toISOString().slice(0, 19).replace("T", " ")}`;
+  return {
+    html: SHELL(inner, footer),
+    text: `Set your password: ${args.url}\n\nLink expires in 2 hours.`,
+    subject,
+  };
+}
+
 export function memberWelcomeEmail(args: { plan: string; portalUrl: string }): {
   html: string;
   text: string;

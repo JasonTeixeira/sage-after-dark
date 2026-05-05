@@ -43,15 +43,15 @@ export default async function LoginPage({
         <TacticalStrip variant="muted">
           <TerminalPrompt path="~/account/login" mode="breadcrumb" />
           <StripSep />
-          <span>AUTH · MAGIC LINK</span>
+          <span>AUTH · LOG IN</span>
         </TacticalStrip>
 
         <header className="mt-10 mb-10">
           <Tactical className="text-cyan mb-4 block">// sign in</Tactical>
-          <Display className="mb-6">Sign in.</Display>
+          <Display className="mb-6">Welcome back.</Display>
           <Lead>
-            Enter the email you used to subscribe. We&apos;ll send you a
-            single-use link that expires in 15 minutes. No passwords.
+            Enter your email and password. Or, if you prefer, switch to the
+            email-link tab and we&apos;ll send a single-use sign-in link.
           </Lead>
         </header>
 
@@ -67,8 +67,18 @@ export default async function LoginPage({
         <LoginForm next={next} />
 
         <p className="mt-10 font-mono text-[11px] uppercase tracking-[0.08em] text-mute">
-          // not a member yet?{" "}
-          <a className="text-cyan underline decoration-cyan/40 underline-offset-2" href="/membership">
+          // no account yet?{" "}
+          <a
+            className="text-cyan underline decoration-cyan/40 underline-offset-2"
+            href={next ? `/account/signup?next=${encodeURIComponent(next)}` : "/account/signup"}
+          >
+            create one
+          </a>
+          {"  ·  "}
+          <a
+            className="text-cyan underline decoration-cyan/40 underline-offset-2"
+            href="/membership"
+          >
             see the membership
           </a>
         </p>
