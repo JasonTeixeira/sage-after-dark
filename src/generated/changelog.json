@@ -1,7 +1,12 @@
 {
-  "generatedAt": "2026-05-05T17:40:22.531Z",
-  "count": 59,
+  "generatedAt": "2026-05-05T17:48:46.823Z",
+  "count": 60,
   "entries": [
+    {
+      "hash": "2f067c7",
+      "date": "2026-05-05",
+      "subject": "fix(about): CountUp renders final value during SSR + safety fallback"
+    },
     {
       "hash": "45f42ac",
       "date": "2026-05-05",

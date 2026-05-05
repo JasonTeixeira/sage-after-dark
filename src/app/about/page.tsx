@@ -33,7 +33,6 @@ import {
   InlineLink,
   NotchedCard,
   PillarTag,
-  Reveal,
 } from "@/components";
 import Link from "next/link";
 import { ABOUT, NOW, PRODUCTS } from "@/content/site-data";
@@ -98,7 +97,7 @@ export default function AboutPage() {
         </TacticalStrip>
 
         {/* ── 1 · Hero ───────────────────────────────────────────── */}
-        <header className="relative mt-12 mb-20">
+        <header className="relative mt-10 mb-14">
           {/* Tactical corner brackets */}
           <div
             aria-hidden
@@ -157,31 +156,29 @@ export default function AboutPage() {
         </header>
 
         {/* ── 2 · By the numbers ─────────────────────────────────── */}
-        <Reveal>
-          <section className="mb-20">
-            <Tactical className="text-cyan mb-5 block">
-              // by the numbers
-            </Tactical>
-            <div className="grid grid-cols-2 md:grid-cols-4 border-t border-rule">
-              {ABOUT.stats.map((s, i) => (
-                <div
-                  key={i}
-                  className="border-b border-r border-rule last:border-r-0 md:[&:nth-child(4n)]:border-r-0 p-6 md:p-8 group hover:bg-cyan/[0.04] transition-colors"
-                >
-                  <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-cyan/80 mb-2">
-                    {String(i + 1).padStart(2, "0")}
-                  </div>
-                  <div className="font-sans text-bone text-[42px] md:text-[56px] leading-none tabular-nums tracking-tight">
-                    <CountUp to={s.kpi} suffix={s.suffix} />
-                  </div>
-                  <div className="mt-3 text-mute text-[13px] leading-snug">
-                    {s.label}
-                  </div>
+        <section className="mb-20">
+          <Tactical className="text-cyan mb-5 block">
+            // by the numbers
+          </Tactical>
+          <div className="grid grid-cols-2 md:grid-cols-4 border-t border-rule">
+            {ABOUT.stats.map((s, i) => (
+              <div
+                key={i}
+                className="border-b border-r border-rule last:border-r-0 md:[&:nth-child(4n)]:border-r-0 p-6 md:p-8 group hover:bg-cyan/[0.04] transition-colors"
+              >
+                <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-cyan/80 mb-2">
+                  {String(i + 1).padStart(2, "0")}
                 </div>
-              ))}
-            </div>
-          </section>
-        </Reveal>
+                <div className="font-sans text-bone text-[42px] md:text-[56px] leading-none tabular-nums tracking-tight">
+                  <CountUp to={s.kpi} suffix={s.suffix} />
+                </div>
+                <div className="mt-3 text-mute text-[13px] leading-snug">
+                  {s.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
 
         {/* ── 3 · Long bio ───────────────────────────────────────── */}
         <Section label="// the long version">
