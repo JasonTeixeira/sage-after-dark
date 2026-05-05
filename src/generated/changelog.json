@@ -1,7 +1,12 @@
 {
-  "generatedAt": "2026-05-05T16:46:46.251Z",
-  "count": 57,
+  "generatedAt": "2026-05-05T17:36:34.071Z",
+  "count": 58,
   "entries": [
+    {
+      "hash": "78b701f",
+      "date": "2026-05-05",
+      "subject": "fix(qa): make sender FROM env-configurable + revert /api/ask diag"
+    },
     {
       "hash": "7d6d984",
       "date": "2026-05-05",

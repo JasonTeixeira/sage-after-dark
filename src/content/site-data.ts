@@ -185,6 +185,78 @@ export const ABOUT = {
     "The half-life of a good tool is shorter than you think.",
     "Ship the smallest reversible thing.",
   ],
+  /* Long-form annotations for the interactive principles section. */
+  principlesDetailed: [
+    {
+      headline: "Reversible deploys. Reversible decisions.",
+      body: "If a change can’t be rolled back in under thirty seconds, it isn’t a deploy — it’s a renovation. Same is true of decisions: write the version that has an exit clause first, ship it, and let production tell you whether it deserves to be permanent.",
+    },
+    {
+      headline: "Publishing badly beats drafting well.",
+      body: "The post that goes out on Sunday at 80% will teach you more in a week than the post that ships next quarter at 100%. Cadence compounds. Drafts don’t.",
+    },
+    {
+      headline: "Low-trust collaboration is the only infrastructure worth investing in.",
+      body: "Build for the person who didn’t read the doc, didn’t ask the question, and joined the channel yesterday. Anything that requires a personal handshake will not survive your second hire.",
+    },
+    {
+      headline: "Cadence > intensity.",
+      body: "Two essays a week for a year beats a manifesto every quarter. Heroics are a tax on whoever’s left holding the pager. Show up small, show up often.",
+    },
+    {
+      headline: "Pay your attention tax with care.",
+      body: "Every dashboard, channel, inbox, and feed quietly invoices you. The audit isn’t “what will I add” — it’s “what’s allowed to keep charging me.” Most things shouldn’t.",
+    },
+    {
+      headline: "Name the gate before you build the build.",
+      body: "Don’t start a project without a written sentence describing the moment it counts as done. The sentence is the spec. The build is downstream.",
+    },
+    {
+      headline: "The half-life of a good tool is shorter than you think.",
+      body: "Every system you ship is decaying the day it lands. Plan the second version into the first. Document like the next maintainer is a stranger — because in twelve months, you will be.",
+    },
+    {
+      headline: "Ship the smallest reversible thing.",
+      body: "The best version of any change is the one you can take back the same afternoon. Make the unit of work small enough that being wrong is cheap, and the cost of trying is lower than the cost of debating.",
+    },
+  ],
+  taglines: [
+    "Late-night studio for Sage Ideas.",
+    "Operator. Writer. Reluctant launcher.",
+    "Reversible deploys. Reversible decisions.",
+    "The day job is shipping. The night job is figuring out what shipping means.",
+  ],
+  stats: [
+    { kpi: 12, suffix: "+", label: "Years shipping production software" },
+    { kpi: 3, suffix: "", label: "Live products under Sage Ideas" },
+    { kpi: 30, suffix: "s", label: "Rollback budget for any deploy" },
+    { kpi: 1, suffix: "", label: "Annual cathedral essay" },
+  ],
+  arc: [
+    { year: "2014", title: "First production deploy.", body: "Wrote my first 24/7-on-call line of code. Learned what “this is fine” actually costs." },
+    { year: "2017", title: "Fintech, scale, and pagers.", body: "Five years inside financial systems. The discipline of money-moves-or-it-doesn’t became the lens for everything since." },
+    { year: "2022", title: "Stopped being employee #N.", body: "Quietly began Sage Ideas. The studio was one operator, one laptop, one rule: ship work I’d be proud to sign." },
+    { year: "2024", title: "Trayd goes live.", body: "AI companion for trades contractors. The product I’d been arguing about with myself for two years. The first paying call took 11 days." },
+    { year: "2026", title: "Sage After Dark opens.", body: "This site. The late-night studio. The receipts." },
+  ],
+  faq: [
+    {
+      q: "Why “After Dark?”",
+      a: "Because most of this gets written between 9pm and 1am, after the day job has stopped paging. The lamp is on. The kettle is full. The emails can wait.",
+    },
+    {
+      q: "Is this a side project?",
+      a: "No. It’s the long version of the day job. The dispatches, the runbooks, the half-life essays — they all fall out of building Sage Ideas. The studio funds the writing; the writing sharpens the studio.",
+    },
+    {
+      q: "Can I republish your work?",
+      a: "Quote freely with attribution and a link back. For full reprints — newsletters, anthologies, course packets — email me. The answer is usually yes.",
+    },
+    {
+      q: "Do you take on new clients?",
+      a: "Rarely. Sage Ideas is mostly closed-list — most product work goes into Trayd, Alphathreum, and Naural. If you have a problem in financial systems, contractor ops, or AI tooling that you think genuinely fits, write the email anyway.",
+    },
+  ],
 };
 
 /* -----------------------------------------------------------
