@@ -1,8 +1,13 @@
 /**
  * SiteFooter — global bottom chrome.
  *
- * Three columns: identity · links · status strip.
- * Hairline rule above. Mono labels.
+ * Curated, professional 3-column layout. Every link has a purpose.
+ *   Read     — what to read next
+ *   Personal — what I'm doing / who I am
+ *   Connect  — how to reach me + verified social
+ *
+ * Hairline rule above. Mono labels. Single bottom strip with
+ * copyright + system status.
  */
 
 import Link from "next/link";
@@ -10,88 +15,89 @@ import {
   Container,
   Tactical,
   StatusDot,
-  TerminalPrompt,
 } from "@/components";
 
-const FOOTER_LINKS = [
-  { label: "essays", href: "/archive" },
-  { label: "best", href: "/best" },
-  { label: "dispatch", href: "/dispatch" },
-  { label: "tools", href: "/tools" },
-  { label: "tags", href: "/tags" },
-  { label: "series", href: "/series" },
-  { label: "now", href: "/now" },
-  { label: "taste", href: "/taste" },
-  { label: "reading", href: "/reading" },
-  { label: "ask", href: "/ask" },
-  { label: "about", href: "/about" },
-  { label: "colophon", href: "/colophon" },
-  { label: "rss", href: "/feed.xml" },
+const READ = [
+  { label: "Essays", href: "/archive" },
+  { label: "Best of", href: "/best" },
+  { label: "Tools", href: "/tools" },
+  { label: "RSS", href: "/feed.xml" },
 ];
 
-const SOCIAL = [
-  { label: "github", href: "https://github.com/JasonTeixeira" },
-  { label: "linkedin", href: "https://www.linkedin.com/in/jasonteixeira" },
-  { label: "sageideas.dev", href: "https://sageideas.dev" },
-  { label: "email", href: "mailto:sage@sageideas.org" },
+const PERSONAL = [
+  { label: "About", href: "/about" },
+  { label: "Now", href: "/now" },
+  { label: "Reading", href: "/reading" },
+  { label: "Taste", href: "/taste" },
 ];
+
+const CONNECT = [
+  { label: "Ask anything", href: "/ask" },
+  { label: "GitHub", href: "https://github.com/JasonTeixeira", external: true },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/jason-teixeira/", external: true },
+  { label: "sageideas.dev", href: "https://sageideas.dev", external: true },
+];
+
+type FooterLink = { label: string; href: string; external?: boolean };
+
+function FooterColumn({ heading, links }: { heading: string; links: FooterLink[] }) {
+  return (
+    <div>
+      <Tactical className="mb-5 block text-mute">{`// ${heading}`}</Tactical>
+      <ul className="space-y-2.5">
+        {links.map((l) => {
+          const isExternal = l.external || l.href.startsWith("http") || l.href.startsWith("mailto:");
+          const Cmp: typeof Link | "a" = isExternal ? "a" : Link;
+          return (
+            <li key={l.href}>
+              <Cmp
+                href={l.href}
+                {...(isExternal
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
+                className="text-bone/85 hover:text-cyan transition-colors text-[14px] inline-flex items-center gap-1.5"
+              >
+                {l.label}
+                {isExternal && (
+                  <span aria-hidden="true" className="text-faint text-[10px] translate-y-[-1px]">
+                    ↗
+                  </span>
+                )}
+              </Cmp>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
   return (
     <footer className="border-t border-rule mt-24" data-print-hide>
-      <Container size="wide" className="py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          <div>
-            <Tactical className="text-cyan mb-4 block">// sage after dark</Tactical>
-            <p className="text-bone/80 leading-relaxed text-[15px] max-w-[34ch]">
-              Late-night essays, tutorials, and signals from the desk of Jason
-              Teixeira. Written in Geist, served at 60fps, rolled back in
-              under 30 seconds.
-            </p>
-            <div className="mt-6">
-              <StatusDot status="live" label="System · live" />
-            </div>
-          </div>
-
-          <div>
-            <Tactical className="mb-4 block">// pages</Tactical>
-            <ul className="space-y-2">
-              {FOOTER_LINKS.map((l) => (
-                <li key={l.href}>
-                  <Link
-                    href={l.href}
-                    className="text-bone/80 hover:text-cyan transition-colors text-[15px]"
-                  >
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <Tactical className="mb-4 block">// elsewhere</Tactical>
-            <ul className="space-y-2">
-              {SOCIAL.map((l) => (
-                <li key={l.href}>
-                  <a
-                    href={l.href}
-                    target={l.href.startsWith("http") ? "_blank" : undefined}
-                    rel={l.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    className="text-bone/80 hover:text-cyan transition-colors text-[15px]"
-                  >
-                    {l.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+      <Container size="wide" className="py-14">
+        {/* Identity row */}
+        <div className="mb-12 max-w-[44ch]">
+          <Tactical className="text-cyan mb-4 block">// sage after dark</Tactical>
+          <p className="text-bone/85 leading-relaxed text-[15px]">
+            The after-hours notebook of a one-person studio.
+            Software, taste, psychology, and the slow internet —
+            written by Jason Teixeira.
+          </p>
         </div>
 
-        <div className="mt-12 pt-6 border-t border-rule flex flex-wrap items-center justify-between gap-4 font-mono text-[10px] uppercase tracking-[0.08em] text-faint">
-          <span>© {year} sage ideas · all rights reserved</span>
-          <TerminalPrompt path="/system" mode="breadcrumb" />
+        {/* Three curated columns */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-12">
+          <FooterColumn heading="Read" links={READ} />
+          <FooterColumn heading="Personal" links={PERSONAL} />
+          <FooterColumn heading="Connect" links={CONNECT} />
+        </div>
+
+        {/* Bottom strip */}
+        <div className="mt-14 pt-6 border-t border-rule flex flex-wrap items-center justify-between gap-4 font-mono text-[10px] uppercase tracking-[0.08em] text-faint">
+          <span>© {year} Sage Ideas LLC</span>
+          <StatusDot status="live" label="System · live" />
         </div>
       </Container>
     </footer>
