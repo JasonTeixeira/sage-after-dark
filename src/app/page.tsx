@@ -32,6 +32,7 @@ import {
   NewsletterForm,
   HeroSubscribe,
   Reveal,
+  ReadThisIf,
 } from "@/components";
 import { getAllPosts } from "@/content/loader";
 import { NOW, ARCS, PRODUCTS, NOW_PLAYING } from "@/content/site-data";
@@ -47,6 +48,45 @@ export default async function HomePage() {
   const dispatches = posts
     .filter((p) => p.frontmatter.slug !== featured?.frontmatter.slug)
     .slice(0, 4);
+
+  // Build the Read-this-if recommendations from the real corpus.
+  // Pure function on the post list — no extra reads, no I/O.
+  const recItem = (p: typeof posts[number]) => ({
+    pillar: p.frontmatter.pillar,
+    slug: p.frontmatter.slug,
+    title: p.frontmatter.title,
+    dek: p.frontmatter.dek ?? "",
+    reading: p.reading_minutes,
+  });
+  const pickByPillar = (pillars: string[]) =>
+    pillars
+      .map((pl) => posts.find((p) => p.frontmatter.pillar === pl))
+      .filter((p): p is typeof posts[number] => Boolean(p))
+      .map(recItem)
+      .slice(0, 3);
+  const recommender = {
+    builder: pickByPillar(["build", "build", "signal"]).length === 3
+      ? pickByPillar(["build", "build", "signal"])
+      : posts.filter((p) => ["build", "signal"].includes(p.frontmatter.pillar)).slice(0, 3).map(recItem),
+    operator: posts
+      .filter((p) => ["mind", "world"].includes(p.frontmatter.pillar))
+      .slice(0, 3)
+      .map(recItem),
+    curious: posts
+      .filter((p) => ["taste", "mind"].includes(p.frontmatter.pillar))
+      .slice(0, 3)
+      .map(recItem),
+  };
+  // Fill any short bucket from the latest essays so each shows 3 items.
+  for (const k of ["builder", "operator", "curious"] as const) {
+    while (recommender[k].length < 3 && posts.length) {
+      const next = posts.find(
+        (p) => !recommender[k].some((x) => x.slug === p.frontmatter.slug),
+      );
+      if (!next) break;
+      recommender[k].push(recItem(next));
+    }
+  }
 
   return (
     <Page>
@@ -404,6 +444,13 @@ export default async function HomePage() {
               ))}
             </div>
           </div>
+        </Reveal>
+      </Container>
+
+      {/* ─── Read this if… ──────────────────────────── */}
+      <Container size="wide" className="py-12">
+        <Reveal>
+          <ReadThisIf recommendations={recommender} />
         </Reveal>
       </Container>
 

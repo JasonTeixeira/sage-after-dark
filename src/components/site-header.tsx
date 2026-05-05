@@ -11,10 +11,11 @@ import { TacticalStrip, StripSep, TerminalPrompt, Kbd } from "@/components";
 import { ReadingModeToggle } from "./reading-mode-toggle";
 
 const NAV = [
+  { label: "start", href: "/start" },
   { label: "essays", href: "/archive" },
+  { label: "concepts", href: "/concepts" },
   { label: "now", href: "/now" },
   { label: "taste", href: "/taste" },
-  { label: "reading", href: "/reading" },
   { label: "about", href: "/about" },
 ];
 

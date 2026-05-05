@@ -21,6 +21,9 @@ import {
   NotchedCard,
   ButtonLink,
   NewsletterForm,
+  AnimatedDiagram,
+  DiagramArcTimeline,
+  Reveal,
 } from "@/components";
 import { ARCS, TRAYD_EPISODES } from "@/content/site-data";
 
@@ -184,6 +187,86 @@ export default async function ArcPage({
             </NotchedCard>
           </aside>
         </div>
+
+        {/* ARC TRAILER — narrative scaffolding before the episode list */}
+        {episodes.length > 0 && (
+          <Reveal>
+            <div className="mb-16 grid grid-cols-1 lg:grid-cols-12 gap-8 border-t border-rule pt-12">
+              <div className="lg:col-span-7">
+                <Tactical className="text-cyan mb-3 block">// arc trailer</Tactical>
+                <EditorialHeading
+                  className="mb-5"
+                  style={{ fontSize: "clamp(1.75rem,3vw,2.5rem)" } as React.CSSProperties}
+                >
+                  Why this <em>arc.</em>
+                </EditorialHeading>
+                <p className="text-bone/85 leading-[1.7] text-[var(--text-body)] mb-5">
+                  {arc.summary}
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="border border-rule p-4">
+                    <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-cyan mb-1">
+                      ▸ THE CONSTRAINT
+                    </div>
+                    <div className="text-bone/80 text-[14px] leading-relaxed">
+                      One season. One product. Twelve episodes — fixed length. The
+                      cadence is the discipline.
+                    </div>
+                  </div>
+                  <div className="border border-rule p-4">
+                    <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-cyan mb-1">
+                      ▸ THE PROMISE
+                    </div>
+                    <div className="text-bone/80 text-[14px] leading-relaxed">
+                      Receipts public. Mistakes public. Numbers — when I can
+                      share them — public. The whole season designed to read.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <aside className="lg:col-span-5">
+                <NotchedCard notch="tl" pillarKey={arc.pillar} label="//CHARACTERS">
+                  <div className="p-6">
+                    <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-faint mb-4">
+                      THE PEOPLE / FORCES IN THIS ARC
+                    </div>
+                    <ul className="space-y-3">
+                      {[
+                        { who: "SAGE", role: "the operator", note: "writing it as it happens" },
+                        { who: "TRAYD", role: "the product", note: "AI companion for trades contractors" },
+                        { who: "THE CONTRACTORS", role: "the users", note: "first ten paying, then the next 100" },
+                        { who: "LATENCY", role: "the antagonist", note: "the bar voice agents must clear" },
+                      ].map((c) => (
+                        <li key={c.who} className="flex items-baseline gap-3 text-[13px]">
+                          <span className="font-mono text-cyan tabular-nums w-32 shrink-0">{c.who}</span>
+                          <span className="text-bone">{c.role}</span>
+                          <span className="text-faint flex-1 text-right">{c.note}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </NotchedCard>
+              </aside>
+            </div>
+          </Reveal>
+        )}
+
+        {/* Horizontal timeline — story spine */}
+        {episodes.length > 0 && (
+          <Reveal>
+            <AnimatedDiagram duration={1600}>
+              <DiagramArcTimeline
+                episodes={episodes.map((e) => ({ n: Number(e.n), kind: e.kind, title: e.title }))}
+                current={
+                  Number(episodes.find((e) => e.kind === "LIVE NOW")?.n) ||
+                  Math.max(...episodes.filter((e) => e.kind === "PUBLISHED").map((e) => Number(e.n)), 1)
+                }
+                arcCode={arc.code}
+                arcTitle={arc.title.toUpperCase()}
+              />
+            </AnimatedDiagram>
+          </Reveal>
+        )}
 
         {/* Episodes timeline */}
         <div id="episodes" className="border-t border-rule pt-10">

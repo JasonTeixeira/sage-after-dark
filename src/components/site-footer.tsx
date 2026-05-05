@@ -18,9 +18,10 @@ import {
 } from "@/components";
 
 const READ = [
+  { label: "Start here", href: "/start" },
   { label: "Essays", href: "/archive" },
+  { label: "Concepts", href: "/concepts" },
   { label: "Best of", href: "/best" },
-  { label: "Tools", href: "/tools" },
   { label: "RSS", href: "/feed.xml" },
 ];
 

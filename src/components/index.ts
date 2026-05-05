@@ -74,3 +74,24 @@ export { Monogram } from "./monogram";
 export { AnalyticsTracker } from "./analytics-tracker";
 export { RollbackBuilder } from "./rollback-builder";
 export { AskForm } from "./ask-form";
+
+// Diagrams (animations + strategy set)
+export { AnimatedDiagram } from "./diagram-animated";
+export {
+  DiagramTasteGate,
+  DiagramLearningLoop,
+  DiagramHalfLife,
+  DiagramSystem,
+} from "./diagrams";
+export {
+  DiagramNoiseVsSignal,
+  DiagramFivePillars,
+  DiagramArcTimeline,
+} from "./diagrams-strategy";
+
+// Cipher layer
+export { Cipher, Redacted } from "./cipher";
+export { DecoderRing, BonusFootnote, useDecoderUnlocked } from "./decoder-ring";
+
+// Recommender
+export { ReadThisIf } from "./read-this-if";

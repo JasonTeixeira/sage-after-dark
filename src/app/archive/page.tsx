@@ -313,8 +313,80 @@ export default async function ArchivePage({
             </div>
           </NotchedCard>
         </div>
+
+        {/* FIELD NOTES MAP — vertical documentary scroll through the year */}
+        <div className="mt-16">
+          <NotchedCard notch="tl" label="//FIELD_NOTES">
+            <div className="p-6 sm:p-8">
+              <div className="flex items-baseline justify-between mb-8">
+                <h3
+                  className="text-bone leading-tight [font-family:var(--font-editorial)]"
+                  style={{ fontSize: "clamp(1.5rem,2.4vw,2rem)" }}
+                >
+                  Field <em>notes.</em> Year One.
+                </h3>
+                <Tactical className="hidden md:inline">12 MONTHS · 7 MILESTONES</Tactical>
+              </div>
+              <DocumentaryScroll />
+              <p className="mt-8 text-faint text-[12px] font-mono uppercase tracking-[0.08em]">
+                // every month of writing, one milestone, one quote
+              </p>
+            </div>
+          </NotchedCard>
+        </div>
       </Container>
     </Page>
+  );
+}
+
+/* -----------------------------------------------------------
+ * DocumentaryScroll — a vertical timeline of the year, with
+ * milestone callouts and ambient quotes pulled from the corpus.
+ * --------------------------------------------------------- */
+function DocumentaryScroll() {
+  const months = [
+    { label: "JAN 2026", milestone: "Site v.01 published", quote: "‘Ship the smallest thing that proves the loop closes.’", pillar: "build" },
+    { label: "FEB 2026", milestone: "First 100 subscribers", quote: "‘Trust is not given, it accrues. Slowly. By doing what you said you would.’", pillar: "signal" },
+    { label: "MAR 2026", milestone: "Trayd, In Public — ARC_001 launched", quote: "‘A blog post is a snapshot. An arc is a season.’", pillar: "build" },
+    { label: "APR 2026", milestone: "Concepts canonicalised", quote: "‘Taste is invisible. The fix is to make it explicit.’", pillar: "mind" },
+    { label: "MAY 2026", milestone: "Membership opened · cipher layer shipped", quote: "‘The signal you can pick out of a stack of a hundred.’", pillar: "taste" },
+    { label: "JUN 2026", milestone: "Half-life essay rewritten", quote: "‘Most teams don’t decide to switch. They decide not to decide.’", pillar: "build" },
+    { label: "JUL 2026", milestone: "Trayd: 100 paying contractors", quote: "‘Ten paying users teach you more than ten thousand readers.’", pillar: "world" },
+  ];
+  const pillarColor: Record<string, string> = {
+    build: "bg-cyan",
+    signal: "bg-pillar-signal",
+    mind: "bg-pillar-mind",
+    world: "bg-pillar-world",
+    taste: "bg-pillar-taste",
+  };
+  return (
+    <ol className="relative">
+      <div className="absolute left-3 top-2 bottom-2 w-px bg-rule" aria-hidden="true" />
+      {months.map((m, i) => (
+        <li key={m.label} className="relative pl-10 pb-8 last:pb-0">
+          <span
+            className={`absolute left-1.5 top-1.5 h-3 w-3 rounded-full ${pillarColor[m.pillar] ?? "bg-cyan"}`}
+            aria-hidden="true"
+          />
+          <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 text-[11px] font-mono uppercase tracking-[0.08em]">
+            <span className="text-cyan tabular-nums">{m.label}</span>
+            <span className="text-faint">·</span>
+            <span className="text-bone">{m.milestone}</span>
+          </div>
+          <p
+            className="mt-2 text-bone/75 italic leading-relaxed text-[15px] max-w-[64ch] [font-family:var(--font-editorial)]"
+          >
+            {m.quote}
+          </p>
+          {i === 4 && (
+            <div className="mt-2 inline-block px-2 py-0.5 border border-cyan/40 text-cyan font-mono text-[10px] uppercase tracking-[0.12em]">
+              ▸ you are here
+            </div>
+          )}
+        </li>
+      ))}
+    </ol>
   );
 }
 

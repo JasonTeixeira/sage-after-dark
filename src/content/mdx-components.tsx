@@ -28,6 +28,12 @@ import {
   DiagramHalfLife,
   DiagramSystem,
 } from "@/components/diagrams";
+import {
+  DiagramNoiseVsSignal,
+  DiagramFivePillars,
+} from "@/components/diagrams-strategy";
+import { Cipher, Redacted } from "@/components/cipher";
+import { BonusFootnote } from "@/components/decoder-ring";
 
 export const mdxComponents: MDXComponents = {
   /* ---------- headings ---------- */
@@ -209,4 +215,10 @@ export const mdxComponents: MDXComponents = {
   DiagramLearningLoop,
   DiagramHalfLife,
   DiagramSystem,
+  DiagramNoiseVsSignal,
+  DiagramFivePillars,
+  // Cipher layer (inline + bonus)
+  Cipher,
+  Redacted,
+  BonusFootnote,
 };
