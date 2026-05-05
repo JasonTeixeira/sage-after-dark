@@ -24,6 +24,9 @@ import {
 } from "./shared";
 import { FloatingTOC } from "@/components/floating-toc";
 import { HighlightToShare } from "@/components/highlight-to-share";
+import { FootnotePopover } from "@/components/footnote-popover";
+import { TocScrubber } from "@/components/toc-scrubber";
+import { AnchorCopy } from "@/components/anchor-copy";
 import { EssaySignoff } from "@/components/essay-signoff";
 import { ShareButtons } from "@/components/share-buttons";
 import { Comments } from "@/components/comments";
@@ -48,8 +51,17 @@ export function EssayLayout({
           {/* Floating right-margin TOC at xl+; mobile sheet button below xl. */}
           <FloatingTOC rootSelector=".essay-prose" />
 
+          {/* Left-edge reading-position rail (xl+ only). */}
+          <TocScrubber rootSelector=".essay-prose" />
+
           {/* Selection-to-share bubble. Listens inside [data-highlightable]. */}
           <HighlightToShare postUrl={url} postTitle={fm.title} />
+
+          {/* Hover-peek footnotes; suppresses jump-to-bottom. */}
+          <FootnotePopover />
+
+          {/* Heading anchors copy URL+hash to clipboard with toast. */}
+          <AnchorCopy />
 
           <EditorialColumn className="essay-prose relative" data-highlightable>
             {children}

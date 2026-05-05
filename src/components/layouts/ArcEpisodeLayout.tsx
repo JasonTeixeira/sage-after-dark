@@ -19,6 +19,10 @@ import {
 } from "@/components";
 import type { Post } from "@/content/schema";
 import { getArcEpisodes } from "@/content/loader";
+import { FloatingTOC } from "@/components/floating-toc";
+import { FootnotePopover } from "@/components/footnote-popover";
+import { TocScrubber } from "@/components/toc-scrubber";
+import { AnchorCopy } from "@/components/anchor-copy";
 import {
   PostStrip,
   PostHeader,
@@ -67,8 +71,12 @@ export async function ArcEpisodeLayout({
 
         <PostHeader post={post} />
 
-        <Section className="border-t-0 pt-0">
-          <EditorialColumn className="essay-prose">
+        <Section className="border-t-0 pt-0 relative">
+          <FloatingTOC rootSelector=".essay-prose" />
+          <TocScrubber rootSelector=".essay-prose" />
+          <FootnotePopover />
+          <AnchorCopy />
+          <EditorialColumn className="essay-prose relative" data-highlightable>
             {children}
 
             {/* Prev/Next nav */}

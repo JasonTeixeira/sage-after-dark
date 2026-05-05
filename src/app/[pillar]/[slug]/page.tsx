@@ -18,6 +18,8 @@ import { JsonLd, articleLd, breadcrumbsLd } from "@/components/json-ld";
 import { EssayStickyBar } from "@/components/essay-sticky-bar";
 import { StudioWidget } from "@/components/studio-widget";
 import { TransmissionFooter } from "@/components/transmission-footer";
+import { RelatedRail } from "@/components/related-rail";
+import { relatedEssays } from "@/lib/related-essays";
 import { WRITING_NOW } from "@/content/studio-state";
 import { ARCS } from "@/content/site-data";
 import { getSessionEmail } from "@/lib/auth";
@@ -156,6 +158,8 @@ export default async function PostPage({
               },
             }}
           />
+          {/* Related-by-concept rail — "read next" curated by signal */}
+          <RelatedRail posts={relatedEssays(post, await getAllPosts(), 3)} />
           {/* Cipher Layer 5 — signed transmission footer */}
           <TransmissionFooter
             source={post.source}

@@ -58,6 +58,10 @@ export { Konami } from "./konami";
 export { TerminalPalette } from "./terminal-palette";
 export { StudioWidget } from "./studio-widget";
 export { TransmissionFooter } from "./transmission-footer";
+export { FootnotePopover } from "./footnote-popover";
+export { TocScrubber } from "./toc-scrubber";
+export { AnchorCopy } from "./anchor-copy";
+export { RelatedRail } from "./related-rail";
 export { JsonLd, PERSON_LD, WEBSITE_LD, articleLd, breadcrumbsLd } from "./json-ld";
 
 // Newsletter funnel
