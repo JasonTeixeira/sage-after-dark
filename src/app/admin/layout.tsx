@@ -53,7 +53,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </Link>
           ))}
           <span className="ml-auto font-mono text-[10px] text-mute">
-            <Link href="/api/auth/logout" className="hover:text-ember">sign out</Link>
+            <form method="post" action="/api/auth/logout" className="inline">
+              <button type="submit" className="hover:text-ember">sign out</button>
+            </form>
           </span>
         </nav>
 
