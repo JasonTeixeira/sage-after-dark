@@ -1,7 +1,12 @@
 {
-  "generatedAt": "2026-05-05T17:53:05.407Z",
-  "count": 62,
+  "generatedAt": "2026-05-05T18:08:52.299Z",
+  "count": 63,
   "entries": [
+    {
+      "hash": "f9093cf",
+      "date": "2026-05-05",
+      "subject": "fix(about): CountUp respects SSR value when already in viewport"
+    },
     {
       "hash": "e1881fd",
       "date": "2026-05-05",

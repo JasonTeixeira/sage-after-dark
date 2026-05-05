@@ -1,19 +1,23 @@
 "use client";
 
 /**
- * Comments — privacy-first via Cusdis.
+ * Comments — Giscus (GitHub Discussions) with Cusdis fallback.
  *
- * Cusdis (https://cusdis.com) is open-source, GDPR-friendly, no tracking,
- * no required login. We embed it via the official script.
+ * Behaviour:
+ *   - If NEXT_PUBLIC_CUSDIS_APP_ID is set, render Cusdis.
+ *   - Else if NEXT_PUBLIC_GISCUS_REPO_ID + NEXT_PUBLIC_GISCUS_CATEGORY_ID
+ *     are set, mount Giscus.
+ *     - If Giscus reports an error (e.g. the Giscus GitHub App hasn't
+ *       been installed on the repo yet, or Discussions aren't enabled
+ *       for this category), we silently swap to the friendly
+ *       reply-by-email placeholder so visitors never see a raw error.
+ *   - Else render the placeholder.
  *
- * To enable, set NEXT_PUBLIC_CUSDIS_APP_ID in Vercel.
- * Until then, a graceful placeholder is shown.
- *
- * Falls back to Giscus (GitHub Discussions) if NEXT_PUBLIC_GISCUS_REPO_ID
- * is set instead — preserves backwards compatibility with prior wiring.
+ * The Giscus app must be installed once at https://github.com/apps/giscus
+ * by the repo owner. Until that happens, the embed is hidden.
  */
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const CUSDIS_APP_ID = process.env.NEXT_PUBLIC_CUSDIS_APP_ID ?? "";
 const CUSDIS_HOST =
@@ -22,6 +26,34 @@ const CUSDIS_HOST =
 const GISCUS_REPO = "JasonTeixeira/sage-after-dark";
 const GISCUS_REPO_ID = process.env.NEXT_PUBLIC_GISCUS_REPO_ID ?? "";
 const GISCUS_CATEGORY_ID = process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID ?? "";
+
+const GISCUS_CONFIGURED = !!(GISCUS_REPO_ID && GISCUS_CATEGORY_ID);
+
+type Mode = "cusdis" | "giscus" | "placeholder";
+
+function Placeholder({ slug }: { slug: string }) {
+  return (
+    <div className="border border-dashed border-rule rounded p-6 text-center">
+      <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-mute">
+        // notes
+      </p>
+      <p className="text-bone/70 text-[14px] mt-2 leading-relaxed">
+        Reply by email —{" "}
+        <a
+          href={`mailto:sage@sageideas.org?subject=Re: ${slug}`}
+          className="text-cyan hover:underline"
+        >
+          sage@sageideas.org
+        </a>
+        . Or share a thought at{" "}
+        <a href="/ask" className="text-cyan hover:underline">
+          /ask
+        </a>
+        .
+      </p>
+    </div>
+  );
+}
 
 export function Comments({
   slug,
@@ -32,13 +64,52 @@ export function Comments({
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
+  // Initial mode is decided by env var presence — Cusdis wins,
+  // otherwise Giscus, otherwise placeholder.
+  const initialMode: Mode = CUSDIS_APP_ID
+    ? "cusdis"
+    : GISCUS_CONFIGURED
+    ? "giscus"
+    : "placeholder";
+  const [mode, setMode] = useState<Mode>(initialMode);
+
+  /* ----------------------------------------------------------------
+   * Listen for Giscus error messages. The official Giscus iframe
+   * posts metadata via window.postMessage; if we see anything that
+   * looks like an error/warning (e.g. "giscus is not installed"),
+   * we collapse to the placeholder.
+   * -------------------------------------------------------------- */
+  useEffect(() => {
+    if (mode !== "giscus") return;
+
+    const onMessage = (event: MessageEvent) => {
+      if (!event.origin.includes("giscus.app")) return;
+      const data = event.data;
+      if (data && typeof data === "object" && "giscus" in data) {
+        // Giscus posts { giscus: { error: "..." } } when something
+        // is wrong (app not installed, repo private, etc.).
+        const payload = (data as { giscus: { error?: string } }).giscus;
+        if (payload && payload.error) {
+          // eslint-disable-next-line no-console
+          console.warn("[comments] giscus error:", payload.error);
+          setMode("placeholder");
+        }
+      }
+    };
+    window.addEventListener("message", onMessage);
+    return () => window.removeEventListener("message", onMessage);
+  }, [mode]);
+
+  /* ----------------------------------------------------------------
+   * Mount the chosen embed. Re-runs when mode flips to placeholder
+   * (which simply tears down any iframe).
+   * -------------------------------------------------------------- */
   useEffect(() => {
     const node = ref.current;
     if (!node) return;
 
     /* ---------- Cusdis path ---------- */
-    if (CUSDIS_APP_ID) {
-      // Avoid double-mount in dev StrictMode
+    if (mode === "cusdis") {
       if (node.querySelector("script[data-host]")) return;
       const s = document.createElement("script");
       s.src = `${CUSDIS_HOST}/js/cusdis.es.js`;
@@ -50,8 +121,8 @@ export function Comments({
       };
     }
 
-    /* ---------- Giscus fallback ---------- */
-    if (GISCUS_REPO_ID && GISCUS_CATEGORY_ID) {
+    /* ---------- Giscus path ---------- */
+    if (mode === "giscus") {
       if (node.querySelector("iframe.giscus-frame")) return;
       const s = document.createElement("script");
       s.src = "https://giscus.app/client.js";
@@ -75,34 +146,14 @@ export function Comments({
         while (node.firstChild) node.removeChild(node.firstChild);
       };
     }
-  }, [slug]);
+  }, [mode, slug]);
 
-  /* ---------- placeholder when nothing configured ---------- */
-  if (!CUSDIS_APP_ID && (!GISCUS_REPO_ID || !GISCUS_CATEGORY_ID)) {
-    return (
-      <div className="border border-dashed border-rule rounded p-6 text-center">
-        <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-mute">
-          // notes
-        </p>
-        <p className="text-bone/60 text-[14px] mt-2">
-          Reply by email —{" "}
-          <a
-            href={`mailto:sage@sageideas.org?subject=Re: ${slug}`}
-            className="text-cyan hover:underline"
-          >
-            sage@sageideas.org
-          </a>
-          . Or share a thought at{" "}
-          <a href="/ask" className="text-cyan hover:underline">
-            /ask
-          </a>
-          .
-        </p>
-      </div>
-    );
+  /* ---------- Render branch ---------- */
+  if (mode === "placeholder") {
+    return <Placeholder slug={slug} />;
   }
 
-  if (CUSDIS_APP_ID) {
+  if (mode === "cusdis") {
     return (
       <div
         ref={ref}
