@@ -1,16 +1,7 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-import { Instrument_Serif } from "next/font/google";
 import "./globals.css";
-
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  variable: "--font-serif",
-  display: "swap",
-});
 import { SiteHeader, SiteFooter, KeyboardShortcuts, HeroReticle, Konami, JsonLd, WEBSITE_LD, PERSON_LD, RouterTransitions, AnalyticsTracker } from "@/components";
 
 export const metadata: Metadata = {
@@ -65,7 +56,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${GeistSans.variable} ${GeistMono.variable} ${instrumentSerif.variable}`}
+      className={`${GeistSans.variable} ${GeistMono.variable}`}
       suppressHydrationWarning
     >
       <body className="bg-ink-0 text-bone antialiased flex flex-col min-h-screen">

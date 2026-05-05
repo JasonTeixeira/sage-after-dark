@@ -40,10 +40,10 @@ export function PullQuote({
         className={cn(
           "relative",
           align === "left" && "border-l-2 border-cyan pl-6 lg:pl-10",
-          "[font-family:var(--font-editorial)] italic text-bone/95",
-          "leading-[1.15] tracking-[-0.01em]",
-          // Editorial scale, responsive
-          "text-[1.65rem] sm:text-[2rem] lg:text-[2.4rem]",
+          "[font-family:var(--font-editorial)] not-italic text-bone/95 font-medium",
+          "leading-[1.25] tracking-[-0.03em]",
+          // Editorial scale, responsive (tuned for mono width)
+          "text-[1.25rem] sm:text-[1.5rem] lg:text-[1.85rem]",
         )}
       >
         <span className="relative">

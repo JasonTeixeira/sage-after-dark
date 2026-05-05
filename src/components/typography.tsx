@@ -41,10 +41,10 @@ export function EditorialDisplay({ className, children, ...rest }: Props) {
     <h1
       {...rest}
       className={cn(
-        "text-bone leading-[0.95] tracking-[-0.01em]",
+        "text-bone leading-[0.95] tracking-[-0.04em] font-medium",
         "[font-family:var(--font-editorial)]",
-        "[font-size:clamp(3rem,8vw,6.5rem)]",
-        "[&_em]:text-cyan [&_em]:italic [&_em]:font-normal",
+        "[font-size:clamp(2.25rem,6vw,5rem)]",
+        "[&_em]:text-cyan [&_em]:not-italic [&_em]:font-medium [&_em]:[font-style:normal]",
         className,
       )}
     >
@@ -62,10 +62,10 @@ export function EditorialHeading({ className, children, ...rest }: Props & { as?
     <h2
       {...rest}
       className={cn(
-        "text-bone leading-[1.05] tracking-[-0.005em]",
+        "text-bone leading-[1.05] tracking-[-0.03em] font-medium",
         "[font-family:var(--font-editorial)]",
-        "[font-size:clamp(1.75rem,3.5vw,2.75rem)]",
-        "[&_em]:italic [&_em]:font-normal [&_em]:text-bone",
+        "[font-size:clamp(1.5rem,3vw,2.25rem)]",
+        "[&_em]:not-italic [&_em]:font-medium [&_em]:text-cyan",
         className,
       )}
     >
