@@ -20,6 +20,10 @@ import {
   Hr,
 } from "@/components";
 import { NOW } from "@/content/site-data";
+import { getNowStatus, getRotation } from "@/lib/living";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata = {
   title: "Now",
@@ -27,10 +31,37 @@ export const metadata = {
     "What Jason Teixeira is working on this week. Updated weekly. The contract with the reader: this is current, or it isn't.",
 };
 
-export default function NowPage() {
-  const updated = format(new Date(NOW.updated), "yyyy-MM-dd");
+export default async function NowPage() {
+  // Live read — falls back to static defaults if Supabase is unconfigured.
+  const [live, reading, listening, watching] = await Promise.all([
+    getNowStatus(),
+    getRotation("reading"),
+    getRotation("listening"),
+    getRotation("watching"),
+  ]);
+
+  const status = live?.status ?? NOW.status;
+  const location = live?.location ?? NOW.location;
+  const this_week = live?.this_week?.length ? live.this_week : NOW.this_week;
+  const not_doing = live?.not_doing?.length ? live.not_doing : NOW.not_doing;
+  const updatedDate = live?.updated_at ?? NOW.updated;
+
+  // For /now, prefer compact "title — by" lines
+  const readingLines = reading.length
+    ? reading.slice(0, 4).map((r) => `${r.title} — ${r.by_line}`)
+    : NOW.reading;
+  const listeningLines = listening.length
+    ? listening.slice(0, 4).map((r) => `${r.title} — ${r.by_line}`)
+    : NOW.listening;
+  const watchingLines = watching.length
+    ? watching.slice(0, 4).map((r) =>
+        r.by_line ? `${r.title} — ${r.by_line}` : r.title,
+      )
+    : NOW.watching;
+
+  const updated = format(new Date(updatedDate), "yyyy-MM-dd");
   const daysSince = Math.floor(
-    (Date.now() - new Date(NOW.updated).getTime()) / (1000 * 60 * 60 * 24),
+    (Date.now() - new Date(updatedDate).getTime()) / (1000 * 60 * 60 * 24),
   );
   const stale = daysSince > 14;
 
@@ -69,9 +100,9 @@ export default function NowPage() {
               <StatusDot status={stale ? "idle" : "live"} />
               <Tactical>// status</Tactical>
             </div>
-            <p className="text-bone/90 leading-relaxed text-lg">{NOW.status}</p>
+            <p className="text-bone/90 leading-relaxed text-lg">{status}</p>
             <div className="mt-3 font-mono text-[11px] uppercase tracking-[0.08em] text-faint">
-              {NOW.location}
+              {location}
             </div>
           </section>
 
@@ -81,7 +112,7 @@ export default function NowPage() {
           <section>
             <Tactical className="mb-4 block">// this week</Tactical>
             <ul className="space-y-3">
-              {NOW.this_week.map((item, i) => (
+              {this_week.map((item, i) => (
                 <li key={i} className="flex items-start gap-3">
                   <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-cyan tabular-nums mt-1.5">
                     {String(i + 1).padStart(2, "0")}
@@ -99,7 +130,7 @@ export default function NowPage() {
             <section>
               <Tactical className="mb-4 block">// reading</Tactical>
               <ul className="space-y-2 text-bone/90 leading-relaxed">
-                {NOW.reading.map((item, i) => (
+                {readingLines.map((item, i) => (
                   <li key={i}>{item}</li>
                 ))}
               </ul>
@@ -107,7 +138,7 @@ export default function NowPage() {
             <section>
               <Tactical className="mb-4 block">// listening</Tactical>
               <ul className="space-y-2 text-bone/90 leading-relaxed">
-                {NOW.listening.map((item, i) => (
+                {listeningLines.map((item, i) => (
                   <li key={i}>{item}</li>
                 ))}
               </ul>
@@ -115,7 +146,7 @@ export default function NowPage() {
             <section className="sm:col-span-2">
               <Tactical className="mb-4 block">// watching</Tactical>
               <ul className="space-y-2 text-bone/90 leading-relaxed">
-                {NOW.watching.map((item, i) => (
+                {watchingLines.map((item, i) => (
                   <li key={i}>{item}</li>
                 ))}
               </ul>
@@ -134,7 +165,7 @@ export default function NowPage() {
               focus. The list of things I&apos;m saying no to this week:
             </p>
             <ul className="space-y-2">
-              {NOW.not_doing.map((item, i) => (
+              {not_doing.map((item, i) => (
                 <li
                   key={i}
                   className="flex items-start gap-3 text-bone/80 leading-relaxed"

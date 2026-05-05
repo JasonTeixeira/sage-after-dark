@@ -26,8 +26,9 @@ import { getPostBySlug, getAllPosts } from "@/content/loader";
 import { NewsletterForm } from "@/components/newsletter-form";
 import { Comments } from "@/components/comments";
 import { ReadingProgress } from "@/components/reading-progress";
+import { getViewsForSlug } from "@/lib/living";
 
-export function PostStrip({
+export async function PostStrip({
   post,
   templateLabel,
 }: {
@@ -39,6 +40,13 @@ export function PostStrip({
   const statusVariant: "default" | "live" | "muted" =
     fm.status === "published" ? "live" : "muted";
 
+  // Live view count — 0 if not yet tracked. Always real, never inflated.
+  const stats = await getViewsForSlug(fm.slug);
+  const viewLabel =
+    stats.views >= 1000
+      ? `${(stats.views / 1000).toFixed(1)}k READS`
+      : `${stats.views} READ${stats.views === 1 ? "" : "S"}`;
+
   return (
     <TacticalStrip variant={statusVariant} className="text-mute">
       <span className="text-cyan">{templateLabel}</span>
@@ -48,6 +56,12 @@ export function PostStrip({
       <span>{post.reading_minutes} MIN READ</span>
       <StripSep />
       <span>{post.word_count.toLocaleString()} WORDS</span>
+      {stats.views > 0 && (
+        <>
+          <StripSep />
+          <span>{viewLabel}</span>
+        </>
+      )}
       <span className="ml-auto">
         <PillarTag pillar={fm.pillar} size="sm" />
       </span>

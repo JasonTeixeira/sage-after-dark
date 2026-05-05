@@ -34,14 +34,17 @@ function randomToken(bytes = 32): string {
 }
 
 export async function POST(req: Request) {
-  let payload: { email?: string } = {};
+  let payload: { email?: string; next?: string } = {};
   try {
     const ct = req.headers.get("content-type") ?? "";
     if (ct.includes("application/json")) {
-      payload = (await req.json()) as { email?: string };
+      payload = (await req.json()) as { email?: string; next?: string };
     } else {
       const fd = await req.formData();
-      payload = { email: String(fd.get("email") ?? "") };
+      payload = {
+        email: String(fd.get("email") ?? ""),
+        next: String(fd.get("next") ?? "") || undefined,
+      };
     }
   } catch {
     return json({ error: "bad_request" }, 400);
@@ -52,6 +55,10 @@ export async function POST(req: Request) {
     return json({ error: "invalid_email" }, 400);
   }
 
+  // Allow only same-origin paths to prevent open redirect.
+  const next =
+    payload.next && /^\/[\w\-/]*$/.test(payload.next) ? payload.next : null;
+
   const token = randomToken();
   try {
     await createMagicLink(email, token, 15);
@@ -61,7 +68,9 @@ export async function POST(req: Request) {
     return json({ ok: true });
   }
 
-  const url = `${SITE}/api/auth/verify?token=${token}`;
+  const url = next
+    ? `${SITE}/api/auth/verify?token=${token}&next=${encodeURIComponent(next)}`
+    : `${SITE}/api/auth/verify?token=${token}`;
   try {
     const tpl = magicLinkEmail({ url });
     await sendEmail({ to: email, ...tpl });

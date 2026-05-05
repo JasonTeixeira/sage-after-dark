@@ -9,7 +9,7 @@
 
 import { useState } from "react";
 
-export function LoginForm() {
+export function LoginForm({ next }: { next?: string | null } = {}) {
   const [email, setEmail] = useState("");
   const [state, setState] = useState<"idle" | "loading" | "ok" | "err">("idle");
 
@@ -21,7 +21,7 @@ export function LoginForm() {
       const r = await fetch("/api/auth/request", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, next: next ?? undefined }),
       });
       if (!r.ok) {
         setState("err");

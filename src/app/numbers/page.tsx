@@ -31,6 +31,7 @@ import Link from "next/link";
 import { getPublicMetrics, type PublicMetrics } from "@/lib/stripe";
 import { getSiteCounts } from "@/lib/live-counts";
 import { getAllPosts } from "@/content/loader";
+import { getTotalPageviews, getTopPosts } from "@/lib/living";
 import { JsonLd, breadcrumbsLd } from "@/components/json-ld";
 
 // Revalidate hourly. Nightly cron will warm the cache.
@@ -53,10 +54,12 @@ async function safeMetrics(): Promise<PublicMetrics | null> {
 }
 
 export default async function NumbersPage() {
-  const [metrics, counts, posts] = await Promise.all([
+  const [metrics, counts, posts, traffic, topPosts] = await Promise.all([
     safeMetrics(),
     getSiteCounts(),
     getAllPosts(),
+    getTotalPageviews(),
+    getTopPosts(5),
   ]);
 
   const published = posts.filter((p) => p.frontmatter.status !== "draft");
@@ -199,31 +202,79 @@ export default async function NumbersPage() {
 
         <Hr />
 
-        {/* Top reads (by length, since real view counts aren't wired yet) */}
+        {/* Traffic */}
+        <Section>
+          <Tactical className="text-cyan mb-4">▸ TRAFFIC · LIVE</Tactical>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-rule">
+            <Stat
+              label="Total pageviews"
+              value={traffic.views.toLocaleString("en-US")}
+              hint="all-time, bots excluded"
+            />
+            <Stat
+              label="Unique visitors"
+              value={traffic.unique_visitors.toLocaleString("en-US")}
+              hint="hashed, no PII"
+            />
+            <Stat
+              label="Pages tracked"
+              value={String(topPosts.length).padStart(2, "0")}
+              hint="posts with at least one read"
+            />
+          </div>
+        </Section>
+
+        <Hr />
+
+        {/* Top reads — by real views if any, otherwise by length */}
         <Section>
           <Tactical className="text-cyan mb-4">
-            ▸ LONGEST · BY WORD COUNT
+            ▸ {topPosts.length > 0 ? "TOP READS · BY VIEWS" : "LONGEST · BY WORD COUNT"}
           </Tactical>
           <ol className="font-mono text-sm space-y-2">
-            {topByLength.map((p, i) => (
-              <li
-                key={p.frontmatter.slug}
-                className="flex items-baseline gap-3 border-b border-rule/50 pb-2"
-              >
-                <span className="text-mute text-xs tabular-nums w-6">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <Link
-                  href={`/${p.frontmatter.pillar}/${p.frontmatter.slug}`}
-                  className="text-bone hover:text-cyan flex-1"
-                >
-                  {p.frontmatter.title}
-                </Link>
-                <span className="text-mute text-xs tabular-nums">
-                  {(p.word_count ?? 0).toLocaleString("en-US")}w
-                </span>
-              </li>
-            ))}
+            {topPosts.length > 0
+              ? topPosts.map((p, i) => {
+                  const post = published.find((x) => x.frontmatter.slug === p.slug);
+                  const title = post?.frontmatter.title ?? p.slug;
+                  const href = post
+                    ? `/${post.frontmatter.pillar}/${post.frontmatter.slug}`
+                    : p.path;
+                  return (
+                    <li
+                      key={p.slug}
+                      className="flex items-baseline gap-3 border-b border-rule/50 pb-2"
+                    >
+                      <span className="text-mute text-xs tabular-nums w-6">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <Link href={href} className="text-bone hover:text-cyan flex-1">
+                        {title}
+                      </Link>
+                      <span className="text-mute text-xs tabular-nums">
+                        {p.views.toLocaleString("en-US")} views
+                      </span>
+                    </li>
+                  );
+                })
+              : topByLength.map((p, i) => (
+                  <li
+                    key={p.frontmatter.slug}
+                    className="flex items-baseline gap-3 border-b border-rule/50 pb-2"
+                  >
+                    <span className="text-mute text-xs tabular-nums w-6">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <Link
+                      href={`/${p.frontmatter.pillar}/${p.frontmatter.slug}`}
+                      className="text-bone hover:text-cyan flex-1"
+                    >
+                      {p.frontmatter.title}
+                    </Link>
+                    <span className="text-mute text-xs tabular-nums">
+                      {(p.word_count ?? 0).toLocaleString("en-US")}w
+                    </span>
+                  </li>
+                ))}
           </ol>
         </Section>
 

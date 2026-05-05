@@ -29,11 +29,13 @@ const ERR_COPY: Record<string, string> = {
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; next?: string }>;
 }) {
   const sp = await searchParams;
   const errCode = sp?.error ?? null;
   const err = errCode && ERR_COPY[errCode] ? ERR_COPY[errCode] : null;
+  // Allow only same-origin paths to prevent open redirect.
+  const next = sp?.next && /^\/[\w\-/]*$/.test(sp.next) ? sp.next : null;
 
   return (
     <Page>
@@ -62,7 +64,7 @@ export default async function LoginPage({
           </div>
         )}
 
-        <LoginForm />
+        <LoginForm next={next} />
 
         <p className="mt-10 font-mono text-[11px] uppercase tracking-[0.08em] text-mute">
           // not a member yet?{" "}

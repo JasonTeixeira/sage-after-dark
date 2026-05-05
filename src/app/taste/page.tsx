@@ -22,7 +22,11 @@ import {
   Pullquote,
 } from "@/components";
 import { TASTE, NOW_PLAYING } from "@/content/site-data";
+import { getRotation } from "@/lib/living";
 import Link from "next/link";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata = {
   title: "Taste",
@@ -55,8 +59,27 @@ const READER_PICKS = [
   },
 ];
 
-export default function TastePage() {
-  const updated = format(new Date(TASTE.updated), "yyyy-MM-dd");
+export default async function TastePage() {
+  // Live reads with fallback to static defaults
+  const [liveBooks, liveMusic, liveFilm] = await Promise.all([
+    getRotation("book"),
+    getRotation("music"),
+    getRotation("film"),
+  ]);
+  const toItem = (r: { title: string; by_line: string; year_label: string | null; note: string | null }) => ({
+    title: r.title,
+    by: r.by_line,
+    year: r.year_label ?? "",
+    note: r.note ?? "",
+  });
+  const books = liveBooks.length ? liveBooks.map(toItem) : TASTE.books;
+  const music = liveMusic.length ? liveMusic.map(toItem) : TASTE.music;
+  const film  = liveFilm.length  ? liveFilm.map(toItem)  : TASTE.film;
+
+  // Updated stamp = max of any item's updated_at, fallback static
+  const allUpdated = [...liveBooks, ...liveMusic, ...liveFilm].map((r) => r.updated_at);
+  const latest = allUpdated.length ? allUpdated.sort().slice(-1)[0] : TASTE.updated;
+  const updated = format(new Date(latest), "yyyy-MM-dd");
 
   return (
     <Page>
@@ -135,23 +158,23 @@ export default function TastePage() {
           <Panel
             label="// CURRENTLY · READING"
             heading="The books."
-            sublabel={`${TASTE.books.length} ACTIVE · ${TASTE.books.length} FINISHED YTD · PHYSICAL`}
-            items={TASTE.books}
+            sublabel={`${books.length} ACTIVE · ${books.length} FINISHED YTD · PHYSICAL`}
+            items={books}
           />
           {/* Panel: Music */}
           <Panel
             label="// CURRENTLY · ROTATION"
             heading="The rotation."
-            sublabel={`${TASTE.music.length} ALBUMS · TOP OF MIND THIS WEEK`}
-            items={TASTE.music}
+            sublabel={`${music.length} ALBUMS · TOP OF MIND THIS WEEK`}
+            items={music}
             tone="cyan"
           />
           {/* Panel: Screen */}
           <Panel
             label="// THE SCREEN"
             heading="The screen."
-            sublabel={`SHOWS THIS MONTH · ${TASTE.film.length} FILMS`}
-            items={TASTE.film}
+            sublabel={`SHOWS THIS MONTH · ${film.length} FILMS`}
+            items={film}
             tone="ember"
           />
           {/* Panel: Small obsessions */}

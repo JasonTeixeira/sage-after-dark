@@ -16,6 +16,10 @@ import {
   NotchedCard,
 } from "@/components";
 import { READING } from "@/content/site-data";
+import { getRotation } from "@/lib/living";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata = {
   title: "Reading",
@@ -34,8 +38,22 @@ const SHELF_PILLARS: Record<
   "On systems": "mind",
 };
 
-export default function ReadingPage() {
-  const updated = format(new Date(READING.updated), "yyyy-MM-dd");
+export default async function ReadingPage() {
+  const liveReading = await getRotation("reading");
+  // Group by shelf if live data is present, fall back to static otherwise.
+  const shelves = liveReading.length
+    ? Object.entries(
+        liveReading.reduce<Record<string, { title: string; by: string }[]>>((acc, r) => {
+          const key = r.shelf ?? "On building";
+          (acc[key] ??= []).push({ title: r.title, by: r.by_line });
+          return acc;
+        }, {}),
+      ).map(([shelf, items]) => ({ shelf, items }))
+    : READING.shelves;
+  const latest = liveReading.length
+    ? liveReading.map((r) => r.updated_at).sort().slice(-1)[0]
+    : READING.updated;
+  const updated = format(new Date(latest), "yyyy-MM-dd");
   return (
     <Page>
       <Container size="wide" className="pt-10 pb-24">
@@ -45,8 +63,8 @@ export default function ReadingPage() {
           <span>UPDATED · {updated.toUpperCase()}</span>
           <StripSep />
           <span>
-            SHELVES · {READING.shelves.length} · BOOKS ·{" "}
-            {READING.shelves.reduce((n, s) => n + s.items.length, 0)}
+            SHELVES · {shelves.length} · BOOKS ·{" "}
+            {shelves.reduce((n, s) => n + s.items.length, 0)}
           </span>
         </TacticalStrip>
 
@@ -57,7 +75,7 @@ export default function ReadingPage() {
         </header>
 
         <div className="space-y-12">
-          {READING.shelves.map((shelf) => {
+          {shelves.map((shelf) => {
             const pillar = SHELF_PILLARS[shelf.shelf] ?? "mind";
             return (
               <Section

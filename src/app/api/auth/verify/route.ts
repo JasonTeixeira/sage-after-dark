@@ -13,6 +13,9 @@ const SITE = "https://www.sageafterdark.com";
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const token = url.searchParams.get("token");
+  const nextRaw = url.searchParams.get("next") ?? "";
+  // Allow only same-origin paths to prevent open redirect.
+  const next = /^\/[\w\-/]*$/.test(nextRaw) ? nextRaw : null;
   if (!token) return Response.redirect(`${SITE}/account/login?error=missing`, 303);
 
   let email: string | null = null;
@@ -33,5 +36,8 @@ export async function GET(req: Request) {
     return Response.redirect(`${SITE}/account/login?error=cookie`, 303);
   }
 
+  if (next) {
+    return Response.redirect(`${SITE}${next}`, 303);
+  }
   return Response.redirect(`${SITE}/account?welcome=1`, 303);
 }

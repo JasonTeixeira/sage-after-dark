@@ -1,7 +1,12 @@
 {
-  "generatedAt": "2026-05-05T04:06:00.551Z",
-  "count": 50,
+  "generatedAt": "2026-05-05T13:33:05.472Z",
+  "count": 51,
   "entries": [
+    {
+      "hash": "0d0aeb0",
+      "date": "2026-05-05",
+      "subject": "fix(p27): pillar diagram redesign with weighted columns, removed duplicate search, auth-aware header + home strip, /account dispatches panel"
+    },
     {
       "hash": "fb6a90b",
       "date": "2026-05-05",
