@@ -9,6 +9,7 @@
 import Link from "next/link";
 import { TacticalStrip, StripSep, TerminalPrompt, Kbd } from "@/components";
 import { ReadingModeToggle } from "./reading-mode-toggle";
+import { getSessionEmail } from "@/lib/auth";
 
 const NAV = [
   { label: "start", href: "/start" },
@@ -19,9 +20,9 @@ const NAV = [
   { label: "about", href: "/about" },
 ];
 
-const RIGHT_NAV = [{ label: "members", href: "/membership" }];
-
-export function SiteHeader({ path = "/" }: { path?: string }) {
+export async function SiteHeader({ path = "/" }: { path?: string }) {
+  const sessionEmail = await getSessionEmail().catch(() => null);
+  const isSignedIn = Boolean(sessionEmail);
   return (
     <header className="border-b border-rule bg-ink-0/80 backdrop-blur-sm sticky top-0 z-40" data-print-hide>
       <div className="mx-auto max-w-7xl px-6">
@@ -48,15 +49,29 @@ export function SiteHeader({ path = "/" }: { path?: string }) {
             ))}
           </nav>
           <span className="ml-auto hidden sm:inline-flex items-center gap-4">
-            {RIGHT_NAV.map((n) => (
+            {isSignedIn ? (
               <Link
-                key={n.href}
-                href={n.href}
-                className="text-teach hover:opacity-80 transition-opacity"
+                href="/account"
+                className="text-cyan hover:opacity-80 transition-opacity"
               >
-                ▸ {n.label}
+                ▸ account
               </Link>
-            ))}
+            ) : (
+              <>
+                <Link
+                  href="/membership"
+                  className="text-teach hover:opacity-80 transition-opacity"
+                >
+                  ▸ members
+                </Link>
+                <Link
+                  href="/account/login"
+                  className="hover:text-cyan transition-colors"
+                >
+                  log in
+                </Link>
+              </>
+            )}
             <StripSep />
             <ReadingModeToggle />
             <StripSep />

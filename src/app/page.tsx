@@ -38,12 +38,14 @@ import { getAllPosts } from "@/content/loader";
 import { NOW, ARCS, PRODUCTS, NOW_PLAYING } from "@/content/site-data";
 import { pillar as pillarTokens } from "@/lib/tokens";
 import { getSiteCounts } from "@/lib/live-counts";
+import { getSessionEmail } from "@/lib/auth";
 
 const PILLAR_LABELS = ["build", "signal", "mind", "world", "taste"] as const;
 
 export default async function HomePage() {
   const posts = await getAllPosts();
   const counts = await getSiteCounts();
+  const sessionEmail = await getSessionEmail().catch(() => null);
   const featured = posts.find((p) => p.frontmatter.featured) ?? posts[0];
   const dispatches = posts
     .filter((p) => p.frontmatter.slug !== featured?.frontmatter.slug)
@@ -103,10 +105,21 @@ export default async function HomePage() {
             <StripSep />
             <span>ESSAYS · {counts.postsLabel}</span>
             <StripSep />
-            <span>LOG IN</span>
-            <StripSep />
-            <span>SEARCH</span>
-            <span className="bg-rule-hi px-1.5 py-0.5 text-faint">/</span>
+            {sessionEmail ? (
+              <Link
+                href="/account"
+                className="text-cyan hover:opacity-80 transition-opacity"
+              >
+                ▸ ACCOUNT
+              </Link>
+            ) : (
+              <Link
+                href="/account/login"
+                className="text-cyan hover:opacity-80 transition-opacity"
+              >
+                ▸ SIGN IN
+              </Link>
+            )}
           </span>
           <span className="ml-auto md:hidden">ESSAYS · {counts.postsLabel}</span>
         </TacticalStrip>

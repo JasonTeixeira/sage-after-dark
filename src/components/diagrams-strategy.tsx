@@ -134,38 +134,63 @@ export function DiagramNoiseVsSignal({ caption, className }: DiagramProps) {
  */
 
 export function DiagramFivePillars({ caption, className }: DiagramProps) {
+  // Each pillar gets: a domain (top tag), a definition (large), a frequency,
+  // and a weight bar that hints at how much I write in each surface.
   const pillars = [
     {
       key: "BUILD",
       color: "#00E5FF",
-      blurb: "code, products,",
-      blurb2: "what i ship",
+      tag: "the maker",
+      def: "code, products,\u00A0craft",
+      freq: "weekly",
+      weight: 0.92,
     },
     {
       key: "SIGNAL",
       color: "#F59E0B",
-      blurb: "dispatches,",
-      blurb2: "live status",
+      tag: "the operator",
+      def: "dispatches,\u00A0live\u00A0status",
+      freq: "daily",
+      weight: 0.78,
     },
     {
       key: "MIND",
       color: "#A78BFA",
-      blurb: "essays,",
-      blurb2: "principles",
+      tag: "the thinker",
+      def: "essays,\u00A0first\u00A0principles",
+      freq: "monthly",
+      weight: 0.66,
     },
     {
       key: "WORLD",
       color: "#34D399",
-      blurb: "industry,",
-      blurb2: "observations",
+      tag: "the watcher",
+      def: "industry,\u00A0observations",
+      freq: "as\u00A0needed",
+      weight: 0.54,
     },
     {
       key: "TASTE",
       color: "#F472B6",
-      blurb: "art, music,",
-      blurb2: "what i love",
+      tag: "the curator",
+      def: "art, music,\u00A0what\u00A0i\u00A0love",
+      freq: "sundays",
+      weight: 0.48,
     },
   ];
+
+  // Layout constants — a wider canvas with deliberate negative space.
+  const W = 760;
+  const H = 460;
+  const COL_W = 130;
+  const GUTTER = 14;
+  const COLS_W = pillars.length * COL_W + (pillars.length - 1) * GUTTER;
+  const COLS_X = (W - COLS_W) / 2;
+  const TOP_Y = 70;
+  const PILLAR_TOP = 96;
+  const PILLAR_BASE = 330;
+  const ARCS_Y = 396;
+
   return (
     <Frame
       number="01"
@@ -174,83 +199,187 @@ export function DiagramFivePillars({ caption, className }: DiagramProps) {
       className={className}
     >
       <svg
-        viewBox="0 0 720 320"
+        viewBox={`0 0 ${W} ${H}`}
         className="w-full h-auto"
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
       >
+        <defs>
+          {pillars.map((p) => (
+            <linearGradient
+              key={`grad-${p.key}`}
+              id={`pillar-grad-${p.key}`}
+              x1="0"
+              x2="0"
+              y1="0"
+              y2="1"
+            >
+              <stop offset="0%" stopColor={p.color} stopOpacity="0.18" />
+              <stop offset="100%" stopColor={p.color} stopOpacity="0.02" />
+            </linearGradient>
+          ))}
+        </defs>
+
         <g fontFamily="ui-monospace, Menlo, Consolas, monospace">
-          {/* top axis */}
-          <line x1="40" y1="40" x2="680" y2="40" stroke="#2A3340" strokeWidth="1" />
-          <text x="40" y="32" fill="#8A8F98" fontSize="10">// SURFACES</text>
+          {/* top axis with frame ticks */}
+          <line x1="32" y1={TOP_Y} x2={W - 32} y2={TOP_Y} stroke="#2A3340" strokeWidth="1" />
+          <text x="32" y={TOP_Y - 12} fill="#8A8F98" fontSize="10" letterSpacing="1">
+            // SURFACES
+          </text>
+          <text x={W - 32} y={TOP_Y - 12} fill="#8A8F98" fontSize="10" textAnchor="end" letterSpacing="1">
+            FIG · 01
+          </text>
+          {/* corner reticles on the top axis */}
+          {[32, W - 32].map((x) => (
+            <g key={`tick-${x}`}>
+              <line x1={x} y1={TOP_Y - 4} x2={x} y2={TOP_Y + 4} stroke="#2A3340" strokeWidth="1" />
+            </g>
+          ))}
 
           {pillars.map((p, i) => {
-            const cx = 90 + i * 130;
+            const cx = COLS_X + i * (COL_W + GUTTER) + COL_W / 2;
+            const left = cx - COL_W / 2;
+            const colHeight = PILLAR_BASE - PILLAR_TOP;
+            const fillH = colHeight * p.weight;
+            const fillY = PILLAR_BASE - fillH;
             return (
               <g key={p.key}>
-                {/* vertical pillar rule */}
-                <line
-                  x1={cx}
-                  y1={50}
-                  x2={cx}
-                  y2={230}
-                  stroke={p.color}
-                  strokeWidth="2"
+                {/* faint column outline */}
+                <rect
+                  x={left}
+                  y={PILLAR_TOP}
+                  width={COL_W}
+                  height={colHeight}
+                  fill="none"
+                  stroke="#1F2630"
+                  strokeWidth="1"
                 />
-                {/* top tick */}
-                <line x1={cx - 8} y1={50} x2={cx + 8} y2={50} stroke={p.color} strokeWidth="2" />
-                {/* bottom tick */}
-                <line x1={cx - 8} y1={230} x2={cx + 8} y2={230} stroke={p.color} strokeWidth="2" />
-                {/* label */}
+                {/* weighted column fill (gradient) */}
+                <rect
+                  x={left}
+                  y={fillY}
+                  width={COL_W}
+                  height={fillH}
+                  fill={`url(#pillar-grad-${p.key})`}
+                />
+                {/* fill cap line at the top of the weighted area */}
+                <line
+                  x1={left}
+                  y1={fillY}
+                  x2={left + COL_W}
+                  y2={fillY}
+                  stroke={p.color}
+                  strokeWidth="1.5"
+                />
+                {/* outer left and right verticals — thicker, the actual pillar */}
+                <line x1={left} y1={PILLAR_TOP} x2={left} y2={PILLAR_BASE} stroke={p.color} strokeWidth="2" />
+                <line x1={left + COL_W} y1={PILLAR_TOP} x2={left + COL_W} y2={PILLAR_BASE} stroke={p.color} strokeWidth="2" opacity="0.55" />
+                {/* base plinth */}
+                <line x1={left - 6} y1={PILLAR_BASE} x2={left + COL_W + 6} y2={PILLAR_BASE} stroke={p.color} strokeWidth="2" />
+
+                {/* tag chip above pillar */}
+                <rect x={cx - 36} y={PILLAR_TOP - 22} width="72" height="14" fill="#0F1218" stroke={p.color} strokeOpacity="0.5" strokeWidth="1" />
+                <text x={cx} y={PILLAR_TOP - 12} fill={p.color} fontSize="9" textAnchor="middle" letterSpacing="1.5">
+                  {p.tag.toUpperCase()}
+                </text>
+
+                {/* big pillar name */}
                 <text
                   x={cx}
-                  y={75}
+                  y={PILLAR_TOP + 32}
                   fill={p.color}
-                  fontSize="13"
+                  fontSize="18"
                   textAnchor="middle"
-                  fontWeight="600"
+                  fontWeight="700"
+                  letterSpacing="2"
                 >
                   {p.key}
                 </text>
-                <text x={cx} y={130} fill="#E8E6E0" fontSize="11" textAnchor="middle">
-                  {p.blurb}
+
+                {/* hairline under name */}
+                <line
+                  x1={cx - 24}
+                  y1={PILLAR_TOP + 42}
+                  x2={cx + 24}
+                  y2={PILLAR_TOP + 42}
+                  stroke={p.color}
+                  strokeWidth="1"
+                  opacity="0.6"
+                />
+
+                {/* definition (two-line auto via tspan) */}
+                <text
+                  x={cx}
+                  y={PILLAR_TOP + 70}
+                  fill="#E8E6E0"
+                  fontSize="11"
+                  textAnchor="middle"
+                >
+                  {p.def}
                 </text>
-                <text x={cx} y={146} fill="#8A8F98" fontSize="11" textAnchor="middle">
-                  {p.blurb2}
+
+                {/* frequency — small all-caps line near the base of the column */}
+                <text
+                  x={cx}
+                  y={PILLAR_BASE - 10}
+                  fill="#8A8F98"
+                  fontSize="9"
+                  textAnchor="middle"
+                  letterSpacing="1.5"
+                >
+                  {p.freq.toUpperCase()}
                 </text>
+
+                {/* weight readout above column — a numeric */}
+                <text
+                  x={cx}
+                  y={fillY - 6}
+                  fill={p.color}
+                  fontSize="9"
+                  textAnchor="middle"
+                  letterSpacing="1"
+                  opacity="0.85"
+                >
+                  {Math.round(p.weight * 100)}%
+                </text>
+
+                {/* connector down to ARCS beam */}
+                <line
+                  x1={cx}
+                  y1={PILLAR_BASE + 4}
+                  x2={cx}
+                  y2={ARCS_Y - 6}
+                  stroke={p.color}
+                  strokeWidth="1"
+                  opacity="0.55"
+                />
+                <circle cx={cx} cy={ARCS_Y} r="3" fill={p.color} />
               </g>
             );
           })}
 
           {/* ARCS beam — horizontal */}
           <line
-            x1="60"
-            y1="270"
-            x2="660"
-            y2="270"
+            x1="40"
+            y1={ARCS_Y}
+            x2={W - 40}
+            y2={ARCS_Y}
             stroke="#00E5FF"
             strokeWidth="1.5"
             strokeDasharray="6 4"
+            opacity="0.85"
           />
-          <text x="40" y="266" fill="#00E5FF" fontSize="11">ARCS →</text>
-          <text x="680" y="266" fill="#8A8F98" fontSize="10" textAnchor="end">braid pillars across time</text>
+          <text x="40" y={ARCS_Y - 8} fill="#00E5FF" fontSize="11" letterSpacing="1.5">
+            ARCS →
+          </text>
+          <text x={W - 40} y={ARCS_Y - 8} fill="#8A8F98" fontSize="10" textAnchor="end" letterSpacing="1">
+            braid pillars across time
+          </text>
 
-          {/* connector ticks from each pillar bottom to ARCS beam */}
-          {pillars.map((p, i) => {
-            const cx = 90 + i * 130;
-            return (
-              <line
-                key={`conn-${i}`}
-                x1={cx}
-                y1={232}
-                x2={cx}
-                y2={268}
-                stroke={p.color}
-                strokeWidth="1"
-                opacity="0.6"
-              />
-            );
-          })}
+          {/* tiny scale legend — weight = how much i write here */}
+          <text x="32" y={H - 12} fill="#5A6371" fontSize="9" letterSpacing="1">
+            // % = SHARE OF OUTPUT · LAST 12 MONTHS
+          </text>
         </g>
       </svg>
     </Frame>

@@ -41,7 +41,8 @@ export { Button, ButtonLink, Kbd, StatusDot, Hr } from "./ui";
 export { Page, Container, EditorialColumn, Section } from "./layout";
 
 // Site chrome
-export { SiteHeader } from "./site-header";
+// SiteHeader is intentionally not re-exported here — it depends on next/headers
+// (server-only). Import it directly from "./site-header" in server components.
 export { SiteFooter } from "./site-footer";
 
 // Post listings

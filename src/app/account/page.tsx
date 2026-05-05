@@ -205,6 +205,30 @@ export default async function AccountPage({
 
         <Hr className="my-16" />
 
+        {/* Newsletter panel — every signed-in person sees this */}
+        <Section label="// dispatches">
+          <div className="max-w-[68ch] space-y-4">
+            <div className="border border-rule p-5 bg-ink-1/40 border-l-2 border-l-cyan">
+              <div className="flex items-baseline justify-between mb-3 gap-3 flex-wrap">
+                <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-cyan">
+                  ▸ sunday transmission
+                </p>
+                <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-mute">
+                  21:00 ET · weekly
+                </span>
+              </div>
+              <p className="text-bone/90 leading-relaxed text-[14px] mb-3">
+                You’re subscribed at <span className="font-mono text-cyan">{email}</span>. One essay or one field note every Sunday — plus what I read this week and one thing I shipped.
+              </p>
+              <p className="text-mute text-[12px] font-mono uppercase tracking-[0.06em]">
+                // change email or unsubscribe — use the one-click link in any dispatch, or reply with “stop”.
+              </p>
+            </div>
+          </div>
+        </Section>
+
+        <Hr className="my-16" />
+
         <Section label="// what's unlocked">
           <ul className="space-y-3 max-w-[68ch]">
             <li className="flex items-start gap-4">

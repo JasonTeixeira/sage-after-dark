@@ -1,7 +1,12 @@
 {
-  "generatedAt": "2026-05-05T03:36:20.489Z",
-  "count": 49,
+  "generatedAt": "2026-05-05T04:06:00.551Z",
+  "count": 50,
   "entries": [
+    {
+      "hash": "fb6a90b",
+      "date": "2026-05-05",
+      "subject": "fix(p26): preserve richer changelog snapshot on shallow Vercel clones"
+    },
     {
       "hash": "fc93cf2",
       "date": "2026-05-05",
