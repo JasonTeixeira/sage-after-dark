@@ -1,7 +1,12 @@
 {
-  "generatedAt": "2026-05-07T01:29:38.190Z",
-  "count": 66,
+  "generatedAt": "2026-05-07T02:01:05.187Z",
+  "count": 67,
   "entries": [
+    {
+      "hash": "202aee9",
+      "date": "2026-05-07",
+      "subject": "fix(diagnostic): guard array props + accept legacy threshold object syntax"
+    },
     {
       "hash": "1c8d0f8",
       "date": "2026-05-07",

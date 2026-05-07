@@ -753,3 +753,394 @@ export function DiagramHalfLifeTeaser({ caption, className }: DiagramProps) {
     </Frame>
   );
 }
+
+/* ─── DIAGRAM E: TASTE MOAT (paid #2) ─────────────────────────────── */
+/* The thesis-as-figure: a wide field of POSSIBLE ARTIFACTS funnels
+   through a narrow TASTE filter into a small set of SHIPPED artifacts,
+   which sits inside a labeled moat. Below: two trend lines crossing —
+   production cost falling, taste leverage rising. */
+
+export function DiagramTasteMoat({ caption, className }: DiagramProps) {
+  /* Deterministic pseudo-random so the dot field is stable across renders.
+     LCG with fixed seed → no hydration mismatch. */
+  function makeRng(seed: number) {
+    let s = seed >>> 0;
+    return () => {
+      s = (s * 1664525 + 1013904223) >>> 0;
+      return s / 0xffffffff;
+    };
+  }
+  const rng = makeRng(7331);
+
+  // Field of POSSIBLE artifacts (left zone): scattered dots in 60..280 × 70..330.
+  const possible: Array<{ x: number; y: number; r: number; o: number }> = [];
+  for (let i = 0; i < 84; i++) {
+    possible.push({
+      x: 60 + rng() * 220,
+      y: 70 + rng() * 260,
+      r: 1.6 + rng() * 1.4,
+      o: 0.18 + rng() * 0.32,
+    });
+  }
+
+  // Tight cluster of SHIPPED artifacts on the right inside the moat ring.
+  const shippedCenter = { x: 645, y: 200 };
+  const shipped: Array<{ x: number; y: number; r: number }> = [];
+  // Six small cyan dots in a clustered formation.
+  const positions: Array<[number, number]> = [
+    [-18, -10],
+    [-6, -22],
+    [10, -8],
+    [-12, 10],
+    [4, 18],
+    [22, 4],
+  ];
+  positions.forEach(([dx, dy]) => {
+    shipped.push({ x: shippedCenter.x + dx, y: shippedCenter.y + dy, r: 3 });
+  });
+
+  // Aperture (taste filter) geometry: a narrow lens at x≈360..420.
+  // Top funnel curve and bottom funnel curve.
+  const funnelTop = "M 290 80 Q 350 180 360 195 L 420 195 Q 430 180 480 80";
+  const funnelBot = "M 290 320 Q 350 220 360 205 L 420 205 Q 430 220 480 320";
+
+  // Lower chart: production cost (falling) vs. taste leverage (rising).
+  // Plot area: x ∈ [80, 720], y ∈ [400, 440].
+  const xL = (t: number) => 80 + (t / 10) * 640;
+  const yL = (v: number) => 440 - (v / 100) * 40;
+  const costPts: Array<[number, number]> = Array.from({ length: 11 }, (_, t) => [
+    t,
+    100 * Math.exp(-0.45 * t),
+  ]);
+  const lifPts: Array<[number, number]> = Array.from({ length: 11 }, (_, t) => [
+    t,
+    100 * (1 - Math.exp(-0.35 * t)),
+  ]);
+  const costPath = costPts
+    .map(([t, v], i) => `${i === 0 ? "M" : "L"} ${xL(t)} ${yL(v)}`)
+    .join(" ");
+  const lifPath = lifPts
+    .map(([t, v], i) => `${i === 0 ? "M" : "L"} ${xL(t)} ${yL(v)}`)
+    .join(" ");
+
+  return (
+    <Frame
+      number="A.05"
+      title="THE TASTE MOAT"
+      caption={
+        caption ??
+        "As production gets cheap, the only remaining bottleneck is judgment. The moat is what you choose not to ship."
+      }
+      className={className}
+    >
+      <svg
+        viewBox="0 0 800 460"
+        className="w-full h-auto"
+        role="img"
+        aria-label="Diagram: a wide field of possible artifacts narrows through a taste filter into a small set of shipped artifacts inside a moat. Below: production cost falls while taste leverage rises."
+      >
+        <defs>
+          <linearGradient id="taste-aperture" x1="0%" x2="0%" y1="0%" y2="100%">
+            <stop offset="0%" stopColor="rgba(34,211,238,0.0)" />
+            <stop offset="50%" stopColor="rgba(34,211,238,0.55)" />
+            <stop offset="100%" stopColor="rgba(34,211,238,0.0)" />
+          </linearGradient>
+          <radialGradient id="taste-shipped-glow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="rgba(34,211,238,0.18)" />
+            <stop offset="100%" stopColor="rgba(34,211,238,0)" />
+          </radialGradient>
+          <pattern
+            id="taste-grid"
+            x="0"
+            y="0"
+            width="40"
+            height="40"
+            patternUnits="userSpaceOnUse"
+          >
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="1" />
+          </pattern>
+        </defs>
+
+        {/* faint grid backdrop in the upper plot zone */}
+        <rect x="40" y="50" width="720" height="320" fill="url(#taste-grid)" />
+
+        {/* ZONE LABELS */}
+        <text
+          x="170"
+          y="40"
+          textAnchor="middle"
+          fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+          fontSize="10"
+          fill="rgba(255,255,255,0.55)"
+          letterSpacing="2"
+        >
+          POSSIBLE ARTIFACTS
+        </text>
+        <text
+          x="380"
+          y="40"
+          textAnchor="middle"
+          fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+          fontSize="10"
+          fill="rgba(34,211,238,0.85)"
+          letterSpacing="2"
+        >
+          TASTE
+        </text>
+        <text
+          x="640"
+          y="40"
+          textAnchor="middle"
+          fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+          fontSize="10"
+          fill="rgba(255,255,255,0.55)"
+          letterSpacing="2"
+        >
+          SHIPPED
+        </text>
+
+        {/* dashed vertical separators between zones */}
+        <line
+          x1="290"
+          y1="55"
+          x2="290"
+          y2="365"
+          stroke="rgba(255,255,255,0.12)"
+          strokeWidth="1"
+          strokeDasharray="3 4"
+        />
+        <line
+          x1="480"
+          y1="55"
+          x2="480"
+          y2="365"
+          stroke="rgba(255,255,255,0.12)"
+          strokeWidth="1"
+          strokeDasharray="3 4"
+        />
+
+        {/* POSSIBLE ARTIFACTS field */}
+        {possible.map((p, i) => (
+          <circle
+            key={`p-${i}`}
+            cx={p.x}
+            cy={p.y}
+            r={p.r}
+            fill="rgba(255,255,255,0.55)"
+            opacity={p.o}
+          />
+        ))}
+        <text
+          x="170"
+          y="358"
+          textAnchor="middle"
+          fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+          fontSize="10"
+          fill="rgba(255,255,255,0.4)"
+        >
+          ≈ ∞ · cost approaching 0
+        </text>
+
+        {/* TASTE FUNNEL — two curves forming a lens, with a glowing aperture in the middle */}
+        <path d={funnelTop} fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="1.25" />
+        <path d={funnelBot} fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="1.25" />
+        {/* aperture glow */}
+        <rect x="356" y="80" width="68" height="240" fill="url(#taste-aperture)" />
+        {/* aperture rails */}
+        <line x1="360" y1="80" x2="360" y2="320" stroke="rgba(34,211,238,0.85)" strokeWidth="1.5" />
+        <line x1="420" y1="80" x2="420" y2="320" stroke="rgba(34,211,238,0.85)" strokeWidth="1.5" />
+        {/* aperture mid label */}
+        <text
+          x="390"
+          y="206"
+          textAnchor="middle"
+          fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+          fontSize="9"
+          fill="rgba(34,211,238,0.95)"
+          letterSpacing="1.5"
+        >
+          FILTER
+        </text>
+        {/* funnel sub-label */}
+        <text
+          x="385"
+          y="358"
+          textAnchor="middle"
+          fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+          fontSize="10"
+          fill="rgba(255,255,255,0.45)"
+        >
+          judgment · 4 sub-models
+        </text>
+        {/* tiny callouts of the four sub-models */}
+        <text x="385" y="73" textAnchor="middle" fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace" fontSize="8" fill="rgba(255,255,255,0.55)">possibility · audience · tension · discipline</text>
+
+        {/* Several "rejected" dots that hit the funnel walls and fade away */}
+        {[
+          [305, 110, 0.5],
+          [318, 165, 0.4],
+          [322, 245, 0.45],
+          [310, 295, 0.5],
+          [462, 130, 0.45],
+          [468, 220, 0.4],
+          [458, 285, 0.45],
+        ].map(([x, y, o], i) => (
+          <g key={`r-${i}`} opacity={o as number}>
+            <circle cx={x as number} cy={y as number} r="2" fill="rgba(255,255,255,0.55)" />
+            <line
+              x1={(x as number) - 4}
+              y1={(y as number) - 4}
+              x2={(x as number) + 4}
+              y2={(y as number) + 4}
+              stroke="rgba(255,255,255,0.35)"
+              strokeWidth="1"
+            />
+            <line
+              x1={(x as number) + 4}
+              y1={(y as number) - 4}
+              x2={(x as number) - 4}
+              y2={(y as number) + 4}
+              stroke="rgba(255,255,255,0.35)"
+              strokeWidth="1"
+            />
+          </g>
+        ))}
+
+        {/* THE MOAT — a ring around the shipped cluster.
+            Outer ring uses dashed stroke; inner ring is solid; the gap between them is the moat. */}
+        <circle
+          cx={shippedCenter.x}
+          cy={shippedCenter.y}
+          r="78"
+          fill="none"
+          stroke="rgba(255,255,255,0.18)"
+          strokeWidth="1"
+          strokeDasharray="2 4"
+        />
+        <circle
+          cx={shippedCenter.x}
+          cy={shippedCenter.y}
+          r="58"
+          fill="url(#taste-shipped-glow)"
+          stroke="rgba(34,211,238,0.65)"
+          strokeWidth="1.25"
+        />
+        {/* moat label, offset above */}
+        <text
+          x={shippedCenter.x}
+          y={shippedCenter.y - 92}
+          textAnchor="middle"
+          fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+          fontSize="9"
+          fill="rgba(255,255,255,0.5)"
+          letterSpacing="2"
+        >
+          ── MOAT ──
+        </text>
+
+        {/* shipped dots */}
+        {shipped.map((s, i) => (
+          <circle key={`s-${i}`} cx={s.x} cy={s.y} r={s.r} fill="rgba(34,211,238,0.95)" />
+        ))}
+
+        {/* shipped count caption */}
+        <text
+          x={shippedCenter.x}
+          y="358"
+          textAnchor="middle"
+          fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+          fontSize="10"
+          fill="rgba(255,255,255,0.45)"
+        >
+          a small set · the residue of refusals
+        </text>
+
+        {/* horizontal divider above the lower chart */}
+        <line x1="40" y1="385" x2="760" y2="385" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
+
+        {/* LOWER CHART — production cost vs. taste leverage over time */}
+        <path d={costPath} fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.25" />
+        <path d={lifPath} fill="none" stroke="rgba(34,211,238,0.95)" strokeWidth="1.5" />
+
+        {/* lower-chart labels */}
+        <text
+          x="46"
+          y="396"
+          fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+          fontSize="9"
+          fill="rgba(255,255,255,0.55)"
+          letterSpacing="1.5"
+        >
+          PRODUCTION COST ↓
+        </text>
+        <text
+          x="754"
+          y="396"
+          textAnchor="end"
+          fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+          fontSize="9"
+          fill="rgba(34,211,238,0.95)"
+          letterSpacing="1.5"
+        >
+          TASTE LEVERAGE ↑
+        </text>
+        <text
+          x="80"
+          y="455"
+          fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+          fontSize="9"
+          fill="rgba(255,255,255,0.4)"
+        >
+          2018
+        </text>
+        <text
+          x="720"
+          y="455"
+          textAnchor="end"
+          fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+          fontSize="9"
+          fill="rgba(255,255,255,0.4)"
+        >
+          2030
+        </text>
+
+        {/* crossover marker */}
+        {(() => {
+          // Find approximate crossover where the two curves meet.
+          let crossT = 5;
+          for (let i = 0; i < costPts.length; i++) {
+            if (lifPts[i][1] >= costPts[i][1]) {
+              crossT = costPts[i][0];
+              break;
+            }
+          }
+          const cx = xL(crossT);
+          return (
+            <>
+              <line
+                x1={cx}
+                y1={395}
+                x2={cx}
+                y2={445}
+                stroke="rgba(34,211,238,0.4)"
+                strokeWidth="1"
+                strokeDasharray="2 3"
+              />
+              <text
+                x={cx}
+                y={455}
+                textAnchor="middle"
+                fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+                fontSize="8"
+                fill="rgba(34,211,238,0.85)"
+                letterSpacing="1"
+              >
+                the moat moves
+              </text>
+            </>
+          );
+        })()}
+      </svg>
+    </Frame>
+  );
+}

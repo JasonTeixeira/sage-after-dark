@@ -1,0 +1,160 @@
+---
+title: "Taste is the last moat"
+dek: "When every engineer can ship a feature in an afternoon and every designer can prototype in a sentence, the only thing left to compete on is what you choose not to build."
+slug: "taste-is-the-last-moat"
+template: essay
+pillar: taste
+tags: ["taste", "judgment", "ai", "craft", "career"]
+published: "2026-05-07"
+status: published
+featured: true
+members_only: true
+series:
+  slug: "late-night-curriculum"
+  title: "Late-Night Curriculum"
+  order: 2
+related:
+  - "the-half-life-of-a-skill"
+  - "the-second-brain-trap"
+---
+
+<DropCap letter="I">'ve been keeping a private list, for about two years now, of things I've watched colleagues ship that I would not have shipped. The list is not a list of bad work. That would be cheap. The list is of *competent* work — things that compiled, passed review, made it to production, and were technically fine — that I would have killed in the planning meeting and absorbed the political cost of killing.</DropCap>
+
+I started keeping the list because something was bothering me, and I couldn't name it. The work was getting faster. The output was getting bigger. The reviews were getting shorter. And the *feeling* I had, watching it all happen, was the feeling you have when the music at a wedding is technically the right song but somehow making everyone sad. Nothing was wrong. Nothing was right either.<Sidenote n="1">A friend of mine, a chef, calls this *correct food*. The dish is a perfect execution of the recipe. The recipe is the wrong recipe. There's no specific complaint. There's no specific praise. Everyone eats. Nobody comes back.</Sidenote>
+
+I think what was bothering me has a name now. The name is *taste*, and it is — bear with me on this, because the word is overused — the only thing that's going to matter, professionally, in about three years.
+
+<DiagramTasteMoat />
+
+## The case, in one paragraph
+
+The cost of producing technically correct work is collapsing toward zero. Code, copy, logos, layouts, schemas, sales emails, board decks — anything that has a *correct* version is being commoditized at a speed that makes the dot-com years look pastoral. What is *not* being commoditized, and what cannot be, is the judgment that decides which technically correct artifact should exist in the first place. Taste is the function that maps from infinite possible outputs to the small subset that should actually ship. As production gets cheaper, that function gets more valuable. Linearly, then exponentially.
+
+That's the case. The rest of this essay is the texture.
+
+## What taste actually is, when you look at it sideways
+
+People talk about taste as if it were a magical property of certain individuals — the design lead with the perfect Instagram, the founder who picks the right name, the editor who can spot a manuscript that will sell. This framing is romantic and also, I think, lazy. It treats taste as an aesthetic gift rather than a *cognitive operation*, and the operation is what matters.
+
+Taste is, mechanically:
+
+1. A model of the space of possible artifacts in your domain.
+2. A model of which of those artifacts will be useful, beautiful, durable, *and to whom*.
+3. A model of which dimensions of "useful, beautiful, durable" are in tension and how to resolve the tension.
+4. The discipline to apply (1)–(3) under deadline, social pressure, and personal vanity.
+
+Notice that none of those four bullets are *artistic*. They are all *epistemic*. Taste is a knowledge problem dressed in an aesthetic costume. The reason it looks magical from the outside is that the four models are mostly tacit — held in the body of someone who has been doing the work for a long time — and the application happens fast enough to look like reflex.<Sidenote n="2">This is also why people with taste are bad at explaining it. They are not withholding the secret. They genuinely don't have access to the model in a form they can put into words. The model is doing what it does *while* they describe it, and the description always lags the model.</Sidenote>
+
+<FieldCard kind="definition" title="TASTE · cognitive">
+The function that maps from infinite possible artifacts to the small subset that should exist. Composed of four sub-models — possibility space, audience fit, tension resolution, and discipline under pressure — none of which are taught and all of which are learnable through deliberate, slow exposure to good work and the postmortems of bad work.
+</FieldCard>
+
+## Why the moat used to be somewhere else
+
+For most of the history of professional software — and design, and writing, and most of the knowledge professions — the moat was *production*. The skill that paid was the ability to *make the thing*. The lawyer who could draft the contract, the designer who could render the comp, the engineer who could write the SQL. The taste was assumed; the bottleneck was the typing.
+
+This was structural, not a failure of imagination. Production was *expensive*. Each artifact took hours, days, sometimes weeks. The world only had so many artifacts in it, so the constraint that mattered was producing one *at all*. In that world, taste mostly served as a *tiebreaker* — when two competent producers fought for the same brief, the one with better taste would win. But the floor was production. Taste was the marginal advantage.
+
+The economy that paid for this lasted about eighty years.
+
+## Why the moat moved
+
+What happened, between roughly 2022 and now, is that the cost of production for most knowledge artifacts dropped by something like two orders of magnitude. Not all artifacts. Not the ones that require deep institutional context, or coordination across many humans, or fresh primary research. But for the *average* artifact in a knowledge worker's day — the email, the spec, the function, the slide, the mockup, the unit test, the migration script — the cost has gone from *hours* to *minutes* and is still falling.
+
+When the cost of production collapses, the bottleneck moves. It always does, every time, in every industry. The bottleneck always moves to *whatever is now the most expensive remaining step*. In 2026, the most expensive remaining step in knowledge work is *deciding which of the cheap artifacts should exist*. That decision is taste.
+
+This is not a theoretical claim. You can watch it happen, in real time, in any team that has aggressively adopted AI tooling. The pull requests get bigger. The drafts get more numerous. The decks get longer. The *work* gets faster, in a narrow sense. And then, predictably, somewhere around month three, the team starts to notice that the *quality* is sliding. Not the technical quality — the technical quality is fine. The *fit* is sliding. The decisions are sliding. The thing being shipped is more impressive *and* less right.
+
+What's happened is that the team has decoupled production from judgment, and the production has accelerated while the judgment hasn't. The output is now bottlenecked by the slowest taste-maker in the loop, and that person is now drowning in correct-but-wrong artifacts to triage.
+
+<PullQuote attribution="— taste is the last moat">
+The team has decoupled production from judgment, and the production has accelerated while the judgment hasn't. The output is now bottlenecked by the slowest taste-maker in the loop.
+</PullQuote>
+
+## The four kinds of taste, and which one to invest in
+
+Not all taste is equally valuable. There are roughly four kinds, in ascending order of how durable they are.
+
+**Aesthetic taste** is the lowest tier and the one people mean when they say "taste" casually. The right typeface. The clean kitchen. The well-cropped photo. This is real, and it pays — but it's the most easily transferable to the cheap-production tools, because it's mostly a question of pattern recognition, and pattern recognition is exactly what these tools do well. Aesthetic taste alone is going to be a hard place to make a living in five years.
+
+**Compositional taste** is one tier up. It's not just "is this thing pretty," it's "do these *several* things hang together in service of a coherent whole." The ability to look at a website and know whether the hero, the navigation, and the footer are speaking the same language. The ability to look at a function and know whether its name, its arguments, and its body are the *same idea*. This is rarer, and it travels less well to automation, because it requires holding the whole in your head while you evaluate the parts.
+
+**Strategic taste** is the third tier and the one most senior people are paid for, even if "taste" is never on their job description. It's the ability to look at a roadmap, a launch plan, a hiring pipeline, and see which moves *fit the moment* — not in a vague way, but specifically: *this is what the company should do given who it is, who its customers are, and what it has not yet earned the right to do*. Strategic taste is what makes a CEO worth their salary. It is the rarest of the four and pays accordingly.
+
+**Ethical taste** is the fourth tier and the most undervalued. It's the ability to know, before the artifact is built, that the artifact is *wrong* — not technically, not aesthetically, but in some deeper way that the company will only realize after a class-action lawsuit or a quiet exodus of the people whose names made the company worth working at. Ethical taste is the kind of taste that keeps a team out of jail. There is no better predictor of long-term company survival than a leader with ethical taste who is willing to use it.<Sidenote n="3">It is also, obviously, the least teachable, because it requires a willingness to take social and professional damage in the moment in exchange for being right in the long run, and most institutions are structurally unable to reward that trade until well after the fact.</Sidenote>
+
+If you are going to invest in *one*, invest in compositional. It's the highest-leverage, most-teachable tier, and it is the prerequisite for the next two.
+
+<FieldCard kind="counter" title="THE COUNTER-CASE">
+A reasonable person might say: as the tools get better, won't they get *taste* too? Won't model-X-2030 be able to choose, not just produce? Maybe. But notice: even if the tools get taste, *somebody* has to evaluate whether the tool's taste is the *right* taste for *your* situation. That meta-evaluation is itself a taste judgment, made by a human, with skin in the game. The moat doesn't disappear. It just moves up one level of abstraction. Taste is fractal.
+</FieldCard>
+
+## How to build it, given that nobody will teach you
+
+The bad news is that none of the institutions that produce knowledge workers — universities, bootcamps, internal training programs, certifications — are set up to teach taste. They are set up to teach *production*, because production is what's testable, and what's testable is what can be sold, and what can be sold is what gets taught. Taste is not testable in any rigorous sense. So it is, mostly, not taught.
+
+The good news is that the curriculum is freely available, just unindexed. Here is the curriculum I have been running on myself, badly and slowly, for about a decade.
+
+**Read criticism in fields adjacent to yours.** Not your field. Adjacent fields. If you're a programmer, read film criticism. If you're a designer, read literary criticism. If you're a writer, read architecture criticism. The *content* doesn't matter. What you're absorbing is the *grammar of evaluation* — how someone with taste articulates *why* something works or doesn't. That grammar transfers across domains. The vocabulary is the same. The verbs are the same. Once you've heard a film critic explain why a scene is dishonest, you will start to see the same dishonesty in code.
+
+**Maintain a deliberate diet of bad work, with notes.** Not as a guilty pleasure. As a discipline. Spend an hour a week on artifacts you think are bad — bad essays, bad apps, bad campaigns, bad architecture diagrams — and write down *specifically* what makes them bad. Three reasons each. The act of articulating the badness is what builds the model. Most people only consume work they think is good, which means their negative space is empty, which means their taste is one-sided. You need both halves.
+
+**Reverse-engineer the small decisions in good work.** Find a piece of writing, or design, or code, that you genuinely admire. Sit with it. Identify ten *small* decisions the maker made — not the headline ones. Why did the paragraph break here, not there? Why is this variable named this and not that? Why does this button sit here and not three pixels to the left? Try to articulate the criterion that made the decision go that way. You won't always be right. The point is the *practice* of looking at small decisions as legible artifacts of taste, because that's where most taste actually lives.
+
+**Pre-commit to your evaluations.** Before you read a review, watch a launch, or get a code review back, write down — privately — what *you* think. Then compare. The gap between your evaluation and the consensus is your taste. The shape of the gap, over time, is your taste's *signature*. Most people never measure this gap, so they have no idea where their judgment is calibrated and where it isn't. Measuring it is uncomfortable and, in my experience, the single fastest way to improve.
+
+**Refuse to ship things you don't believe in, even small ones.** This is the hardest one and the one that actually moves the needle. Every time you ship something *correct but wrong*, you are training your nervous system that correct-but-wrong is acceptable, because you accepted it. Every time you push back — gently, professionally, but firmly — you are training your nervous system that *taste* is the real product. Most careers are determined by what people refuse to ship. The portfolio is the residue of the refusals.
+
+<FieldCard kind="tool" title="THE FIVE-MINUTE TASTE CALIBRATION">
+Open something you shipped six months ago. Open something you shipped six years ago. Notice what changed in the work, then ask: *what specifically about my taste improved, and what specifically about my taste got worse?* Most professionals only track the first half. The second half is where the signal is. Taste, like any model, can drift in bad directions if the feedback loop is wrong.
+</FieldCard>
+
+## What it looks like, if you do this for a decade
+
+You will become someone other people quietly route their hard decisions through.
+
+That's it. That's the whole picture. There will be no certificate. You will not be promoted *because* of it; you will be promoted because of the secondary effects of it — your projects ship cleaner, your team has fewer fires, your reputation has the strange property of being durable across job changes. You will be the person other people send their drafts to before sending them to anyone else. You will be the person who gets pulled into the meetings where the answer hasn't been figured out yet. You will, gradually and without fanfare, accumulate the only kind of professional capital that is hard to copy and impossible to manufacture.
+
+This is the moat. It is mostly invisible, mostly slow, mostly underpaid in the short term, and mostly the thing that's left when the other moats have been drained.
+
+## A late-night confession
+
+I will tell you the thing I wasn't sure I was going to put in this essay, and then I'll stop.
+
+The list I keep — the list of correct-but-wrong things I've watched ship — has my own name on it more times than I would like. Not most. But more than zero. I have shipped artifacts I knew were correct-but-wrong because I was tired, or because the politics were going to be ugly, or because I'd already lost the argument once and didn't have the budget for losing it again. Each one of those is a small failure of taste. Not a failure of *having* it. A failure of *using* it.
+
+I think this is the part that doesn't get said in essays about craft. Taste is not a noun. It is a verb you have to keep conjugating. The people I admire most are not the ones with the best static taste. They are the ones who *use* it most consistently, even when using it is expensive. Especially when using it is expensive. *Especially* when nobody would have noticed if they hadn't.
+
+The moat is not having the taste. The moat is doing the small, costly thing the taste tells you to do, on a Tuesday afternoon, when the deadline is Thursday, and the work is already passable, and nobody asked.
+
+<Diagnostic
+  kind="checklist"
+  title="THE TASTE AUDIT"
+  items={[
+    "I have, in the last month, killed a piece of my own work that was technically fine but didn't fit.",
+    "I can name three pieces of work — by other people — I genuinely admire and articulate why, in three sentences each.",
+    "I keep notes, somewhere, on bad work I've encountered and what specifically was bad about it.",
+    "I have written down what I thought of something before reading anyone else's take on it, in the last 30 days.",
+    "I have lost an argument about quality, professionally, in the last quarter — and held the position anyway.",
+    "I read criticism in at least one field that is not mine.",
+    "I can describe the difference between aesthetic, compositional, strategic, and ethical taste in my own words.",
+  ]}
+  threshold={[
+    { count: 0, verdict: "you are producing · not yet judging" },
+    { count: 3, verdict: "you have a model · keep training it" },
+    { count: 5, verdict: "you have a moat · defend it" },
+    { count: 7, verdict: "you should be the one other people route through" },
+  ]}
+/>
+
+## A closing observation about the people on the other side of the moat
+
+The thing about a moat is that, from the inside, it doesn't feel like one. You don't notice you have it. You notice that the work is going more smoothly than it used to. You notice that the calls are shorter. You notice that you are being asked, more often, what you *think*, rather than what you've *built*.
+
+The people who don't have it tend to assume the people who do have it are lucky, or political, or have some kind of credential they themselves are missing. This is rarely the case. The people who have it usually have something duller and more durable: they spent ten years paying attention to the *small* parts of the work — the parts nobody was rewarding them for paying attention to — and the residue of all that small attention turned, eventually, into something the rest of the field couldn't replicate.
+
+The good news is that nobody else is going to do it for you, but the door isn't locked.
+
+The bad news is that it's a long door, and it opens slowly, and the only people who know how far in you've gone are the ones who got there first.
+
+That's the trade.

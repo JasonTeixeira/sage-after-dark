@@ -39,6 +39,7 @@ import {
   DiagramSecondBrain,
   DiagramLatencyArchitecture,
   DiagramHalfLifeTeaser,
+  DiagramTasteMoat,
 } from "@/components/curriculum-diagrams";
 import { Cipher, Redacted } from "@/components/cipher";
 import { BonusFootnote } from "@/components/decoder-ring";
@@ -230,6 +231,7 @@ export const mdxComponents: MDXComponents = {
   DiagramSecondBrain,
   DiagramLatencyArchitecture,
   DiagramHalfLifeTeaser,
+  DiagramTasteMoat,
   // New essay primitives
   FieldCard,
   Diagnostic,
