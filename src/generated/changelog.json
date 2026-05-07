@@ -1,7 +1,12 @@
 {
-  "generatedAt": "2026-05-05T18:23:24.662Z",
-  "count": 64,
+  "generatedAt": "2026-05-07T00:22:26.801Z",
+  "count": 65,
   "entries": [
+    {
+      "hash": "2eec249",
+      "date": "2026-05-05",
+      "subject": "fix(comments): only fall back on FATAL Giscus errors, not 'discussion not found'"
+    },
     {
       "hash": "7bab2a5",
       "date": "2026-05-05",

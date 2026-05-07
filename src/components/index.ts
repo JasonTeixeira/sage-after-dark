@@ -75,6 +75,8 @@ export { EssayStickyBar } from "./essay-sticky-bar";
 export { FloatingTOC } from "./floating-toc";
 export { Sidenote } from "./sidenote";
 export { PullQuote } from "./pullquote-editorial";
+export { FieldCard } from "./field-card";
+export { Diagnostic } from "./diagnostic";
 export { HighlightToShare } from "./highlight-to-share";
 export { EssaySignoff } from "./essay-signoff";
 export { ReadingModeToggle } from "./reading-mode-toggle";

@@ -21,6 +21,8 @@ import {
   DropCap,
   Sidenote,
   PullQuote,
+  FieldCard,
+  Diagnostic,
 } from "@/components";
 import {
   DiagramTasteGate,
@@ -32,6 +34,12 @@ import {
   DiagramNoiseVsSignal,
   DiagramFivePillars,
 } from "@/components/diagrams-strategy";
+import {
+  DiagramSkillHalfLife,
+  DiagramSecondBrain,
+  DiagramLatencyArchitecture,
+  DiagramHalfLifeTeaser,
+} from "@/components/curriculum-diagrams";
 import { Cipher, Redacted } from "@/components/cipher";
 import { BonusFootnote } from "@/components/decoder-ring";
 
@@ -217,6 +225,14 @@ export const mdxComponents: MDXComponents = {
   DiagramSystem,
   DiagramNoiseVsSignal,
   DiagramFivePillars,
+  // Late-Night Curriculum diagrams
+  DiagramSkillHalfLife,
+  DiagramSecondBrain,
+  DiagramLatencyArchitecture,
+  DiagramHalfLifeTeaser,
+  // New essay primitives
+  FieldCard,
+  Diagnostic,
   // Cipher layer (inline + bonus)
   Cipher,
   Redacted,

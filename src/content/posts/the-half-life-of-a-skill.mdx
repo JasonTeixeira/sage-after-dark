@@ -1,0 +1,131 @@
+---
+title: "The half-life of a skill"
+dek: "Three things have a half-life: uranium-238, the enthusiasm of a new hire, and your knowledge of CSS. The third one is the only one most of us pretend isn't happening."
+slug: "the-half-life-of-a-skill"
+template: essay
+pillar: learning
+tags: ["learning", "career", "compounding", "taste"]
+published: "2026-05-06"
+status: published
+featured: true
+members_only: true
+series:
+  slug: "late-night-curriculum"
+  title: "Late-Night Curriculum"
+  order: 1
+related:
+  - "the-half-life-of-a-good-tool"
+  - "learning-by-shipping"
+---
+
+<DropCap letter="T">hree things have a half-life: uranium-238, the enthusiasm of a new hire, and your knowledge of CSS. The first one is on a poster in a physics classroom. The second one is on a Slack channel everyone politely doesn't post in anymore. The third one is the largest of the three — and almost nobody is willing to say it out loud, including, especially, the people whose paychecks depend on knowing CSS.</DropCap>
+
+I was the third person, for what it's worth. I had a folder on my old laptop called `flexbox-notes-2017.md`. By 2024 it was a museum exhibit. The instincts I had built — about what was possible, what was a hack, what was "the way you do this" — were the wrong instincts. Not subtly wrong. Catastrophically wrong, in the way that a 2007 map of the Mediterranean is wrong about Yugoslavia.<Sidenote n="1">If you don't know what Yugoslavia is, congratulations: you have just demonstrated my point. Knowledge of a thing called Yugoslavia had a much shorter half-life than knowledge of, say, the alphabet.</Sidenote>
+
+The discovery wasn't that I had to learn the new way. The discovery was that *learning the new way* wasn't actually the skill. It was a *symptom* of the skill. The real skill was upstream of the technique entirely, and the people who had it were sitting at desks beside me, calmly applying it to whatever the new toolchain was that month, while the rest of us were trying to set fire to our laptops.
+
+This essay is about that real skill. What it is. Why almost nobody teaches it. And why, if you want a career that doesn't expire, you are going to have to teach it to yourself.
+
+<DiagramSkillHalfLife />
+
+## The math, briefly, with feeling
+
+Half-life is a useful word because it imports an honest piece of arithmetic from physics into the soft, lying world of careers. It means: the time it takes for half of a thing to be gone. Crucially, it does not say *which* half. It is a statistical claim about decay, not a hand-picked retirement plan.
+
+Most people reading this will have been told, at some point, that the half-life of a tech skill is "two years" or "five years" or, if you're reading some breathless trade rag, "eighteen months." These numbers are mostly vibes. The honest version is that the half-life depends on what the skill *is*. The skill of typing fast on a keyboard has a half-life measured in decades. The skill of writing AngularJS 1.x without crying has a half-life that ended on a specific Tuesday in 2016.
+
+<PullQuote attribution="— the half-life of a skill">
+The skill of typing fast on a keyboard has a half-life measured in decades. The skill of writing AngularJS 1.x without crying has a half-life that ended on a specific Tuesday in 2016.
+</PullQuote>
+
+The arithmetic that matters isn't the headline rate. It's the *spread*. A career is a portfolio of skills, and the wealthy investors are the ones whose portfolio is balanced — short half-life skills for paying this year's bills, long half-life skills for paying every year's bills. The bankrupt ones are the engineers whose entire stack is "things that were hot in 2019."
+
+<FieldCard kind="definition" title="HALF-LIFE · skill">
+The duration after which half of a skill's *useful application* has been lost — to obsolescence, replacement, deprecation, or a cultural shift that makes the skill professionally embarrassing to mention. Not to be confused with *forgetting*, which is a memory problem; half-life is a *world* problem.
+</FieldCard>
+
+## What has a long half-life (a partial list)
+
+Here is what I have noticed compounds, after a decade of watching people get hired, fired, promoted, and occasionally enlightened. None of these will appear in a job listing. All of them are what the job listing is actually trying to find.
+
+**Knowing what a good question feels like.** The cheapest, most underrated skill in any technical field. Most engineers are pretty good at answering questions; very few are good at *asking* them. A good question narrows. A good question reveals the next question. A good question makes the smartest person in the room think for a beat before answering. This is the skill that lets a senior engineer drop into an unfamiliar codebase on a Monday and ship a useful PR by Wednesday — not because they know the codebase, but because they know how to ask the codebase what it is.
+
+**Reading code like prose.** Not parsing it. *Reading* it. Knowing when a function is too long because the *idea* it's expressing is too long. Knowing when a comment is lying. Knowing when a name is a clue and when it's a cover-up. This skill takes about a decade to develop and is essentially identical to the skill a great copy editor brings to manuscripts. It does not become obsolete. The languages change; prose is prose.
+
+**Smelling a bad abstraction.** This one is hard to describe and absolutely a real thing. There is a feeling you get, somewhere south of the ribcage, when a piece of architecture is wrong in a way that the metrics haven't caught up to yet. The feeling has been in continuous use, in roughly this form, since the Romans were laying out aqueducts. Database, message queue, microservice, Roman aqueduct — the smell is the same.<Sidenote n="2">The Roman engineers who could smell a bad slope in an aqueduct were, I am claiming with absolutely no historical evidence, the same kind of person who can smell a bad slope in a Kubernetes cluster. The technology is incidental. The nose is the skill.</Sidenote>
+
+**Knowing when to stop.** The single highest-leverage skill in software, and the one most aggressively under-rewarded by every system that promotes engineers. Every line of code you don't write has a maintenance cost of zero forever. Every meeting you don't take is a meeting you don't have to recover from. Every feature you talk a stakeholder out of shipping is a feature that doesn't break in production at 3 a.m. This skill never decays. The people who have it look, from the outside, like they aren't working very hard. They are working very, very hard, on the meta-question of *whether to work*.
+
+**The structural empathy of a good listener.** Not "being nice." Listening with the part of your brain that maps what someone is saying onto a model of what they actually mean. Most technical people are bad at this. The few who are good at it become the people every team eventually orbits around — the ones who turn a stakeholder's vague complaint into a tractable spec, the ones who can run a postmortem without the room becoming a courtroom. This is the social half of taste. It compounds the same way taste does, and it dies the same way: from disuse.
+
+## What has a short half-life (a longer list)
+
+I'll be brief, because the list is mostly demoralizing. The half-life of a specific framework is roughly five years and shrinking. The half-life of an opinion about that framework is about six months. The half-life of a specific build tool is two years. The half-life of a specific cloud provider's specific service's specific API is eighteen months at the outside, less if you're using the new bits. The half-life of a hot take on Twitter is ninety minutes. The half-life of "the way you should structure your folders in [framework]" is the time it takes for one well-followed person on Mastodon to notice it and post a contrarian Markdown file in the morning.
+
+None of this is bad news. Short half-life skills are the *currency* of a working career — you spend them, you renew them, you move on. The trap isn't having them. The trap is *only* having them. The trap is mistaking the currency for the savings account.
+
+<FieldCard kind="warning" title="THE TRAP">
+The most common career failure mode in software is becoming an *expert in the present moment*. The person who knows everything about the current Webpack config, has every Hooks pattern memorized, can recite the exact behavior of `useEffect` cleanup, and could not, if you put them on the spot, explain *why* any of it is the way it is. They are paid well. They are also paid *exactly* until the present moment ends.
+</FieldCard>
+
+## Why nobody teaches the long-half-life skills
+
+Three reasons, in escalating order of how cynical they sound:
+
+The first reason is that the long-half-life skills are *boring to teach*. There is no certification for "knows when to stop coding." There is no bootcamp for "smells a bad abstraction." You can't fit "structural empathy" on a slide. The skills that compound are the skills that emerge from doing the work for so long that you start noticing things — and you cannot accelerate the noticing. The Roman didn't have a course on aqueduct smell either. He just laid a lot of aqueducts.
+
+The second reason is that the institutions that *could* teach them are run by people who also need to pay rent next month. Universities sell credentials. Bootcamps sell employment outcomes. Trade rags sell ad inventory. None of these business models are well aligned with "spend a decade building taste." Even the rare teacher who *does* teach the long-half-life skills usually has to smuggle them in under the cover of teaching the short-half-life ones, which is why every great professor I had spent half their lectures going off-script.
+
+The third reason is the meanest. The people who have these skills mostly don't know they do. They have spent so long inside the work that the skill is invisible to them — it is what they think *thinking* is. Asking a senior engineer what makes them senior is like asking a fish what makes them wet. The good ones will eventually mumble something about "judgment" or "experience," but they cannot decompose the thing into transferable parts because they do not, themselves, see the parts.
+
+This is bad news if you were hoping someone would hand you the curriculum. It is *very good news* if you have ten years and a willingness to pay attention.
+
+## How to actually build the long-half-life portfolio
+
+You are not going to like this, because none of it is a course you can sign up for. But:
+
+**Read code older than you are.** Not because old code is good. Because old code that *survived* has been selected for. The patterns that show up in twenty-year-old open-source projects, written by twenty different people, in twelve different languages, are the patterns that reflect actual properties of the problem, not actual properties of the framework. Those are the patterns with the long half-life. (Suggested reading: the Linux kernel's coding style document. SQLite's source. The original Smalltalk-80 papers if you can stomach them.)
+
+**Write postmortems for things you didn't break.** This is the highest-leverage exercise I have ever found, and almost nobody does it. Pick a public outage — Cloudflare 2022, Knight Capital 2012, the great AWS S3 outage of 2017. Read the public writeup. Write your own version, from scratch, with the question: *what was the upstream skill the responsible engineers were missing?* You are training the part of your brain that recognizes those skills. You will start seeing them in your own work within weeks.
+
+**Give yourself a budget for the boring fundamentals.** Ten percent of your reading time, in perpetuity, on things that have a half-life longer than you do. Database internals. Operating systems. Compilers. Type theory. Probability. The bones of the field. This is the index fund half of your portfolio. It does not feel productive. It is precisely what makes you productive a decade from now.
+
+**Pair with someone older.** Not for the technique. For the *priors*. The senior engineer in the room is not better at typing. They are better at pre-committing to which paths aren't worth typing down. You learn this by sitting next to them, watching the paths they don't take, and asking — gently, repeatedly, over years — *why didn't you try X?* Most of the time the answer will be a one-sentence story about a thing they tried in 2014 that didn't work. That story is the asset. Collect the stories.
+
+**Write things down where you'll re-read them.** Not in a notes app you'll never open again. In a place you actually return to. A blog. A wiki nobody else reads. A daily log. The act of writing down what you learned converts a fleeting bit of skill into a long-half-life one, because you've forced yourself to abstract it. This is the only "productivity system" that has ever paid me back its cost. It pays back roughly forever.
+
+<Diagnostic
+  kind="checklist"
+  title="THE LONG-HALF-LIFE AUDIT"
+  items={[
+    "I can name three patterns I've seen in the last week that I also saw a decade ago.",
+    "I have written down one lesson from a postmortem I read this month.",
+    "I can describe — without looking — how a database B-tree works.",
+    "I have changed my mind about something technical, on the basis of new evidence, in the last 90 days.",
+    "I spend at least one hour a week on something that will not pay off for five years.",
+    "When I read code, I can tell whether the author was tired, rushed, or scared.",
+    "I have, in the last quarter, *not shipped* something I had permission to ship.",
+  ]}
+  threshold={[
+    { count: 0, verdict: "you are an expert in the present moment" },
+    { count: 3, verdict: "you are starting to compound" },
+    { count: 5, verdict: "you have a portfolio" },
+    { count: 7, verdict: "you should be teaching this" },
+  ]}
+/>
+
+## A closing note on the people who have it
+
+The thing I will say in defense of the senior engineers, the architects, the people who have spent twenty years in the field and have somehow not become bitter: they are mostly very kind. I think this is causal, not coincidental.
+
+The skills with long half-lives are mostly skills of *seeing*. Seeing what someone meant rather than what they typed. Seeing what the codebase is afraid of. Seeing what a feature will do to the team that has to maintain it, in two years, when you are gone. You cannot develop the eyes for these things while keeping the part of yourself that wants to win. The two faculties are mutually exclusive. You can have the elbows or you can have the eyes.
+
+The good news is that, by the time you've got the eyes, you don't really need the elbows. The work is gentler. The pay is better. The phone rings less. The questions you get asked are interesting. The job is, in some real sense, easier than it was when you were thirty. Not because the field has gotten easier — God knows it hasn't — but because the parts of the field that age you are precisely the parts you've stopped letting yourself be aged by.
+
+The half-life of *that* skill is, as far as I can tell, somewhere north of forty years.
+
+Long enough to plan a career around.
+
+Long enough to plan a life around.
+
+That's the trade.
