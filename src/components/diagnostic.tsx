@@ -1,38 +1,53 @@
 "use client";
 
 /**
- * Diagnostic — a small interactive "self-check" that lives at the end
- * of an essay. Three modes:
+ * Diagnostic — small interactive "self-check" at the end of an essay.
  *
- *   - kind="checklist"  → checkboxes with a running tally
- *   - kind="rating"     → 1–5 self-rating with a label band
- *   - kind="prompt"     → one prompt + a textarea (local-only, no submit)
+ * Three modes, all driven by simple JSON-safe primitives so MDX → RSC
+ * serialization can't drop a prop:
  *
- * Designed to be intellectually generous: no leads, no email capture,
- * no analytics on input. Just a small ritual for the reader.
+ *   <Diagnostic kind="checklist" title="..." items={["a","b"]}
+ *               thresholds={[[0,"none"],[3,"some"]]} />
+ *
+ *   <Diagnostic kind="rating" title="..." question="..."
+ *               bands={["1","2","3","4","5"]} />
+ *
+ *   <Diagnostic kind="prompt" title="..." prompt="..." />
+ *
+ * Notes:
+ *  - thresholds use [number, string] tuples, not objects. Tuples survive
+ *    the RSC serialization boundary cleanly; nested objects can sometimes
+ *    be omitted depending on MDX compiler settings.
+ *  - All array props are guarded with Array.isArray so a missing prop
+ *    can never crash the page at hydration.
  */
 
 import { useState } from "react";
 
-type Item = string;
+type CommonProps = {
+  title: string;
+};
 
-type ChecklistProps = {
+type ThresholdObj = { count: number; verdict: string };
+type ThresholdTuple = [number, string];
+
+type ChecklistProps = CommonProps & {
   kind: "checklist";
-  title: string;
-  items: Item[];
-  threshold?: { count: number; verdict: string }[]; // sorted ascending
+  items?: string[];
+  /** [count, verdict] tuples — sorted ascending */
+  thresholds?: Array<ThresholdTuple>;
+  /** legacy: array of {count, verdict} objects — still supported */
+  threshold?: Array<ThresholdObj>;
 };
 
-type RatingProps = {
+type RatingProps = CommonProps & {
   kind: "rating";
-  title: string;
   question: string;
-  bands: [string, string, string, string, string]; // 1..5
+  bands?: string[];
 };
 
-type PromptProps = {
+type PromptProps = CommonProps & {
   kind: "prompt";
-  title: string;
   prompt: string;
   placeholder?: string;
 };
@@ -60,21 +75,47 @@ export function Diagnostic(props: Props) {
 
 /* ──────────────── Checklist ──────────────── */
 
-function Checklist({ items, threshold }: ChecklistProps) {
-  const [checked, setChecked] = useState<boolean[]>(
-    () => items.map(() => false),
+function Checklist({ items, thresholds, threshold }: ChecklistProps) {
+  const safeItems = Array.isArray(items) ? items : [];
+
+  // Accept both new tuple syntax (`thresholds`) and legacy object syntax
+  // (`threshold`). Whichever is present and valid wins; both are guarded
+  // so a missing or malformed prop can never crash hydration.
+  const fromTuples: Array<[number, string]> = Array.isArray(thresholds)
+    ? thresholds.filter(
+        (t): t is [number, string] =>
+          Array.isArray(t) &&
+          t.length === 2 &&
+          typeof t[0] === "number" &&
+          typeof t[1] === "string",
+      )
+    : [];
+  const fromObjects: Array<[number, string]> = Array.isArray(threshold)
+    ? threshold
+        .filter(
+          (t): t is ThresholdObj =>
+            !!t &&
+            typeof t === "object" &&
+            typeof (t as ThresholdObj).count === "number" &&
+            typeof (t as ThresholdObj).verdict === "string",
+        )
+        .map((t) => [t.count, t.verdict] as [number, string])
+    : [];
+  const safeThresholds: Array<[number, string]> =
+    fromTuples.length > 0 ? fromTuples : fromObjects;
+
+  const [checked, setChecked] = useState<boolean[]>(() =>
+    safeItems.map(() => false),
   );
   const count = checked.filter(Boolean).length;
-  const verdict = threshold
-    ? [...threshold]
-        .sort((a, b) => a.count - b.count)
-        .reduce<string>((acc, t) => (count >= t.count ? t.verdict : acc), "")
-    : "";
+  const verdict = [...safeThresholds]
+    .sort((a, b) => a[0] - b[0])
+    .reduce<string>((acc, [n, v]) => (count >= n ? v : acc), "");
 
   return (
     <>
       <ul className="space-y-3">
-        {items.map((item, i) => (
+        {safeItems.map((item, i) => (
           <li key={i}>
             <label className="flex items-start gap-3 cursor-pointer group">
               <span
@@ -90,7 +131,7 @@ function Checklist({ items, threshold }: ChecklistProps) {
               </span>
               <input
                 type="checkbox"
-                checked={checked[i]}
+                checked={checked[i] ?? false}
                 onChange={(e) => {
                   const next = [...checked];
                   next[i] = e.target.checked;
@@ -107,7 +148,7 @@ function Checklist({ items, threshold }: ChecklistProps) {
       </ul>
       <div className="mt-6 pt-4 border-t border-rule flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-mute">
-          score · {count} / {items.length}
+          score · {count} / {safeItems.length}
         </span>
         {verdict && (
           <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-cyan">
@@ -122,6 +163,10 @@ function Checklist({ items, threshold }: ChecklistProps) {
 /* ──────────────── Rating ──────────────── */
 
 function Rating({ question, bands }: RatingProps) {
+  const safeBands: string[] =
+    Array.isArray(bands) && bands.length === 5
+      ? bands
+      : ["", "", "", "", ""];
   const [value, setValue] = useState<number | null>(null);
   return (
     <>
@@ -150,7 +195,7 @@ function Rating({ question, bands }: RatingProps) {
       <div className="min-h-[2rem]">
         {value !== null && (
           <p className="font-mono text-[12px] uppercase tracking-[0.08em] text-cyan">
-            → {bands[value - 1]}
+            → {safeBands[value - 1]}
           </p>
         )}
       </div>
