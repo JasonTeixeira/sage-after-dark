@@ -1,0 +1,153 @@
+---
+title: "The cost of being available"
+dek: "I once calculated, in a fit of late-night rigor, that I had been on call — in some informal sense — for roughly 4,200 of the previous 4,380 days. The number was wrong only in that it was too low."
+slug: "the-cost-of-being-available"
+template: essay
+pillar: mind
+tags: ["mind", "availability", "attention", "career", "boundaries"]
+published: "2026-05-07"
+status: published
+featured: true
+members_only: true
+series:
+  slug: "late-night-curriculum"
+  title: "Late-Night Curriculum"
+  order: 3
+related:
+  - "latency-is-a-worldview"
+  - "the-second-brain-trap"
+---
+
+<DropCap letter="A">round 11 p.m. on a Tuesday in November, I was reading my daughter a book about a sad whale, and my phone buzzed in my pocket — Slack, the angry red dot — and I felt my body do the small involuntary lean that I had been doing for so many years that I had stopped noticing I was doing it. The book was open. The whale was sad. My daughter was watching the whale. And the back of my head was already gone.</DropCap>
+
+She noticed before I did. She didn't say anything. She just turned the page herself, the way a child does when she has decided, quietly and probably for the third time that week, that the parent is not all the way in the room.<Sidenote n="1">There is a moment, with kids, when they stop asking you to come back. They have not stopped wanting it. They have just stopped requesting it as a service that's worth requesting. The shift is small. It happens once. You don't get a notification.</Sidenote>
+
+I went into the hallway. I looked at the message. It was, as it almost always is, *not actually urgent*. A teammate wanted to know whether a certain config flag should be `true` or `false` in the staging environment for a deploy that was happening the next morning. The deploy could have shipped with either value and we could have flipped it in a follow-up. The question was answerable, in twelve seconds, by literally any senior engineer on the team. It was sent to me because I am the one who answers.
+
+I am the one who answers because I have, over fifteen years of professional life, optimized myself to be the one who answers.
+
+This essay is about that optimization, and the price of it, and the math that finally made me stop.
+
+<DiagramAvailabilityCost />
+
+## The math that finally made me stop
+
+I want to start with the arithmetic, because the arithmetic is the part that's hard to argue with.
+
+A 24-hour day contains 86,400 seconds. A working adult, in the fastest professional cohort I know, sleeps about seven hours, which is 25,200 seconds. That leaves 61,200 seconds of waking life. Of those, the rough average for a working professional in a knowledge job is 28,800 seconds spent on directed work — the eight-hour day, give or take. Which leaves 32,400 seconds of *not work*. Family, food, exercise, books, a few minutes of sky.
+
+Now: an interruption costs you, by the most cited estimate in the literature, about 23 minutes — 1,380 seconds — of sustained attention. *Per interruption.* This number is mostly used in the context of work, but it does not stop being true at 5 p.m. The cost applies to whatever you were trying to be present for. The bedtime story. The conversation with the partner. The ten-minute walk where the next thing you needed to think clearly about was supposed to come up the way mushrooms come up — quietly, after enough days of nothing.
+
+If you check your phone — Slack, email, the work group text, the dashboard — five times during your 32,400 seconds of *not work*, you have spent roughly 6,900 seconds of that time *recovering* from those checks. That's almost two of your remaining ten waking hours. You did not get those two hours. You don't notice you didn't get them, because the recovery happens in the background. But the day you wanted, the *off-work* day, was about 80% of what you thought it was.
+
+Five checks is, of course, low. The actual median, in studies of people who report being "not on call" but who *carry their phone*, is closer to forty.<Sidenote n="2">The number that actually stopped me was personal, not academic. I tracked my own checks for one week. I averaged 73. On a Saturday I logged 109. I was, at the time, telling myself I "didn't really work weekends." I had been telling myself this for nine years.</Sidenote>
+
+Forty checks at 23 minutes apiece is 920 minutes of recovery. Which is more minutes than there are in your waking off-hours. The number is impossible. The math is telling you that the off-hours of an "always available" professional are, by the literature's own definition, *not actually off*. They are a long, ragged interruption with brief filaments of presence in between.
+
+This is the part of the essay where I am supposed to advise you to "set boundaries." I'm not going to do that, because the word *boundary* is now so worn that it has lost the part of itself that worked.
+
+I'm going to say something blunter, instead, which is that *the always-on professional is operating a different system than they think they are*, and the gap between the system they think they're operating and the one they actually are is where the cost lives.
+
+## The four lies an always-on person tells themselves
+
+Before I tried to get out, I told myself all four of these. Maybe you tell some of them. They have the property of being *almost* true, which is what makes them effective.
+
+**Lie one: it's just five minutes.** This is the foundational lie. It works because *checking* takes five minutes. *Recovering* doesn't. The conscious cost of an interruption is the 5–60 seconds of reading the message and deciding what to do; the unconscious cost is the 23-minute slow-fade where your nervous system stops being where you put it, and starts being where the message wanted it. You experience only the first cost. You pay both.
+
+**Lie two: I'm the only one who can answer.** Sometimes true. Almost always *more* true than it should be. The reason you're the only one who can answer is that, every time you've answered, you have made it slightly less likely that anyone else will need to. You have trained the team that you are a reliable cache of context. Every time you respond at 11 p.m., you are not just answering this question; you are reinforcing the gradient that produces this question. The gradient is the problem. The answer is the maintenance fee on the gradient.
+
+**Lie three: I want to be available.** This one is interesting because it is *partly* true and partly a story you have constructed because the alternative is unbearable. You are partly available because you genuinely care about the work and the people. You are partly available because being available is the main way you have learned to feel useful in the world, and the cost of stopping is the cost of finding out whether you are still useful when nobody is asking.<Sidenote n="3">For me, this was the bottom of the well. Not the workload. The *identity*. I did not have a way to be a person who was not the person other people could route around to. The first six months of trying to stop felt, with embarrassing precision, like grief.</Sidenote>
+
+**Lie four: I'll throttle it later, when this project ships.** No, you won't. There will be another project. The pattern is not coupled to the project. The pattern is coupled to *you*, and "later" is a person you have never met.
+
+<FieldCard kind="warning" title="THE PATTERN HAS A NAME">
+The technical name for this in distributed systems is a *thundering herd*. A lot of clients converge on a single resource because the resource has, historically, responded fastest. The resource gets overloaded. The clients all wait. Latency goes up for everyone. Eventually the resource burns out and the system has to redesign around its absence — which it could have done a year earlier without the burnout, but didn't, because the resource was answering.
+</FieldCard>
+
+## The architecture mistake under all of it
+
+If you treat yourself as a system — and I think most professionals secretly do, even if they wouldn't say it that way — then the always-on configuration is an *architectural* mistake, not a discipline mistake.
+
+The discipline framing says: *I should answer fewer messages.* This framing is wrong because it locates the problem in your willpower, which is the wrong place. Willpower is a finite resource that depletes over the day, and "answer fewer messages" requires willpower to be applied dozens of times per day, every day, forever. No system survives that contract.
+
+The architectural framing says: *the system that produces these messages is mis-configured, and the fix is upstream of any single message.* This is the framing that actually works, because it relocates the problem from "you" to "the system" — and systems can be redesigned in ways that habits cannot.
+
+Specifically, the architectural framing notices three things the discipline framing misses:
+
+**One:** every channel that can reach you is a *capability*, not a default. Email *can* reach you any time. That doesn't mean email *should* reach you any time. The fact that the technical capability exists does not mean it should be invoked at the rate it currently is. Most always-on professionals never make a conscious decision about which channels are allowed to reach them, when, with what kinds of payloads. They inherited the defaults. The defaults are wrong.
+
+**Two:** the *response time* you've trained the system to expect from you is itself a configurable parameter. If you respond in fifteen minutes for a year, the system reorganizes itself around fifteen-minute-response-time-from-you. If you change to four-hour, the system, after a brief lag, reorganizes itself around that. The reorganization is *inevitable*. The only choice you have is which equilibrium you want to live in.
+
+**Three:** the *cache* — the set of things only you know — is not a feature. It is a *bug*. Every fact that lives only in your head is a fact the system cannot operate on without you. This is the mechanism that produces the question at 11 p.m. The fix is not to answer faster. The fix is to *evict the cache* — to put the fact in the document, the wiki, the runbook, the README, the place where anyone competent can find it. Eviction is annoying. Eviction is the work. People who do not evict are people whose 11 p.m. is permanently mortgaged.
+
+<PullQuote attribution="— the cost of being available">
+The fix is not to answer faster. The fix is to evict the cache. Every fact that lives only in your head is a fact the system cannot operate on without you.
+</PullQuote>
+
+## The retrofit
+
+I'll say what I did, with the caveat that it is not a manifesto and it took about eleven months and three relapses.
+
+**I made the channels asymmetric.** Phone for genuine emergencies, *defined narrowly*, by people I had told what counts. Text for friends and family, with the understanding that I would respond within hours, not minutes. Email for work, checked in two windows, at 10 a.m. and 4 p.m. Slack with notifications *off* outside work hours, period. The asymmetry is not a hierarchy; it is a *protocol*. The protocol communicates, without me having to be in the room, what kind of latency each channel is allowed to have.
+
+**I told three people the protocol, in writing.** My partner. My closest collaborator at work. The friend most likely to think I had been hit by a bus. Telling them in writing is the part that mattered. They could not, later, claim to be surprised. I could not, later, soften it.
+
+**I evicted the cache, slowly, on the work side.** Every time someone asked me a question I had answered before, I wrote up the answer somewhere durable and sent the link instead of the re-derived answer. Within four months, the volume of incoming questions had dropped by something like 60%. Not because the team got worse. Because the *answers were now reachable without me*. The team got better, in fact, because they were thinking through the documents instead of waiting for me to remember.
+
+**I let things break, on purpose, in low-stakes ways.** This is the one most people skip and the one that mattered most. I had to *demonstrate* — to the team, to my own nervous system — that the system could absorb my absence without catastrophe. I would, deliberately, not answer a non-urgent message for six hours. Sometimes someone else figured it out. Sometimes nothing happened and the question disappeared on its own, because it wasn't actually a question. Either way, the system learned. *Sage takes longer now. Plan accordingly.*
+
+**I stopped lying about it.** When someone asked, "are you still online?" at 9 p.m., I started saying "no" instead of answering the actual question. The literal lie — "I'm offline, I'll get this in the morning" — sent while typing on my phone in a hallway, was a mirror I eventually couldn't look into. So I stopped sending it. I either answered (rare) or genuinely waited. There turned out to be no third option that wasn't corrosive.
+
+<FieldCard kind="tool" title="THE 11 P.M. RULE">
+If a message arrives after 9 p.m. on a non-on-call day and is not from someone in physical danger, the only correct response is *no response*. Not a delayed response. Not a "I'll get to this in the morning." *No response.* The morning will arrive. The message will still be there. If the asker concluded, in the interim, that they could solve it without you — congratulations, you have just upgraded the system. Repeat until upgraded.
+</FieldCard>
+
+## What you get back
+
+I am going to be careful here, because the easy version of this essay ends with a triumphant list of all the wonderful things that happened when I stopped being available, and the easy version is mostly a lie.
+
+What actually happens is more complicated and, in some ways, less satisfying.
+
+You get back time, but the time is not as clean as you imagined it would be. The first month is *terrible*. You have, for years, used responsiveness as a low-grade nervous-system regulator — something to do with your hands when the silence was uncomfortable. Removing it doesn't immediately leave behind a serene professional sipping tea. It leaves behind a person who has to figure out what to do with their hands. The figuring out is the work.
+
+You get back attention, but the attention is *expensive to redeploy*. The mind that has been trained, for a decade, to slice itself into 90-second windows of half-presence will not, on a Tuesday in October, suddenly remember how to read a chapter of a book. You will read three pages and reach, automatically, for the phone that isn't there. This will feel, for a while, like a loss. It is not a loss. It is the system noticing that it was running on the wrong fuel.
+
+You get back the people. This is the part that surprised me. Not because they hadn't been there. They had been there. I had not been there *for* them. The bedtime story I half-listened to for six years did happen. I just wasn't in it. The version where I am in it costs nothing extra in time. It costs everything in *focus*. The trade is not work-vs-life. The trade is *which life you are going to have inside the same waking hours*.
+
+You get back, finally, the version of yourself that gets to think slowly. This one is the one I am most reluctant to oversell, because it is the one I am most grateful for. Most of the *good* thinking I have done in the last year has happened in the gap that opened up when I stopped responding. The thinking did not arrive on cue. It arrived because the gap arrived, and the gap arrived because I stopped filling it, and I stopped filling it because, one Tuesday in November, my daughter quietly turned a page that I had not been reading.
+
+<Diagnostic
+  kind="checklist"
+  title="THE AVAILABILITY AUDIT"
+  items={[
+    "I can name a specific window, on a normal weekday, when I am unreachable on every async channel.",
+    "I have a written protocol — visible to at least two other people — for how to reach me in a real emergency.",
+    "When someone asks me a question I've answered before, I send a link to a durable document, not a re-derived reply.",
+    "I have, in the last month, deliberately not responded to a non-urgent message and watched the system absorb it.",
+    "I have notifications off, by default, on at least one major channel outside work hours.",
+    "I can describe the difference between answering fast and being a healthy node in the system.",
+    "I have, in the last quarter, said 'no' to being added to a thread, group, or channel where my presence wasn't load-bearing.",
+  ]}
+  threshold={[
+    { count: 0, verdict: "the herd is thundering · you are the resource" },
+    { count: 3, verdict: "the protocol is forming · keep enforcing it" },
+    { count: 5, verdict: "the system is healthier · you are upstream now" },
+    { count: 7, verdict: "the cache is evicted · you are no longer single-threaded" },
+  ]}
+/>
+
+## A closing note on the people on the other side
+
+I want to say one last thing, in defense of the colleagues, partners, and friends of always-on people, because I have been on both sides of this and the other side is harder to be on than people admit.
+
+It is *very disorienting* to have a person reorganize their availability mid-relationship. You had been counting on a certain shape of responsiveness. The shape was, frankly, part of why you trusted them. Now the shape is changing and you don't, immediately, know what to do with the new one. There is often a period of suspicion — *do they not care anymore?* — that is not crazy. It's a reasonable response to a system that has, without consultation, been re-architected.
+
+The thing that helps, on the other side, is to be *explicit about why*. Not as an apology. As a transmission. *I am trying to be more present in the room I am physically in. I am trying to be a more reliable thinker for the projects I have agreed to think reliably about. I am trying to put more of what I know into places you can read without me, so that when you reach me, you actually need me, and we both know it.*
+
+Most of the people in my life, told this directly, took about three weeks to recalibrate, and then quietly preferred the new version.<Sidenote n="4">The exceptions, almost without exception, were the people whose relationship with me had been *predicated* on my unavailability — the ones for whom my failure to be present was the part of the dynamic that worked for them. Those relationships did not survive the retrofit. I do not, on the whole, miss them.</Sidenote>
+
+The cost of being available, in the end, is not paid by you alone. It is paid by everyone who needs the version of you that *is not currently being summoned*. The people in the room are paying it. The work that requires sustained thought is paying it. The future you, the one with the calmer eyes and the quieter phone, is paying it.
+
+The day you stop running yourself as an open port is the day the rest of the system finally gets to know who you actually are when you are not, also, on call.
+
+That's the trade.

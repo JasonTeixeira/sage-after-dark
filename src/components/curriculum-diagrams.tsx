@@ -1144,3 +1144,343 @@ export function DiagramTasteMoat({ caption, className }: DiagramProps) {
     </Frame>
   );
 }
+
+/* ─── DIAGRAM F: AVAILABILITY COST (paid #3) ──────────────────────── */
+/* A 24-hour timeline showing what "always-on" actually does to the
+   off-hours. Top band = the day the worker thinks they're having
+   (clean off-hours bracketing a work block). Bottom band = the day
+   they're actually having: each check fires a 23-minute recovery shadow
+   that eats into the surrounding off-hours, leaving thin filaments of
+   real presence. */
+
+export function DiagramAvailabilityCost({ caption, className }: DiagramProps) {
+  // 24 hours mapped horizontally. Plot area: x ∈ [80, 740], y ∈ [60, 380].
+  const xH = (h: number) => 80 + (h / 24) * 660;
+
+  // Work block is 9 → 17 (8 hours), off-hours = the rest.
+  const workStart = 9;
+  const workEnd = 17;
+
+  // Synthetic but plausible "checks" outside the work block — each is a
+  // pulse that fires a 23-minute recovery shadow (mapped as 23/60 ≈ 0.383 h).
+  // Twelve checks across the off-hours; deterministic.
+  const checks = [
+    6.4, 7.1, 7.8, 18.1, 18.6, 19.3, 20.2, 20.8, 21.4, 22.0, 22.5, 23.1,
+  ];
+  const recoveryHours = 23 / 60; // 0.3833...
+
+  // Bands — vertical positions
+  const yTopBand = 90; // "the day you think you're having"
+  const yBotBand = 230; // "the day you're actually having"
+  const bandH = 64;
+
+  // Helper to clamp recovery shadow to 24h
+  const clamp = (h: number) => Math.max(0, Math.min(24, h));
+
+  return (
+    <Frame
+      number="A.06"
+      title="THE COST OF BEING AVAILABLE"
+      caption={
+        caption ??
+        "Top: the day you think you're having. Bottom: the day you're actually having — each check trails a 23-minute recovery shadow."
+      }
+      className={className}
+    >
+      <svg
+        viewBox="0 0 800 460"
+        className="w-full h-auto"
+        role="img"
+        aria-label="Diagram comparing the off-hours an always-on professional thinks they have versus the off-hours they actually have, after each check fires a 23-minute recovery shadow."
+      >
+        <defs>
+          <linearGradient id="avail-recovery" x1="0%" x2="100%" y1="0%" y2="0%">
+            <stop offset="0%" stopColor="rgba(34,211,238,0.55)" />
+            <stop offset="100%" stopColor="rgba(34,211,238,0.0)" />
+          </linearGradient>
+          <pattern
+            id="avail-grid"
+            x="0"
+            y="0"
+            width="44"
+            height="40"
+            patternUnits="userSpaceOnUse"
+          >
+            <path d="M 44 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="1" />
+          </pattern>
+        </defs>
+
+        {/* faint grid in plotting area */}
+        <rect x="40" y="50" width="720" height="350" fill="url(#avail-grid)" />
+
+        {/* X-axis: hour ticks every 3h */}
+        {[0, 3, 6, 9, 12, 15, 18, 21, 24].map((h) => (
+          <g key={`tick-${h}`}>
+            <line
+              x1={xH(h)}
+              y1={yTopBand - 6}
+              x2={xH(h)}
+              y2={yBotBand + bandH + 6}
+              stroke="rgba(255,255,255,0.08)"
+              strokeWidth="1"
+            />
+            <text
+              x={xH(h)}
+              y={yBotBand + bandH + 22}
+              textAnchor="middle"
+              fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+              fontSize="9"
+              fill="rgba(255,255,255,0.5)"
+            >
+              {`${h.toString().padStart(2, "0")}:00`}
+            </text>
+          </g>
+        ))}
+
+        {/* ─── TOP BAND: the day you think you're having ─── */}
+        <text
+          x="80"
+          y="78"
+          fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+          fontSize="10"
+          fill="rgba(255,255,255,0.55)"
+          letterSpacing="2"
+        >
+          THE DAY YOU THINK YOU'RE HAVING
+        </text>
+
+        {/* off-hours block: full band, faint cyan = presence */}
+        <rect
+          x={xH(0)}
+          y={yTopBand}
+          width={xH(workStart) - xH(0)}
+          height={bandH}
+          fill="rgba(34,211,238,0.18)"
+          stroke="rgba(34,211,238,0.55)"
+          strokeWidth="1"
+        />
+        {/* work block */}
+        <rect
+          x={xH(workStart)}
+          y={yTopBand}
+          width={xH(workEnd) - xH(workStart)}
+          height={bandH}
+          fill="rgba(255,255,255,0.10)"
+          stroke="rgba(255,255,255,0.35)"
+          strokeWidth="1"
+        />
+        {/* second off-hours block */}
+        <rect
+          x={xH(workEnd)}
+          y={yTopBand}
+          width={xH(24) - xH(workEnd)}
+          height={bandH}
+          fill="rgba(34,211,238,0.18)"
+          stroke="rgba(34,211,238,0.55)"
+          strokeWidth="1"
+        />
+
+        {/* labels inside top band */}
+        <text
+          x={(xH(0) + xH(workStart)) / 2}
+          y={yTopBand + bandH / 2 + 4}
+          textAnchor="middle"
+          fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+          fontSize="10"
+          fill="rgba(34,211,238,0.95)"
+          letterSpacing="1.5"
+        >
+          OFF
+        </text>
+        <text
+          x={(xH(workStart) + xH(workEnd)) / 2}
+          y={yTopBand + bandH / 2 + 4}
+          textAnchor="middle"
+          fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+          fontSize="10"
+          fill="rgba(255,255,255,0.85)"
+          letterSpacing="1.5"
+        >
+          WORK · 8h
+        </text>
+        <text
+          x={(xH(workEnd) + xH(24)) / 2}
+          y={yTopBand + bandH / 2 + 4}
+          textAnchor="middle"
+          fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+          fontSize="10"
+          fill="rgba(34,211,238,0.95)"
+          letterSpacing="1.5"
+        >
+          OFF
+        </text>
+
+        {/* ─── BOTTOM BAND: the day you're actually having ─── */}
+        <text
+          x="80"
+          y={yBotBand - 12}
+          fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+          fontSize="10"
+          fill="rgba(255,255,255,0.55)"
+          letterSpacing="2"
+        >
+          THE DAY YOU'RE ACTUALLY HAVING
+        </text>
+
+        {/* recovery shadows under the bottom band — drawn first so checks sit on top */}
+        {checks.map((h, i) => {
+          const x1 = xH(h);
+          const x2 = xH(clamp(h + recoveryHours));
+          return (
+            <rect
+              key={`shadow-${i}`}
+              x={x1}
+              y={yBotBand}
+              width={Math.max(2, x2 - x1)}
+              height={bandH}
+              fill="url(#avail-recovery)"
+              opacity={0.85}
+            />
+          );
+        })}
+
+        {/* outline of bottom band — uses dashed segments where it's "off" */}
+        {/* off1 [0..workStart] */}
+        <rect
+          x={xH(0)}
+          y={yBotBand}
+          width={xH(workStart) - xH(0)}
+          height={bandH}
+          fill="none"
+          stroke="rgba(34,211,238,0.55)"
+          strokeWidth="1"
+          strokeDasharray="3 3"
+        />
+        {/* work [workStart..workEnd] — same as top band */}
+        <rect
+          x={xH(workStart)}
+          y={yBotBand}
+          width={xH(workEnd) - xH(workStart)}
+          height={bandH}
+          fill="rgba(255,255,255,0.10)"
+          stroke="rgba(255,255,255,0.35)"
+          strokeWidth="1"
+        />
+        {/* off2 [workEnd..24] */}
+        <rect
+          x={xH(workEnd)}
+          y={yBotBand}
+          width={xH(24) - xH(workEnd)}
+          height={bandH}
+          fill="none"
+          stroke="rgba(34,211,238,0.55)"
+          strokeWidth="1"
+          strokeDasharray="3 3"
+        />
+
+        {/* check pulses — vertical strikes */}
+        {checks.map((h, i) => (
+          <g key={`pulse-${i}`}>
+            <line
+              x1={xH(h)}
+              y1={yBotBand - 4}
+              x2={xH(h)}
+              y2={yBotBand + bandH + 4}
+              stroke="rgba(34,211,238,0.95)"
+              strokeWidth="1.25"
+            />
+            <circle cx={xH(h)} cy={yBotBand - 6} r="2.5" fill="rgba(34,211,238,0.95)" />
+          </g>
+        ))}
+
+        {/* small inset legend mid-bottom */}
+        <g transform={`translate(${xH(workStart) + 16}, ${yBotBand + bandH / 2 + 4})`}>
+          <text
+            fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+            fontSize="10"
+            fill="rgba(255,255,255,0.85)"
+            letterSpacing="1.5"
+          >
+            WORK · 8h
+          </text>
+        </g>
+
+        {/* annotation: "23 min recovery × N checks" */}
+        <g>
+          <line
+            x1={xH(20.2)}
+            y1={yBotBand + bandH + 28}
+            x2={xH(20.2) + 80}
+            y2={yBotBand + bandH + 28}
+            stroke="rgba(255,255,255,0.4)"
+            strokeWidth="1"
+          />
+          <text
+            x={xH(20.2) + 86}
+            y={yBotBand + bandH + 32}
+            fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+            fontSize="10"
+            fill="rgba(34,211,238,0.95)"
+            letterSpacing="1"
+          >
+            23 min recovery × {checks.length} checks
+          </text>
+        </g>
+
+        {/* totals row near the right edge */}
+        <g>
+          <line
+            x1="40"
+            y1="408"
+            x2="760"
+            y2="408"
+            stroke="rgba(255,255,255,0.1)"
+            strokeWidth="1"
+          />
+          <text
+            x="48"
+            y="430"
+            fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+            fontSize="10"
+            fill="rgba(255,255,255,0.55)"
+            letterSpacing="1.5"
+          >
+            OFF-HOURS BUDGET · ~10h
+          </text>
+          <text
+            x="48"
+            y="448"
+            fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+            fontSize="10"
+            fill="rgba(255,255,255,0.55)"
+            letterSpacing="1.5"
+          >
+            ACTUAL CONTIGUOUS PRESENCE · ~3h
+          </text>
+          <text
+            x="752"
+            y="430"
+            textAnchor="end"
+            fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+            fontSize="10"
+            fill="rgba(34,211,238,0.95)"
+            letterSpacing="1.5"
+          >
+            DELTA · 7h paid invisibly
+          </text>
+          <text
+            x="752"
+            y="448"
+            textAnchor="end"
+            fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+            fontSize="9"
+            fill="rgba(255,255,255,0.4)"
+            letterSpacing="1"
+          >
+            illustrative · 12 checks/day · 23-min recovery (Mark, 2008)
+          </text>
+        </g>
+      </svg>
+    </Frame>
+  );
+}
