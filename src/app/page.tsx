@@ -35,6 +35,7 @@ import {
   ReadThisIf,
 } from "@/components";
 import { getAllPosts } from "@/content/loader";
+import { HeroBroadcast } from "@/components/hero-broadcast";
 import { NOW, ARCS, PRODUCTS, NOW_PLAYING } from "@/content/site-data";
 import { pillar as pillarTokens } from "@/lib/tokens";
 import { getSiteCounts } from "@/lib/live-counts";
@@ -199,10 +200,17 @@ export default async function HomePage() {
                   <span className="ml-auto h-2 w-2 rounded-full bg-cyan animate-pulse" />
                 </div>
 
-                {/* Oscilloscope / signal panel */}
-                <div className="relative h-44 mx-5 border border-rule overflow-hidden">
-                  <SignalPanel />
-                </div>
+                {/* Rotating hero broadcast — five variants */}
+                <HeroBroadcast
+                  posts={posts.slice(0, 18).map((p) => ({
+                    slug: p.frontmatter.slug,
+                    pillar: p.frontmatter.pillar,
+                    title: p.frontmatter.title,
+                    dek: p.frontmatter.dek,
+                    published: p.frontmatter.published,
+                  }))}
+                  initialSeed={Math.floor(Date.now() / 86400000)}
+                />
 
                 <div className="px-5 pt-4 pb-5">
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-mono uppercase tracking-[0.08em] text-mute">
@@ -493,54 +501,4 @@ export default async function HomePage() {
   );
 }
 
-/**
- * SignalPanel — the oscilloscope skyline graphic for the Latest
- * Transmission card. Pure SVG, deterministic, low-key animated.
- */
-function SignalPanel() {
-  // Build a deterministic skyline of bars.
-  const bars = Array.from({ length: 48 }, (_, i) => {
-    const seed = (i * 9301 + 49297) % 233280;
-    const h = 12 + (seed % 60);
-    return h;
-  });
-  return (
-    <svg
-      viewBox="0 0 480 176"
-      preserveAspectRatio="none"
-      className="absolute inset-0 h-full w-full"
-      aria-hidden="true"
-    >
-      {/* Grid */}
-      <defs>
-        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-          <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#1C232E" strokeWidth="0.5" />
-        </pattern>
-      </defs>
-      <rect width="480" height="176" fill="url(#grid)" />
-      {/* Skyline bars */}
-      {bars.map((h, i) => (
-        <rect
-          key={i}
-          x={i * 10}
-          y={176 - h}
-          width="6"
-          height={h}
-          fill="#0A2C33"
-          stroke="#00E5FF"
-          strokeOpacity="0.5"
-          strokeWidth="0.5"
-        />
-      ))}
-      {/* Reticle */}
-      <g transform="translate(240, 88)">
-        <circle r="20" fill="none" stroke="#00E5FF" strokeWidth="1" opacity="0.6" />
-        <circle r="3" fill="#00E5FF" />
-        <line x1="-30" y1="0" x2="-22" y2="0" stroke="#00E5FF" strokeWidth="1" />
-        <line x1="22" y1="0" x2="30" y2="0" stroke="#00E5FF" strokeWidth="1" />
-        <line x1="0" y1="-30" x2="0" y2="-22" stroke="#00E5FF" strokeWidth="1" />
-        <line x1="0" y1="22" x2="0" y2="30" stroke="#00E5FF" strokeWidth="1" />
-      </g>
-    </svg>
-  );
-}
+

@@ -1,7 +1,12 @@
 {
-  "generatedAt": "2026-05-07T02:19:38.100Z",
-  "count": 69,
+  "generatedAt": "2026-05-07T02:34:37.064Z",
+  "count": 70,
   "entries": [
+    {
+      "hash": "5398a46",
+      "date": "2026-05-07",
+      "subject": "feat(curriculum): paid post #4 — The half-life of a good tool"
+    },
     {
       "hash": "c034f8b",
       "date": "2026-05-07",
