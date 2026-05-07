@@ -1,0 +1,141 @@
+---
+# ─────────────────────────────────────────────────────────────
+# SAGE AFTER DARK — POST SKELETON
+# Copy this file to src/content/posts/<your-slug>.mdx and edit.
+#
+# This is the lean starter. For template-specific scaffolds
+# (tutorial, field_note, dispatch, arc_episode, annual) see
+# src/content/_templates/*.mdx.template — they have the full
+# field set per kind.
+#
+# Authoritative schema: src/content/schema.ts (Zod).
+# When in doubt, the schema wins.
+# ─────────────────────────────────────────────────────────────
+
+# Identity
+title: "The provocative thesis that names a real tension"
+dek: "One sub-headline sentence that earns the click without spoiling the punchline."
+slug: "the-provocative-thesis"
+
+# Taxonomy — pillar must match src/lib/tokens.ts
+template: essay              # essay · tutorial · field_note · dispatch · arc_episode · annual
+pillar: mind                 # build · signal · mind · world · taste · learning · teach
+tags: ["one", "two", "three"]
+
+# Dates — ISO format, UTC
+published: "2026-05-08"
+# updated: "2026-05-12"
+
+# Status & access
+status: published            # draft · published · archived
+featured: false
+members_only: true           # true = paywalled, false = public
+
+# Series — only if part of an arc/series
+# series:
+#   slug: "late-night-curriculum"
+#   title: "Late-Night Curriculum"
+#   order: 5
+
+# Related — 2–4 slugs that genuinely pair
+related:
+  - "the-half-life-of-a-skill"
+  - "taste-is-the-last-moat"
+
+# Optional
+# og_image: "/og/the-provocative-thesis.png"
+# canonical: "https://example.com/original"
+---
+
+{/*
+  ─── HOW TO USE THIS SKELETON ────────────────────────────────
+  1. Cold open in the DropCap. 2–4 sentences. A scene, not a thesis.
+  2. State the thesis somewhere in the first 200 words.
+  3. Drop the signature diagram after the first major beat.
+  4. Earn each H2. Sections are turns in the argument, not lists.
+  5. End with a Diagnostic the reader can run on themselves.
+  6. One quiet signoff line. No "until next time".
+  ─────────────────────────────────────────────────────────────
+*/}
+
+<DropCap letter="T">he opening paragraph carries the entire essay. It states the thesis without hedging, drops a concrete image, and earns the next paragraph. No throat-clearing. No "in this post we will explore." The drop cap renders only on the first paragraph.</DropCap>
+
+The second paragraph proves you mean it. Here you cite the receipt — the data, the war story, the quote. This is also where a sidenote can carry an aside you'd otherwise cut.<Sidenote n="1">Sidenotes float in the margin on desktop, render inline on mobile. Keep them under ~50 words. Two or three per post, never more.</Sidenote>
+
+This essay is about *one specific thing*. Name it here, in a single sentence, before the first H2.
+
+{/* ─── SIGNATURE DIAGRAM ─────────────────────────────────────
+     Build the diagram as a React component at:
+       src/components/diagrams/<PostSlug>Diagram.tsx
+     and use it inline below. SVG only, no animation libraries.
+     If the diagram doesn't add information the prose lacks, cut it. */}
+
+{/* <DiagramYourPostName /> */}
+
+## A heading is a promise
+
+The H2 reframes the section. Each section runs 200–500 words. Don't go longer without a payoff.
+
+Make the argument with scenes and specifics, not abstractions. Show the receipt. End the section with a sentence that earns the next H2.
+
+## The deadpan list
+
+A signature move: the deadpan enumerated list with a thesis baked into the items.
+
+**The thing in category one.** A sentence about why it looks like the answer and isn't.
+
+**The thing in category two.** A sentence about what it actually is.
+
+**The thing in category three.** A sentence about what most people miss about it. This is where the essay's core insight lands.<Sidenote n="2">If you can't write a deadpan list for your topic, you may not have an essay yet — you may have an opinion. They're different.</Sidenote>
+
+## Receipts, not vibes
+
+Use real numbers, real screenshots, real quotes. Inline `code` for terms of art, fenced blocks for actual code.
+
+```ts
+// Show the smallest version that proves the point.
+function halfLife<T>(items: T[]): T[] {
+  return items.filter((it) => stillWorks(it, FIVE_YEARS));
+}
+```
+
+<FieldCard kind="tool" title="THE FIELD CARD">
+
+A field card breaks the page rhythm. Use it for a tool, a counter-example, a warning, or a principle that deserves a frame. `kind` accepts `tool`, `counter`, `warning`, or `principle`. Keep the body under ~120 words.
+
+</FieldCard>
+
+The paragraph after a field card shouldn't apologize for the field card. Pick up the argument and keep going.
+
+## The pull-quote, used sparingly
+
+Once per post, max. Reserve it for the sentence you'd put on a t-shirt.
+
+<PullQuote attribution="— the working title of this essay">
+The one sentence that names the thing.
+</PullQuote>
+
+Keep moving. Don't admire your own pull quote.
+
+## What this means tomorrow
+
+Before the diagnostic, give the reader a concrete claim about how the world looks now that they've read this. One paragraph. No hedging.
+
+<Diagnostic
+  title="Run this on yourself"
+  items={[
+    "The first thing the reader can notice tomorrow.",
+    "The second thing — slightly harder, slightly more specific.",
+    "The third thing — the one that requires the change in framing the essay just argued for.",
+    "The fourth, optional. Cut to three if four is filler."
+  ]}
+/>
+
+The signoff is one line. Quiet. It belongs to the essay, not to the next one.
+
+{/*
+  ─── PRE-COMMIT CHECK ────────────────────────────────────────
+  Run `docs/80-EDITORIAL-CHECKLIST.md` before you ship.
+  Especially: read the post out loud, top to bottom.
+  ─────────────────────────────────────────────────────────────
+*/}
