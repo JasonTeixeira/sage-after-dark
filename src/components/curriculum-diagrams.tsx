@@ -1484,3 +1484,370 @@ export function DiagramAvailabilityCost({ caption, className }: DiagramProps) {
     </Frame>
   );
 }
+
+/* ─── DIAGRAM G: TOOL HALF-LIFE STRATIGRAPHY (paid #4) ───────────── */
+/* The tooling stack as geological strata. Deep layer = long-half-life
+   spine (broad, stable). Middle layer = medium-half-life production.
+   Thin top crust = short-half-life surface, with churn dots showing
+   names that come and go. Right-side timeline shows decade markers. */
+
+export function DiagramToolHalfLife({ caption, className }: DiagramProps) {
+  // Plot area: x ∈ [60, 740], y ∈ [60, 380].
+  // Three horizontal strata, stacked top→bottom by half-life:
+  //   surface  (~0..1.5y)   — thin crust
+  //   medium   (~5y)        — middle layer
+  //   spine    (>career)    — deep stratum
+
+  // Y zones
+  const surfaceTop = 70;
+  const surfaceBot = 130; // 60h tall — thin crust
+  const mediumTop = 130;
+  const mediumBot = 230; // 100h
+  const spineTop = 230;
+  const spineBot = 380; // 150h tall — deepest
+
+  // Right-side timeline x position
+  const tlX = 752;
+
+  // Surface tools (churn) — names with positions and small horizontal "lifespans"
+  const surfaceTools = [
+    { x: 100, w: 60, label: "framework-of-2024" },
+    { x: 175, w: 50, label: "css-in-greek" },
+    { x: 240, w: 70, label: "build-tool-2025" },
+    { x: 325, w: 56, label: "norse-state" },
+    { x: 395, w: 64, label: "yet-another-cli" },
+    { x: 475, w: 52, label: "rewrite-of-x" },
+    { x: 540, w: 70, label: "agent-ide-vN" },
+    { x: 625, w: 60, label: "successor-tbd" },
+  ];
+
+  const mediumTools = [
+    { x: 100, w: 130, label: "current major framework" },
+    { x: 250, w: 130, label: "cloud platform" },
+    { x: 400, w: 130, label: "observability stack" },
+    { x: 550, w: 140, label: "managed database" },
+  ];
+
+  const spineTools = [
+    { y: 250, label: "the shell · pipes · plain text" },
+    { y: 280, label: "version control (the model, not the porcelain)" },
+    { y: 310, label: "SQL · the relational algebra" },
+    { y: 340, label: "the editor you've used for 20 years" },
+    { y: 365, label: "files you own · in formats you can still read in 2050" },
+  ];
+
+  return (
+    <Frame
+      number="A.07"
+      title="THE TOOL STRATIGRAPHY"
+      caption={
+        caption ??
+        "Your tooling stack is geological. The surface churns; the spine carries the surface across rotations. Optimize the spine."
+      }
+      className={className}
+    >
+      <svg
+        viewBox="0 0 800 460"
+        className="w-full h-auto"
+        role="img"
+        aria-label="Diagram showing professional tooling as geological strata: a thin churning surface layer of short-half-life tools, a middle layer of medium-half-life production tools, and a deep stratum of long-half-life spine tools."
+      >
+        <defs>
+          <linearGradient id="tool-spine" x1="0%" x2="0%" y1="0%" y2="100%">
+            <stop offset="0%" stopColor="rgba(34,211,238,0.18)" />
+            <stop offset="100%" stopColor="rgba(34,211,238,0.32)" />
+          </linearGradient>
+          <linearGradient id="tool-medium" x1="0%" x2="0%" y1="0%" y2="100%">
+            <stop offset="0%" stopColor="rgba(255,255,255,0.06)" />
+            <stop offset="100%" stopColor="rgba(255,255,255,0.10)" />
+          </linearGradient>
+          <linearGradient id="tool-surface" x1="0%" x2="0%" y1="0%" y2="100%">
+            <stop offset="0%" stopColor="rgba(255,255,255,0.04)" />
+            <stop offset="100%" stopColor="rgba(255,255,255,0.10)" />
+          </linearGradient>
+          <pattern
+            id="tool-grid"
+            x="0"
+            y="0"
+            width="40"
+            height="40"
+            patternUnits="userSpaceOnUse"
+          >
+            <path
+              d="M 40 0 L 0 0 0 40"
+              fill="none"
+              stroke="rgba(255,255,255,0.04)"
+              strokeWidth="1"
+            />
+          </pattern>
+          {/* hatch pattern for surface churn */}
+          <pattern
+            id="tool-churn"
+            x="0"
+            y="0"
+            width="6"
+            height="6"
+            patternUnits="userSpaceOnUse"
+          >
+            <path
+              d="M 0 6 L 6 0"
+              stroke="rgba(255,255,255,0.16)"
+              strokeWidth="0.6"
+            />
+          </pattern>
+        </defs>
+
+        {/* faint grid in background */}
+        <rect x="40" y="50" width="700" height="370" fill="url(#tool-grid)" />
+
+        {/* ─── SPINE STRATUM (deepest) ─── */}
+        <rect
+          x="60"
+          y={spineTop}
+          width="680"
+          height={spineBot - spineTop}
+          fill="url(#tool-spine)"
+          stroke="rgba(34,211,238,0.55)"
+          strokeWidth="1"
+        />
+        {/* Spine label, top-left */}
+        <text
+          x="74"
+          y={spineTop + 22}
+          fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+          fontSize="10"
+          fill="rgba(34,211,238,0.95)"
+          letterSpacing="2"
+        >
+          SPINE · half-life &gt; career
+        </text>
+        {/* spine tool labels */}
+        {spineTools.map((s, i) => (
+          <g key={`spine-${i}`}>
+            <circle cx="80" cy={s.y - 4} r="2.5" fill="rgba(34,211,238,0.95)" />
+            <text
+              x="92"
+              y={s.y}
+              fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+              fontSize="10"
+              fill="rgba(255,255,255,0.85)"
+            >
+              {s.label}
+            </text>
+          </g>
+        ))}
+
+        {/* ─── MEDIUM STRATUM ─── */}
+        <rect
+          x="60"
+          y={mediumTop}
+          width="680"
+          height={mediumBot - mediumTop}
+          fill="url(#tool-medium)"
+          stroke="rgba(255,255,255,0.35)"
+          strokeWidth="1"
+        />
+        <text
+          x="74"
+          y={mediumTop + 18}
+          fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+          fontSize="10"
+          fill="rgba(255,255,255,0.7)"
+          letterSpacing="2"
+        >
+          PRODUCTION · half-life ~ 5y
+        </text>
+        {mediumTools.map((m, i) => {
+          const yMid = mediumTop + (mediumBot - mediumTop) / 2 + 14;
+          return (
+            <g key={`m-${i}`}>
+              <rect
+                x={m.x}
+                y={yMid - 14}
+                width={m.w}
+                height={26}
+                fill="rgba(255,255,255,0.08)"
+                stroke="rgba(255,255,255,0.4)"
+                strokeWidth="1"
+              />
+              <text
+                x={m.x + m.w / 2}
+                y={yMid + 4}
+                textAnchor="middle"
+                fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+                fontSize="9"
+                fill="rgba(255,255,255,0.85)"
+              >
+                {m.label}
+              </text>
+            </g>
+          );
+        })}
+
+        {/* ─── SURFACE STRATUM (top, thin) ─── */}
+        <rect
+          x="60"
+          y={surfaceTop}
+          width="680"
+          height={surfaceBot - surfaceTop}
+          fill="url(#tool-surface)"
+          stroke="rgba(255,255,255,0.35)"
+          strokeWidth="1"
+        />
+        <rect
+          x="60"
+          y={surfaceTop}
+          width="680"
+          height={surfaceBot - surfaceTop}
+          fill="url(#tool-churn)"
+          opacity="0.6"
+        />
+        <text
+          x="74"
+          y={surfaceTop + 14}
+          fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+          fontSize="10"
+          fill="rgba(255,255,255,0.55)"
+          letterSpacing="2"
+        >
+          SURFACE · half-life ~ 18mo · churn
+        </text>
+        {surfaceTools.map((t, i) => {
+          const yMid = (surfaceTop + surfaceBot) / 2 + 8;
+          return (
+            <g key={`s-${i}`}>
+              <line
+                x1={t.x}
+                y1={yMid - 6}
+                x2={t.x + t.w}
+                y2={yMid - 6}
+                stroke="rgba(255,255,255,0.6)"
+                strokeWidth="1"
+              />
+              {/* small "X" marker at the right end indicating end-of-life */}
+              <line
+                x1={t.x + t.w - 3}
+                y1={yMid - 9}
+                x2={t.x + t.w + 3}
+                y2={yMid - 3}
+                stroke="rgba(255,255,255,0.5)"
+                strokeWidth="0.8"
+              />
+              <line
+                x1={t.x + t.w - 3}
+                y1={yMid - 3}
+                x2={t.x + t.w + 3}
+                y2={yMid - 9}
+                stroke="rgba(255,255,255,0.5)"
+                strokeWidth="0.8"
+              />
+              <text
+                x={t.x + t.w / 2}
+                y={yMid + 7}
+                textAnchor="middle"
+                fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+                fontSize="8"
+                fill="rgba(255,255,255,0.7)"
+              >
+                {t.label}
+              </text>
+            </g>
+          );
+        })}
+
+        {/* ─── RIGHT-SIDE TIMELINE: decade markers ─── */}
+        <line
+          x1={tlX}
+          y1={surfaceTop}
+          x2={tlX}
+          y2={spineBot}
+          stroke="rgba(255,255,255,0.3)"
+          strokeWidth="1"
+        />
+        {[
+          { y: surfaceTop + 10, label: "now" },
+          { y: surfaceBot - 6, label: "+18mo" },
+          { y: mediumBot - 6, label: "+5y" },
+          { y: spineTop + (spineBot - spineTop) / 2, label: "+10y" },
+          { y: spineBot - 6, label: "+40y" },
+        ].map((tick, i) => (
+          <g key={`tick-${i}`}>
+            <line
+              x1={tlX - 4}
+              y1={tick.y}
+              x2={tlX + 4}
+              y2={tick.y}
+              stroke="rgba(255,255,255,0.5)"
+              strokeWidth="1"
+            />
+            <text
+              x={tlX + 8}
+              y={tick.y + 3}
+              fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+              fontSize="9"
+              fill="rgba(255,255,255,0.6)"
+            >
+              {tick.label}
+            </text>
+          </g>
+        ))}
+        {/* timeline label, vertical */}
+        <text
+          x={tlX + 32}
+          y={spineTop - 4}
+          fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+          fontSize="9"
+          fill="rgba(255,255,255,0.4)"
+          textAnchor="middle"
+          transform={`rotate(-90 ${tlX + 32} ${spineTop - 4})`}
+        >
+          TIMELINE
+        </text>
+
+        {/* arrow at bottom indicating "deeper = more durable" */}
+        <g transform="translate(0, 405)">
+          <line
+            x1="60"
+            y1="0"
+            x2="740"
+            y2="0"
+            stroke="rgba(255,255,255,0.2)"
+            strokeWidth="1"
+          />
+          <text
+            x="60"
+            y="20"
+            fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+            fontSize="9"
+            fill="rgba(255,255,255,0.4)"
+            letterSpacing="1.5"
+          >
+            ◯ surface : photogenic, replaceable, loud
+          </text>
+          <text
+            x="740"
+            y="20"
+            textAnchor="end"
+            fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+            fontSize="9"
+            fill="rgba(34,211,238,0.95)"
+            letterSpacing="1.5"
+          >
+            ● spine : boring, load-bearing, long
+          </text>
+          <text
+            x="400"
+            y="40"
+            textAnchor="middle"
+            fontFamily="ui-monospace, SFMono-Regular, Menlo, monospace"
+            fontSize="9"
+            fill="rgba(255,255,255,0.35)"
+            letterSpacing="1"
+          >
+            depth → durability · the boring is the signature of the load-bearing
+          </text>
+        </g>
+      </svg>
+    </Frame>
+  );
+}

@@ -41,6 +41,7 @@ import {
   DiagramHalfLifeTeaser,
   DiagramTasteMoat,
   DiagramAvailabilityCost,
+  DiagramToolHalfLife,
 } from "@/components/curriculum-diagrams";
 import { Cipher, Redacted } from "@/components/cipher";
 import { BonusFootnote } from "@/components/decoder-ring";
@@ -234,6 +235,7 @@ export const mdxComponents: MDXComponents = {
   DiagramHalfLifeTeaser,
   DiagramTasteMoat,
   DiagramAvailabilityCost,
+  DiagramToolHalfLife,
   // New essay primitives
   FieldCard,
   Diagnostic,

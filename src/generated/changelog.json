@@ -1,7 +1,12 @@
 {
-  "generatedAt": "2026-05-07T02:09:32.766Z",
-  "count": 68,
+  "generatedAt": "2026-05-07T02:19:38.100Z",
+  "count": 69,
   "entries": [
+    {
+      "hash": "c034f8b",
+      "date": "2026-05-07",
+      "subject": "feat(curriculum): paid post #3 — The cost of being available"
+    },
     {
       "hash": "4aa7cc4",
       "date": "2026-05-07",
