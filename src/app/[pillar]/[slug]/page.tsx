@@ -24,6 +24,7 @@ import { WRITING_NOW } from "@/content/studio-state";
 import { ARCS } from "@/content/site-data";
 import { getSessionEmail } from "@/lib/auth";
 import { memberStatus } from "@/lib/supabase";
+import { isAdminEmail } from "@/lib/admin-guard";
 import type { Metadata } from "next";
 import type { Pillar } from "@/content/schema";
 
@@ -91,15 +92,17 @@ export default async function PostPage({
   const Layout = LAYOUT_BY_TEMPLATE[post.frontmatter.template];
 
   // Members-only gate. Unsigned-in users see the paywall; non-active members
-  // see the paywall with the dashboard CTA. Anything fails open as a safety
-  // measure for content delivery, except an explicit "not active" answer.
+  // see the paywall with the dashboard CTA. The site admin always bypasses
+  // the paywall — they need to QA the full essay end-to-end.
   let isMember = false;
   let signedIn = false;
+  let isAdmin = false;
   if (post.frontmatter.members_only) {
     try {
       const email = await getSessionEmail();
       signedIn = Boolean(email);
-      if (email) {
+      isAdmin = isAdminEmail(email);
+      if (email && !isAdmin) {
         const status = await memberStatus(email);
         isMember = status?.status === "active";
       }
@@ -109,7 +112,7 @@ export default async function PostPage({
       isMember = false;
     }
   }
-  const showPaywall = post.frontmatter.members_only && !isMember;
+  const showPaywall = post.frontmatter.members_only && !isMember && !isAdmin;
 
   const fm = post.frontmatter;
   const url = `https://www.sageafterdark.com/${fm.pillar}/${fm.slug}`;
