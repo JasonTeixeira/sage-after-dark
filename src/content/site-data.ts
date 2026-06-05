@@ -14,7 +14,6 @@ export const NOW = {
   location: "Brooklyn, NY",
   status: "Heads-down on Trayd v2 onboarding + the first 12 episodes of Trayd, In Public.",
   this_week: [
-    "Ship Trayd v2 paywall + checkout flow",
     "Write EP 02 of Trayd, In Public (subject: the first pricing call I lost on purpose)",
     "Record one tutorial: atomic-swap deploys end-to-end",
     "First 100 newsletter subscribers — founding window now open",

@@ -12,7 +12,6 @@ The stack, the env, the deploy path, and the gotchas. Read this before touching 
 | Hosting | Vercel | Production + preview deploys |
 | DB | Supabase (Postgres) | Members, event log, password resets |
 | Auth | Custom over Supabase RPC | Email + password, admin allowlist |
-| Payments | Stripe (LIVE) | $5/month membership |
 | Email | Resend (via Pipedream) | Magic links, password reset, receipts |
 | Repo | GitHub `JasonTeixeira/sage-after-dark` | main is deployed |
 
@@ -41,8 +40,7 @@ sage-after-dark/
 │   └── lib/
 │       ├── admin-guard.ts      # isAdminEmail — admin allowlist
 │       ├── tokens.ts           # color/motion/space tokens
-│       ├── supabase/           # server + client helpers
-│       └── stripe/             # checkout + webhook helpers
+│       └── supabase/           # server + client helpers
 ├── public/                     # static assets, fonts
 └── package.json
 ```
@@ -61,9 +59,6 @@ All env is managed in Vercel project settings. Local dev reads from `.env.local`
 | `NEXT_PUBLIC_SUPABASE_URL` | client + server | Supabase project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | client | Anon key, safe to expose |
 | `SUPABASE_SERVICE_ROLE_KEY` | server only | Bypass RLS — never expose |
-| `STRIPE_SECRET_KEY` | server only | Live key, `sk_live_...` |
-| `STRIPE_WEBHOOK_SECRET` | webhook handler | `whsec_...` for endpoint `we_1TTWniEGpp4mxtd4iqxhrAOl` |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | checkout | `pk_live_...` |
 | `RESEND_API_KEY` | server only | Used via Pipedream proxy |
 | `ADMIN_EMAILS` | `lib/admin-guard` | Comma-separated allowlist |
 
@@ -85,9 +80,10 @@ Use `api_credentials=["vercel"]`. After adding, redeploy main for the change to 
 
 | Table | Purpose |
 | --- | --- |
-| `sage_after_dark_members` | One row per paying member. Columns: `id`, `email`, `stripe_customer_id`, `stripe_subscription_id`, `status` (`active` / `canceled` / `past_due`), `plan` (`monthly`), `password_hash`, `created_at`, `updated_at` |
-| `stripe_event_log` | Append-only log of every webhook event Stripe delivered. Used for idempotency + audit. |
+| `sage_after_dark_members` | One row per registered account. Columns: `id`, `email`, `password_hash`, `created_at`, `updated_at` |
 | `password_reset_tokens` | Single-use tokens for password reset. Expires in 1 hour. |
+
+> Billing removed 2026-06-05 — the site is free; accounts + newsletter only. (See docs/audit/2026-06-05-systems-audit.md.)
 
 ### RPCs
 
@@ -110,57 +106,6 @@ select event_id, event_type, received_at from stripe_event_log order by received
 
 ---
 
-## Stripe
-
-**Account:** Sage After Dark (live).
-
-> ⚠️ The Stripe MCP connector connects to a *different* account (`acct_1QOltHEDeyGfkojJ`, Nexural.io). It can't manage SAD. To manage SAD live, use the Stripe CLI or REST API with a restricted key.
-
-### Product / Price
-
-- One product: "Sage After Dark Membership"
-- One price: $5.00 USD / month, recurring
-
-### Webhook
-
-- Endpoint ID: `we_1TTWniEGpp4mxtd4iqxhrAOl`
-- URL: `https://www.sageafterdark.com/api/stripe/webhook`
-- Subscribed events: `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`
-- Signing secret stored as `STRIPE_WEBHOOK_SECRET`
-
-### Webhook handler logic (`src/app/api/stripe/webhook/route.ts`)
-
-1. Verify signature using `STRIPE_WEBHOOK_SECRET`.
-2. Idempotency: insert event into `stripe_event_log`. If unique-key collision, return 200 and exit.
-3. Dispatch on `event.type`:
-   - `checkout.session.completed` → upsert member, mark `active`.
-   - `customer.subscription.updated` → update `status`, `plan`.
-   - `customer.subscription.deleted` → mark member `canceled` (or hard-delete row, depending on policy).
-4. Respond 200. Stripe retries any non-2xx for up to 3 days.
-
-> ⚠️ **DO NOT** modify the `subscribe` flow, `upsertMember` helper, or webhook handler without a full E2E test. They were verified end-to-end on the live account; breaking them silently breaks payments.
-
-### How to drive Stripe from this environment
-
-```bash
-export STRIPE_API_KEY="rk_live_..."   # restricted key, scoped per-task
-curl -u "$STRIPE_API_KEY:" https://api.stripe.com/v1/customers
-```
-
-Or:
-
-```bash
-stripe --api-key "$STRIPE_API_KEY" customers list --limit 5
-```
-
-The Stripe CLI is installed at `/usr/local/bin/stripe` (v1.21.8).
-
-> ⚠️ **Restricted keys are scoped and rotated.** If a prior session created one, assume it's been rolled. Ask the user before assuming a key still works.
-
-> ⚠️ **Known issue:** Stripe Dashboard cancel/refund actions have silently failed to persist in this account before. If the user reports they "did it in the dashboard" but the data doesn't reflect, verify via API and redo via CLI.
-
----
-
 ## Auth
 
 Custom auth, not Supabase Auth.
@@ -169,12 +114,12 @@ Custom auth, not Supabase Auth.
 
 1. User submits email + password to `/api/auth/login`.
 2. Server calls `sage_after_dark_check_password` RPC.
-3. If valid and `status = active`, set signed cookie (`sad_session`).
+3. If valid, set signed cookie (`sad_session`).
 4. Cookie is read on every request via `lib/auth/session.ts`.
 
 ### Admin bypass
 
-`src/lib/admin-guard.ts` exports `isAdminEmail(email)` which checks against `ADMIN_EMAILS`. The post page (`src/app/[pillar]/[slug]/page.tsx`) checks admin **before** member status — admin always sees full content, even without a paid membership.
+`src/lib/admin-guard.ts` exports `isAdminEmail(email)` which checks against `ADMIN_EMAILS`. The post page (`src/app/[pillar]/[slug]/page.tsx`) checks admin **before** member status — admin always sees full content.
 
 > ⚠️ This bypass is critical for content QA. Don't refactor it out.
 
@@ -215,9 +160,8 @@ Routed through Pipedream connector (`resend__pipedream`). Templates are inline i
 
 Transactional emails:
 
-- Welcome (sent on `checkout.session.completed`)
+- Welcome (sent on account creation)
 - Password reset
-- Receipt (Stripe handles natively; we don't duplicate)
 
 ---
 
@@ -240,12 +184,10 @@ Transactional emails:
 2. **No `Math.random()` or `new Date()` in render** without `suppressHydrationWarning`. Causes hydration mismatch.
 3. **No `\u00b7` escapes in JSX/template strings.** Type the middle dot or use `&middot;`.
 4. **Admin allowlist is comma-separated**, not JSON. Trim whitespace.
-5. **Stripe price ID is hardcoded** in `lib/stripe/checkout.ts`. If you create a new price for any reason, update it here.
-6. **Webhook idempotency key** is `event_id`, not `event.id` — easy to typo.
-7. **MDX template kind must match the schema discriminator**, or Zod validation throws on build.
-8. **Vercel caches `node_modules` aggressively.** If a dep upgrade isn't taking, redeploy with cache cleared.
-9. **Supabase service-role key has been rotated before.** If queries 401, re-fetch the key from the Supabase dashboard and update `SUPABASE_SERVICE_ROLE_KEY` in Vercel.
-10. **OG image generation is at build time.** New posts won't have OG cards until the next deploy.
+5. **MDX template kind must match the schema discriminator**, or Zod validation throws on build.
+6. **Vercel caches `node_modules` aggressively.** If a dep upgrade isn't taking, redeploy with cache cleared.
+7. **Supabase service-role key has been rotated before.** If queries 401, re-fetch the key from the Supabase dashboard and update `SUPABASE_SERVICE_ROLE_KEY` in Vercel.
+8. **OG image generation is at build time.** New posts won't have OG cards until the next deploy.
 
 ---
 
@@ -254,9 +196,7 @@ Transactional emails:
 | Scenario | Action |
 | --- | --- |
 | Prod down | Roll back via Vercel (`Deployments → previous → Promote`). |
-| Webhook flooding errors | Check `stripe_event_log` for idempotency working. Pause endpoint in Stripe Dashboard if needed. |
-| Member can't log in | Check `sage_after_dark_members` for their email + `status = active`. Reset password via RPC if needed. |
-| Refund needed | `stripe refunds create -d charge=ch_...` via CLI, then verify member row is canceled. |
+| Member can't log in | Check `sage_after_dark_members` for their email. Reset password via RPC if needed. |
 | Lost domain | Vercel → Settings → Domains. DNS at registrar. |
 
 ---
@@ -270,6 +210,5 @@ When working on this repo from Computer:
 | `github` | All `git`/`gh` commands. Never `browser_task` for repo work. |
 | `vercel` | All `vercel` CLI commands. |
 | `supabase` | DB queries, RPC calls. |
-| `stripe` | **Only** for read operations on Nexural account. Use Stripe CLI with restricted key for SAD. |
 | `resend__pipedream` | Send transactional emails. |
 | `notion_mcp` | Notes, drafts, planning docs. |
