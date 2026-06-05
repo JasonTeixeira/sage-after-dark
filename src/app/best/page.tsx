@@ -1,9 +1,15 @@
 /**
  * /best — the curated front door.
  *
- * Anchor essays first (the longest, most ambitious pieces), then
- * recent field notes and dispatches (the everyday signal).
+ * Anchor essays first (the longest, most ambitious pieces), then the next
+ * tier of long-form pieces, then recent field notes and dispatches.
  * No "popular" lie — we don't have view counts to sort by, so we curate.
+ *
+ * De-paywall note: members_only is no longer meaningful (site is free).
+ * Former Tier 1 (members_only) + Tier 2 (longest non-members_only) are
+ * merged into one pool: all essays sorted by word_count descending.
+ * The top slice goes into the NotchedCard grid (anchors), the remainder
+ * into the list view (when you have time). Nothing is hidden.
  */
 
 import Link from "next/link";
@@ -31,12 +37,26 @@ export const metadata = {
 export default async function BestPage() {
   const all = await getAllPosts();
 
-  // Tier 1: anchor essays — longest pieces as proxy for depth and ambition
-  const anchors = all
-    .sort((a, b) => (b.word_count ?? 0) - (a.word_count ?? 0))
-    .slice(0, 8);
+  // All essays sorted by word count descending (depth as proxy for ambition).
+  // field_note and dispatch templates are excluded — they belong in Tier 3.
+  const allEssays = all
+    .filter(
+      (p) =>
+        p.frontmatter.template !== "field_note" &&
+        p.frontmatter.template !== "dispatch",
+    )
+    .sort((a, b) => (b.word_count ?? 0) - (a.word_count ?? 0));
 
-  // Tier 2: most recent dispatch + field note (the everyday signal)
+  // Tier 1 — anchor essays: the top 7 by word count (NotchedCard grid).
+  // 7 matches the former members_only count so the visual section stays the
+  // same size; the remaining essays spill into the list below.
+  const ANCHOR_COUNT = 7;
+  const anchors = allEssays.slice(0, ANCHOR_COUNT);
+
+  // Tier 2 — longer essays: everything beyond the anchor cut, list style.
+  const longest = allEssays.slice(ANCHOR_COUNT);
+
+  // Tier 3: most recent dispatch + field note (the everyday signal).
   const recentSignal = all
     .filter(
       (p) =>
@@ -45,13 +65,15 @@ export default async function BestPage() {
     )
     .slice(0, 3);
 
+  const essayCount = anchors.length + longest.length;
+
   return (
     <Page>
       <Container size="wide" className="pt-6 pb-24">
         <TacticalStrip>
           <TerminalPrompt path="sageafterdark.com/best" mode="breadcrumb" />
           <StripSep />
-          <span>HAND-PICKED · {anchors.length}</span>
+          <span>HAND-PICKED · {essayCount}</span>
         </TacticalStrip>
 
         <header className="mt-12 mb-16 max-w-3xl">
@@ -122,7 +144,46 @@ export default async function BestPage() {
           </section>
         )}
 
-        {/* Tier 2 — Recent signal */}
+        {/* Tier 2 — Longer essays (list style) */}
+        {longest.length > 0 && (
+          <section className="mb-20">
+            <div className="flex items-baseline justify-between mb-6 border-b border-rule pb-3">
+              <Tactical className="text-cyan">// when you have time</Tactical>
+              <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-faint">
+                LONGER ESSAYS
+              </span>
+            </div>
+            <ul>
+              {longest.map((p) => (
+                <li
+                  key={p.frontmatter.slug}
+                  className="border-t border-rule first:border-t-0"
+                >
+                  <Link
+                    href={`/${p.frontmatter.pillar}/${p.frontmatter.slug}`}
+                    className="group flex items-baseline gap-4 py-4 hover:bg-ink-1/30 transition-colors px-1"
+                  >
+                    <PillarTag pillar={p.frontmatter.pillar} size="sm" />
+                    <h3
+                      className="text-bone group-hover:text-cyan transition-colors flex-1 leading-snug [font-family:var(--font-editorial)]"
+                      style={{ fontSize: "clamp(1.05rem, 1.4vw, 1.25rem)" }}
+                    >
+                      {p.frontmatter.title}
+                    </h3>
+                    <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-faint shrink-0 tabular-nums hidden sm:inline">
+                      {p.word_count?.toLocaleString()} W
+                    </span>
+                    <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-cyan shrink-0 tabular-nums w-12 text-right">
+                      {p.reading_minutes} MIN
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {/* Tier 3 — Recent signal */}
         {recentSignal.length > 0 && (
           <section className="mb-12">
             <div className="flex items-baseline justify-between mb-6 border-b border-rule pb-3">
