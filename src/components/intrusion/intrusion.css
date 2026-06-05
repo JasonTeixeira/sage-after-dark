@@ -10,6 +10,7 @@
   --mute: #8a8f98;
   --faint: #4f5563;
   --cyan: #00e5ff;
+  --magenta: #f472b6;
   --ember: #f59e0b;
   --world: #34d399;
   --red: #f4727b;
@@ -35,6 +36,77 @@
   mix-blend-mode: overlay;
 }
 
+/* ===== NEON VIGNETTE ===== */
+#wall-vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 61;
+  background:
+    radial-gradient(ellipse 100% 55% at 50% 0%, rgba(0, 229, 255, 0.055) 0%, transparent 70%),
+    radial-gradient(ellipse 100% 55% at 50% 100%, rgba(244, 114, 182, 0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 70% at 0% 50%, rgba(0, 229, 255, 0.025) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 70% at 100% 50%, rgba(244, 114, 182, 0.025) 0%, transparent 60%);
+}
+
+/* ===== DATA-RAIN / SCAN BEAM ===== */
+#scan-beam {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 59;
+  overflow: hidden;
+}
+
+#scan-beam::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 229, 255, 0.0) 20%,
+    rgba(0, 229, 255, 0.18) 50%,
+    rgba(0, 229, 255, 0.0) 80%,
+    transparent 100%
+  );
+  box-shadow: 0 0 18px 4px rgba(0, 229, 255, 0.12);
+  animation: scan-sweep 7s linear infinite;
+  filter: blur(1px);
+}
+
+@keyframes scan-sweep {
+  0%   { transform: translateY(-10px); opacity: 0; }
+  5%   { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+/* ===== GLITCH-ON-LAND FLASH ===== */
+#glitch-flash {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0;
+}
+
+#glitch-flash.active {
+  animation: flash-in 0.9s steps(1) forwards;
+}
+
+@keyframes flash-in {
+  0%   { opacity: 0.06; background: rgba(0, 229, 255, 0.08); }
+  10%  { opacity: 0; }
+  14%  { opacity: 0.12; background: rgba(244, 114, 182, 0.1); }
+  18%  { opacity: 0; }
+  22%  { opacity: 0.05; background: rgba(0, 229, 255, 0.06); }
+  28%  { opacity: 0; }
+  100% { opacity: 0; }
+}
+
 /* ===== FAKE FRONT ===== */
 #wall {
   position: fixed;
@@ -42,8 +114,8 @@
   z-index: 60;
   background: radial-gradient(
     1100px 700px at 50% 36%,
-    #0b0f16 0%,
-    #05070a 70%
+    #0c1018 0%,
+    #05070a 65%
   );
   display: flex;
   flex-direction: column;
@@ -54,18 +126,42 @@
   transition: clip-path 0.9s var(--ease), opacity 0.7s var(--ease),
     filter 0.5s var(--ease);
   clip-path: inset(0 0 0 0);
+  overflow: hidden;
+}
+
+/* Perspective grid floor */
+.wall-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(0, 229, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.045) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: center center;
+  mask-image: radial-gradient(
+    ellipse 90% 70% at 50% 60%,
+    rgba(0,0,0,0.7) 0%,
+    transparent 72%
+  );
+  animation: grid-drift 20s linear infinite;
+}
+
+@keyframes grid-drift {
+  0%   { background-position: 0 0; }
+  100% { background-position: 0 48px; }
 }
 
 .wall-grain {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.5;
-  background-image: linear-gradient(
-      rgba(42, 51, 64, 0.08) 1px,
-      transparent 1px
-    ),
-    linear-gradient(90deg, rgba(42, 51, 64, 0.08) 1px, transparent 1px);
+  z-index: 0;
+  opacity: 0.4;
+  background-image:
+    linear-gradient(rgba(42, 51, 64, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(42, 51, 64, 0.07) 1px, transparent 1px);
   background-size: 40px 40px;
   mask-image: radial-gradient(
     800px 520px at 50% 40%,
@@ -76,13 +172,16 @@
 
 .wall-inner {
   position: relative;
+  z-index: 1;
 }
 
 .badge {
   font-size: 10px;
   letter-spacing: 0.34em;
-  color: var(--faint);
+  color: var(--cyan);
   margin-bottom: 26px;
+  text-shadow: 0 0 12px rgba(0, 229, 255, 0.45);
+  opacity: 0.75;
 }
 
 .code {
@@ -90,9 +189,14 @@
   font-weight: 700;
   font-size: 96px;
   letter-spacing: 0.04em;
-  color: var(--rule-hi);
+  color: var(--bone);
   line-height: 1;
-  text-shadow: 0 0 60px rgba(28, 35, 46, 0.6);
+  /* Dual neon glow: cyan + magenta duotone */
+  text-shadow:
+    -2px 0 var(--cyan),
+    2px 0 var(--magenta),
+    0 0 40px rgba(0, 229, 255, 0.35),
+    0 0 80px rgba(244, 114, 182, 0.18);
 }
 
 #wall h1 {
@@ -102,6 +206,11 @@
   letter-spacing: 0.18em;
   color: var(--bone);
   margin-top: 8px;
+  /* Subtle chromatic aberration */
+  text-shadow:
+    -1px 0 rgba(0, 229, 255, 0.3),
+    1px 0 rgba(244, 114, 182, 0.25),
+    0 0 20px rgba(232, 230, 224, 0.08);
 }
 
 .sub {
@@ -249,6 +358,163 @@
     transform: none;
     filter: none;
   }
+}
+
+/* ===== GLITCH-ON-LAND (mount animation) ===== */
+
+/* The 403 code lands with RGB chromatic split + clip jitter */
+.code.glitch-land {
+  animation: code-glitch-land 0.85s steps(1) forwards;
+}
+
+@keyframes code-glitch-land {
+  0%   {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+    text-shadow:
+      -8px 0 var(--cyan),
+      8px 0 var(--magenta),
+      0 0 60px rgba(0, 229, 255, 0.6);
+    transform: translateY(-4px);
+  }
+  8%   {
+    opacity: 1;
+    clip-path: inset(18% 2% 22% 0);
+    text-shadow:
+      -10px 0 var(--cyan),
+      10px 0 var(--magenta),
+      0 0 80px rgba(244, 114, 182, 0.5);
+    transform: translateX(-3px);
+  }
+  16%  {
+    clip-path: inset(60% 0 5% 3%);
+    text-shadow:
+      5px 0 var(--cyan),
+      -5px 0 var(--magenta),
+      0 0 40px rgba(0, 229, 255, 0.4);
+    transform: translateX(4px);
+  }
+  24%  {
+    clip-path: inset(0 0 0 0);
+    text-shadow:
+      -8px 0 var(--cyan),
+      8px 0 var(--magenta),
+      0 0 60px rgba(0, 229, 255, 0.55);
+    transform: translateX(-2px);
+    opacity: 0.7;
+  }
+  36%  {
+    clip-path: inset(30% 0 10% 0);
+    text-shadow:
+      6px 0 var(--cyan),
+      -6px 0 var(--magenta);
+    transform: translateX(3px);
+    opacity: 1;
+  }
+  52%  {
+    clip-path: inset(0 0 0 0);
+    text-shadow:
+      -4px 0 var(--cyan),
+      4px 0 var(--magenta),
+      0 0 50px rgba(0, 229, 255, 0.4),
+      0 0 90px rgba(244, 114, 182, 0.2);
+    transform: translateX(0);
+    opacity: 1;
+  }
+  68%  {
+    text-shadow:
+      -3px 0 var(--cyan),
+      3px 0 var(--magenta),
+      0 0 45px rgba(0, 229, 255, 0.38),
+      0 0 80px rgba(244, 114, 182, 0.18);
+    transform: none;
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+  100% {
+    text-shadow:
+      -2px 0 var(--cyan),
+      2px 0 var(--magenta),
+      0 0 40px rgba(0, 229, 255, 0.35),
+      0 0 80px rgba(244, 114, 182, 0.18);
+    transform: none;
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* The h1 lands with a flicker-in + chromatic aberration */
+#wall h1.glitch-land {
+  animation: h1-glitch-land 0.9s steps(1) forwards;
+}
+
+@keyframes h1-glitch-land {
+  0%   { opacity: 0; transform: translateY(3px); }
+  12%  { opacity: 0.5; transform: translateX(-2px); }
+  22%  { opacity: 0;   transform: translateX(2px); }
+  34%  { opacity: 0.8; transform: translateX(-1px); }
+  44%  { opacity: 0.4; transform: translateX(1px); }
+  58%  { opacity: 1;   transform: none; }
+  68%  { opacity: 0.85; }
+  78%  { opacity: 1; }
+  100% { opacity: 1;   transform: none; }
+}
+
+/* ===== PERSISTENT MICRO-GLITCH (rare, every ~8s) ===== */
+
+.code.micro-glitch {
+  animation:
+    code-micro 0.28s steps(1) 1,
+    code-idle 8s linear infinite;
+}
+
+@keyframes code-idle {
+  /* Rare flicker: fires at ~87% of the 8s period (~6.9s in) */
+  0%, 86.5%  {
+    text-shadow:
+      -2px 0 var(--cyan),
+      2px 0 var(--magenta),
+      0 0 40px rgba(0, 229, 255, 0.35),
+      0 0 80px rgba(244, 114, 182, 0.18);
+  }
+  86.9% {
+    text-shadow:
+      -7px 0 var(--cyan),
+      7px 0 var(--magenta),
+      0 0 60px rgba(0, 229, 255, 0.55);
+    transform: translateX(-2px);
+    clip-path: inset(25% 0 30% 0);
+  }
+  87.4% {
+    text-shadow:
+      4px 0 var(--cyan),
+      -4px 0 var(--magenta);
+    transform: translateX(3px);
+    clip-path: inset(5% 0 60% 0);
+  }
+  88% {
+    text-shadow:
+      -2px 0 var(--cyan),
+      2px 0 var(--magenta),
+      0 0 40px rgba(0, 229, 255, 0.35),
+      0 0 80px rgba(244, 114, 182, 0.18);
+    transform: none;
+    clip-path: inset(0 0 0 0);
+  }
+  100% {
+    text-shadow:
+      -2px 0 var(--cyan),
+      2px 0 var(--magenta),
+      0 0 40px rgba(0, 229, 255, 0.35),
+      0 0 80px rgba(244, 114, 182, 0.18);
+  }
+}
+
+@keyframes code-micro {
+  0%  { transform: translateX(-3px); clip-path: inset(20% 0 25% 0); }
+  33% { transform: translateX(3px);  clip-path: inset(55% 0 5% 0); }
+  66% { transform: translateX(-1px); clip-path: inset(0 0 0 0); }
+  100%{ transform: none; }
 }
 
 /* ===== OPERATOR STAGE ===== */
@@ -624,6 +890,43 @@
   }
   #wall.peel {
     clip-path: inset(0 0 100% 0);
+  }
+
+  /* No glitch/rain/flicker — static neon styling only */
+  .code.glitch-land,
+  .code.micro-glitch,
+  #wall h1.glitch-land {
+    animation: none !important;
+    /* Static settled state */
+    text-shadow:
+      -2px 0 var(--cyan),
+      2px 0 var(--magenta),
+      0 0 40px rgba(0, 229, 255, 0.35),
+      0 0 80px rgba(244, 114, 182, 0.18);
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 0 0);
+  }
+
+  #wall h1.glitch-land {
+    text-shadow:
+      -1px 0 rgba(0, 229, 255, 0.3),
+      1px 0 rgba(244, 114, 182, 0.25),
+      0 0 20px rgba(232, 230, 224, 0.08);
+  }
+
+  #scan-beam::after {
+    animation: none !important;
+    opacity: 0;
+  }
+
+  #glitch-flash.active {
+    animation: none !important;
+    opacity: 0;
+  }
+
+  .wall-grid {
+    animation: none !important;
   }
 }
 

@@ -4,6 +4,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import * as sound from "@/lib/intrusion/sound";
 import "./intrusion.css";
 
+// Duration of the glitch-on-land animation (ms) — keeps classes in sync
+const GLITCH_LAND_MS = 900;
+
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
@@ -47,6 +50,8 @@ export function Decoy({ onBypass }: DecoyProps) {
   const [bypassOpen, setBypassOpen] = useState(false);
   const [inputVal, setInputVal] = useState("");
   const [placeholder, setPlaceholder] = useState("");
+  const [glitchLanding, setGlitchLanding] = useState(false);
+  const [flashActive, setFlashActive] = useState(false);
 
   // --- refs ---
   const trapHitsRef = useRef(0);
@@ -77,6 +82,25 @@ export function Decoy({ onBypass }: DecoyProps) {
       if (revertTimerRef.current !== null) {
         clearTimeout(revertTimerRef.current);
       }
+    };
+  }, []);
+
+  // Glitch-on-land: trigger on first mount, remove class after animation
+  useEffect(() => {
+    setGlitchLanding(true);
+    setFlashActive(true);
+
+    const glitchTimer = setTimeout(() => {
+      setGlitchLanding(false);
+    }, GLITCH_LAND_MS);
+
+    const flashTimer = setTimeout(() => {
+      setFlashActive(false);
+    }, GLITCH_LAND_MS);
+
+    return () => {
+      clearTimeout(glitchTimer);
+      clearTimeout(flashTimer);
     };
   }, []);
 
@@ -178,16 +202,30 @@ export function Decoy({ onBypass }: DecoyProps) {
 
   return (
     <>
+      {/* Full-screen flash on land (aria-hidden, decorative) */}
+      <div
+        id="glitch-flash"
+        aria-hidden="true"
+        className={flashActive ? "active" : ""}
+      />
+
       {/* Scanlines overlay (aria-hidden, decorative) */}
       <div id="scanlines" aria-hidden="true" />
 
+      {/* Neon vignette (aria-hidden, decorative) */}
+      <div id="wall-vignette" aria-hidden="true" />
+
+      {/* Scan beam (aria-hidden, decorative) */}
+      <div id="scan-beam" aria-hidden="true" />
+
       {/* The fake 403 wall */}
       <div id="wall" role="dialog" aria-label="Access restricted">
+        <div className="wall-grid" aria-hidden="true" />
         <div className="wall-grain" />
         <div className="wall-inner">
-          <div className="badge">▚ SYSTEM</div>
-          <div className="code">403</div>
-          <h1>ACCESS RESTRICTED</h1>
+          <div className="badge">▚ SYSTEM // INTRUSION DETECTED</div>
+          <div className={`code${glitchLanding ? " glitch-land" : " micro-glitch"}`}>403</div>
+          <h1 className={glitchLanding ? "glitch-land" : ""}>ACCESS RESTRICTED</h1>
           <p className="sub">
             This terminal is closed to the public.
             <br />
