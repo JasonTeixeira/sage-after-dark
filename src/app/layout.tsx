@@ -5,7 +5,7 @@ import "./globals.css";
 import { SiteFooter, KeyboardShortcuts, HeroReticle, JsonLd, WEBSITE_LD, PERSON_LD, RouterTransitions, AnalyticsTracker, DecoderRing, TerminalPalette, CommandPalette } from "@/components";
 import { SiteHeader } from "@/components/site-header";
 import { getAllPosts } from "@/content/loader";
-import { IntrusionRoot } from "@/components/intrusion/IntrusionRoot";
+import { IntrusionMount } from "@/components/intrusion/IntrusionMount";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.sageafterdark.com"),
@@ -90,10 +90,10 @@ export default async function RootLayout({
         <DecoderRing />
         <RouterTransitions />
         <AnalyticsTracker />
-        {/* IntrusionRoot is a client-only overlay — it sits on top of the SSR
-            page visually but never removes or hides {children} from the DOM.
-            Search bots and screen readers see the full page content below. */}
-        <IntrusionRoot essays={essays} />
+        {/* IntrusionMount uses ssr:false so the overlay is absent from the
+            server-rendered HTML. Bots and screen readers see only real content.
+            The overlay appears after hydration for interactive visitors. */}
+        <IntrusionMount essays={essays} />
       </body>
     </html>
   );

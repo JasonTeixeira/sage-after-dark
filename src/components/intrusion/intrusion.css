@@ -1015,6 +1015,45 @@
   border-color: var(--cyan);
 }
 
+/* ===== FOCUS RINGS (a11y) ===== */
+/* Visible focus for all interactive intrusion elements */
+.leave:focus-visible,
+.hintline:focus-visible,
+.chip:focus-visible,
+.pilltag:focus-visible,
+.gate-hintbtn:focus-visible,
+.gate-ans button:focus-visible,
+.vault-back:focus-visible,
+.vault-item:focus-visible,
+.intrusion-bar-btn:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
+/* Inputs get a cyan underline/border on focus */
+#binput:focus-visible,
+.ask input:focus-visible {
+  outline: none;
+  border-bottom-color: var(--cyan);
+  box-shadow: 0 2px 0 0 var(--cyan);
+}
+
+.gate-ans input:focus-visible {
+  outline: none;
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.2);
+}
+
+#cmd:focus-visible {
+  outline: none;
+}
+
+/* The gate range input */
+.gate-ring input[type="range"]:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 4px;
+}
+
 /* Sub-overlay wrapper for VaultGate (centered, sits above terminal) */
 .intrusion-suboverlay {
   position: fixed;
@@ -1031,28 +1070,138 @@
 }
 
 /* ===== RESPONSIVE ===== */
+
+/* ── 768px and below ── */
+@media (max-width: 768px) {
+  .vault-card {
+    padding: 32px 28px;
+  }
+
+  .gate {
+    max-width: 100%;
+  }
+
+  /* Gate ring stays usable — range input fills full width */
+  .gate-ring {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .gate-ring input[type="range"] {
+    min-width: 140px;
+    touch-action: pan-x;
+  }
+
+  /* Bypass input scales down a bit */
+  #binput {
+    width: 200px;
+  }
+}
+
+/* ── 560px and below ── */
 @media (max-width: 560px) {
   .code {
     font-size: 68px;
   }
+
+  /* Bypass input — narrow on very small screens */
   #binput {
-    width: 160px;
+    width: 140px;
+    max-width: calc(100vw - 120px);
   }
+
+  /* Bypass form never overflows the viewport */
+  #bform {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  /* Essay list collapses to 2-column on narrow widths */
   .ls li {
     grid-template-columns: 9px 1fr;
     gap: 6px 10px;
   }
+
   .ls .pl,
   .ls .rt {
     grid-column: 2;
   }
+
   #screen {
     padding: 20px 18px 60px;
   }
+
+  /* Vault card */
   .vault-card {
-    padding: 28px 22px;
+    padding: 24px 16px;
   }
+
+  /* Gate cipher wraps on very small screens */
   .gate-cipher {
-    font-size: 15px;
+    font-size: 14px;
+    word-break: break-all;
+  }
+
+  /* Gate answer form stacks on tiny screens */
+  .gate-ans {
+    flex-wrap: wrap;
+  }
+
+  .gate-ans input {
+    min-width: 0;
+  }
+
+  /* Chip rail wraps tightly and stays tappable (min 44px touch target) */
+  .chip {
+    padding: 8px 12px;
+    min-height: 36px;
+  }
+
+  /* Intrusion bar buttons stay readable */
+  .intrusion-bar {
+    top: 10px;
+    right: 10px;
+    gap: 6px;
+  }
+}
+
+/* ── 375px and below ── */
+@media (max-width: 375px) {
+  .code {
+    font-size: 54px;
+  }
+
+  #wall h1 {
+    font-size: 20px;
+  }
+
+  .vault-title {
+    font-size: 24px;
+  }
+
+  #binput {
+    width: 100px;
+    max-width: calc(100vw - 100px);
+  }
+}
+
+/* ── 320px ── */
+@media (max-width: 320px) {
+  .code {
+    font-size: 48px;
+  }
+
+  .intrusion-bar-btn {
+    font-size: 10px;
+    padding: 4px 7px;
+  }
+
+  .gate-ring {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .gate-ring input[type="range"] {
+    width: 100%;
   }
 }

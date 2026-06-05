@@ -199,6 +199,7 @@ export function Decoy({ onBypass }: DecoyProps) {
             className={`leave${trapAnimating ? " trap" : ""}`}
             onClick={handleLeaveClick}
             type="button"
+            aria-label="Return to safety"
           >
             {leaveLabel}
           </button>
