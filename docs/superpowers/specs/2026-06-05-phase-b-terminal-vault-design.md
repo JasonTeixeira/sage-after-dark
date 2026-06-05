@@ -10,19 +10,23 @@ Redesign the front end of the (now free) publication into an interactive "modern
 ## Resolved decisions
 | Decision | Choice |
 |----------|--------|
-| Interface model | **Terminal as an enhancement LAYER over a fast, crawlable site.** Content is server-rendered in the initial HTML; the terminal/boot/vault are progressive-enhancement on top. |
+| Interface model (EVOLVED 2026-06-05) | **Terminal-FIRST experience for humans, crawlable substrate underneath.** The primary surface is a clean, high-intelligence "Terminal AI" you interact with by typing — commands run, the AI responds in-voice, content materializes in place. Every essay ALSO renders as server-side semantic HTML (bots/no-JS/deep links). Not a multi-panel website — one calm, professional terminal. |
+| Maze depth | **Maze guards the vault only.** Public essays are reachable by simple typed commands (`ls`/`open`/`search`) + clickable command chips (no "type-or-leave"), and are crawlable → SEO/100k intact. The maze + puzzle + labyrinth gate the hidden vault. |
+| AI persona | Articulate, terse, dry-witted, a touch enigmatic — mirrors `docs/10-VOICE.md`. Drops cryptic breadcrumbs about the hidden layer. Curated/scripted responses that feel intelligent (not a live LLM in v1). A `help`/`?` affordance always tells newcomers what to type. |
 | The vault payoff | **Hidden "after dark" content layer** — deep-cut essays, director's-cut annotations, lore. Seeded with 3–5 pieces at launch (repurpose `_drafts/` + annotations). Intentionally `noindex` (bonus, not the traffic engine). |
 | Aesthetic | **Hybrid:** essays render clean/fast/readable; the cinematic terminal/CRT/glitch theater is concentrated in the interactive moments (boot, command palette, decode, vault reveal). |
 | Puzzle difficulty | Medium with generous hints (DecoderRing assist). |
 | Unlock persistence | localStorage-only (no account required). |
 | SEO posture | All posts in initial HTML; enhancement never blocks/hides indexed content; vault is `noindex`. |
 
-## The experience arc
-1. **Boot** — first visit plays a short, skippable cinematic boot sequence on the homepage. Content is already in the DOM behind it (SEO-safe). Honors `prefers-reduced-motion` (skips to content). Persists "seen" in localStorage so returning visitors skip it.
-2. **Browse** — site reads as a refined modern terminal; essays stay clean. A persistent command spine (`⌘K` / `~`) is the nav identity — jump to essays, pillars, search. Upgrades existing `CommandPalette`/`TerminalPalette`.
-3. **The hook** — subtle breadcrumbs hint at a hidden layer: a glyph in the footer, a ciphertext fragment on 404/colophon, a prompt that responds to the curious.
-4. **Crack it** — an interactive terminal presents the month's cipher (`cipher.ts` rotates a monthly Caesar shift; `liveCiphertext()` / `LIVE_PLAINTEXT`). A `DecoderRing` aid + progressive hints let the reader decode and submit the answer (`normaliseGuess` vs `LIVE_PLAINTEXT`).
-5. **Vault** — correct answer → reveal animation → hidden "after dark" section unlocks (deep-cut essays, annotations, lore). Unlock persists in localStorage.
+## The experience arc (terminal-first)
+1. **Arrive** — a clean terminal boots with a short, in-voice greeting from the AI and an unmissable hint for what to type. A living cursor; a persistent `help`/`?` context affordance so no one is lost. Calm, professional, one focused surface (not a panel-heavy site).
+2. **Interact** — the visitor types; the AI "thinks" then responds in-voice and content materializes in the scrolling transcript. Core grammar: `help`/`?`, `ls`, `open <name>`/`read`, `search`, `pillars`, `about`/`whoami`, `clear`. Clickable command chips + arrow-key history + autocomplete give non-typers the same reach (no "type-or-leave").
+3. **Read** — `open <essay>` renders the essay clean and highly readable (66ch, terminal chrome only around it). This pane is also the crawlable SSR view.
+4. **Sense the mystery** — unknown commands and cryptic AI deflections hint at a hidden layer; `decode`/`vault`/`cd` are teased but locked.
+5. **The labyrinth** — the curious navigate a short maze (rooms/`cd`, riddles, breadcrumbs) to the cipher gate. Solvable and rewarding, not punishing.
+6. **Crack it** — the month's Caesar cipher (`cipher.ts`: `liveCiphertext()`/`currentShift()`, answer `the answer was always postgres`) with a `DecoderRing` aid + 3-hint ladder + fail/success states.
+7. **Vault** — correct answer → decrypt/reveal animation → the hidden "after dark" vault opens (deep cuts, annotations, lore), with a `DECODED` treatment. Unlock persists in localStorage; vault content is `noindex`.
 
 ## Architecture (progressive enhancement)
 - **Server (crawlable, no-JS-safe):** all pages and posts render full semantic HTML server-side exactly as today. The vault index + vault content render server-side too but are marked `noindex` and visually gated client-side.
