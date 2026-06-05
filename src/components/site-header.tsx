@@ -13,7 +13,7 @@ import { getSessionEmail } from "@/lib/auth";
 import { isAdminEmail } from "@/lib/admin-guard";
 
 const NAV = [
-  { label: "start", href: "/start" },
+  { label: "start here", href: "/start" },
   { label: "essays", href: "/archive" },
   { label: "concepts", href: "/concepts" },
   { label: "now", href: "/now" },
