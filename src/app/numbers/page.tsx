@@ -28,7 +28,6 @@ import {
   Hr,
 } from "@/components";
 import Link from "next/link";
-import { getPublicMetrics, type PublicMetrics } from "@/lib/stripe";
 import { getSiteCounts } from "@/lib/live-counts";
 import { getAllPosts } from "@/content/loader";
 import { getTotalPageviews, getTopPosts } from "@/lib/living";
@@ -40,22 +39,12 @@ export const revalidate = 3600;
 export const metadata = {
   title: "Numbers — Sage After Dark",
   description:
-    "Every number on this site is real. MRR, subscribers, posts, words. Live, rounded, honest.",
+    "Every number on this site is real. Subscribers, posts, words. Live, rounded, honest.",
   alternates: { canonical: "/numbers" },
 };
 
-async function safeMetrics(): Promise<PublicMetrics | null> {
-  try {
-    return await getPublicMetrics();
-  } catch (e) {
-    console.warn("[/numbers] stripe metrics failed", e);
-    return null;
-  }
-}
-
 export default async function NumbersPage() {
-  const [metrics, counts, posts, traffic, topPosts] = await Promise.all([
-    safeMetrics(),
+  const [counts, posts, traffic, topPosts] = await Promise.all([
     getSiteCounts(),
     getAllPosts(),
     getTotalPageviews(),
@@ -74,9 +63,7 @@ export default async function NumbersPage() {
     )
     .slice(0, 5);
 
-  const asOfLabel = metrics
-    ? new Date(metrics.asOf).toISOString().slice(0, 16).replace("T", " ") + " UTC"
-    : "live · refreshed hourly";
+  const asOfLabel = "live · refreshed hourly";
 
   return (
     <Page>
@@ -103,59 +90,6 @@ export default async function NumbersPage() {
             hour. If a number embarrasses me, I leave it.
           </Lead>
         </header>
-
-        <Hr />
-
-        {/* Money */}
-        <Section>
-          <Tactical className="text-cyan mb-4">▸ MONEY · STRIPE LIVE</Tactical>
-          {metrics ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-rule">
-              <Stat
-                label="MRR"
-                value={`$${metrics.mrrUsd.toLocaleString("en-US")}`}
-                suffix="/ mo"
-                hint="rounded to nearest $5"
-              />
-              <Stat
-                label="Active subscribers"
-                value={String(metrics.activeSubs).padStart(3, "0")}
-                hint="paying members today"
-              />
-              <Stat
-                label="New · 30d"
-                value={`+${metrics.newSubs30d}`}
-                hint="started in last 30 days"
-              />
-              <Stat
-                label="Churn · 30d"
-                value={
-                  metrics.churn30d === null
-                    ? "—"
-                    : `${(metrics.churn30d * 100).toFixed(1)}%`
-                }
-                hint={
-                  metrics.churn30d === null
-                    ? "denominator too small to be meaningful"
-                    : `${metrics.canceledSubs30d} canceled / period start`
-                }
-              />
-            </div>
-          ) : (
-            <TerminalPrompt path="stripe.metrics.unavailable" mode="breadcrumb" />
-          )}
-
-          {metrics && (
-            <div className="mt-4">
-              <Stat
-                label="Lifetime revenue"
-                value={`$${metrics.lifetimeUsd.toLocaleString("en-US")}`}
-                hint="all paid invoices · rounded to nearest $10"
-                wide
-              />
-            </div>
-          )}
-        </Section>
 
         <Hr />
 
@@ -310,17 +244,10 @@ export default async function NumbersPage() {
 
         <footer className="mt-10 pt-6 border-t border-rule font-mono text-xs text-mute leading-relaxed space-y-2">
           <p>
-            ▸ <span className="text-cyan">methodology</span> — Money figures come
-            from the Stripe live API in this server. Subscribers come from the
-            Resend audience for this domain. Corpus stats are derived from the
-            actual MDX files on disk at build time. Numbers refresh hourly; a
-            nightly cron warms the cache.
-          </p>
-          <p>
-            ▸ <span className="text-cyan">privacy</span> — Money is rounded to
-            the nearest $5 (MRR) or $10 (lifetime). Churn is suppressed when the
-            denominator is below 5, because small numbers create misleading
-            percentages.
+            ▸ <span className="text-cyan">methodology</span> — Subscribers come
+            from the Resend audience for this domain. Corpus stats are derived
+            from the actual MDX files on disk at build time. Numbers refresh
+            hourly; a nightly cron warms the cache.
           </p>
           <p>
             ▸ <span className="text-cyan">why</span> — Most operators hide their

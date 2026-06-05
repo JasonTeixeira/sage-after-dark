@@ -11,7 +11,6 @@ import { TacticalStrip, StripSep, TerminalPrompt, Kbd } from "@/components";
 import { ReadingModeToggle } from "./reading-mode-toggle";
 import { getSessionEmail } from "@/lib/auth";
 import { isAdminEmail } from "@/lib/admin-guard";
-import { memberStatus } from "@/lib/supabase";
 
 const NAV = [
   { label: "start", href: "/start" },
@@ -26,15 +25,6 @@ export async function SiteHeader({ path = "/" }: { path?: string }) {
   const sessionEmail = await getSessionEmail().catch(() => null);
   const isSignedIn = Boolean(sessionEmail);
   const isAdmin = isSignedIn && isAdminEmail(sessionEmail);
-  let isMember = false;
-  if (isSignedIn && !isAdmin) {
-    try {
-      const s = await memberStatus(sessionEmail!);
-      isMember = s?.status === "active" || s?.status === "trialing";
-    } catch {
-      isMember = false;
-    }
-  }
   return (
     <header className="border-b border-rule bg-ink-0/80 backdrop-blur-sm sticky top-0 z-40" data-print-hide>
       <div className="mx-auto max-w-7xl px-6">
@@ -63,7 +53,7 @@ export async function SiteHeader({ path = "/" }: { path?: string }) {
           <span className="ml-auto hidden sm:inline-flex items-center gap-4">
             {isSignedIn ? (
               <>
-                {isAdmin ? <AdminBadge /> : isMember ? <MemberBadge /> : null}
+                {isAdmin && <AdminBadge />}
                 {isAdmin && (
                   <Link
                     href="/admin"
@@ -114,25 +104,7 @@ export async function SiteHeader({ path = "/" }: { path?: string }) {
 }
 
 /**
- * MemberBadge — small monospace badge with a glyph. Shown next to the
- * "▸ account" link when the signed-in user has an active subscription.
- */
-function MemberBadge() {
-  return (
-    <Link
-      href="/members"
-      className="inline-flex items-center gap-1.5 px-2 py-0.5 border border-teach/60 rounded font-mono text-[10px] uppercase tracking-[0.08em] text-teach hover:bg-teach/10 transition-colors"
-      title="Members area"
-    >
-      <MemberGlyph />
-      <span>member</span>
-    </Link>
-  );
-}
-
-/**
- * AdminBadge — the admin equivalent. Ember accent so it's visually
- * distinct from the teal member badge.
+ * AdminBadge — ember accent badge shown next to the admin link.
  */
 function AdminBadge() {
   return (
@@ -143,25 +115,6 @@ function AdminBadge() {
       <AdminGlyph />
       <span>admin</span>
     </span>
-  );
-}
-
-/**
- * MemberGlyph — little inline SVG mark. A circle with a half-moon notch
- * (the Sage After Dark visual motif at small scale).
- */
-function MemberGlyph() {
-  return (
-    <svg
-      width="10"
-      height="10"
-      viewBox="0 0 10 10"
-      aria-hidden="true"
-      className="shrink-0"
-    >
-      <circle cx="5" cy="5" r="4" fill="none" stroke="currentColor" strokeWidth="1" />
-      <path d="M 5 1 A 4 4 0 0 1 5 9 A 2.4 2.4 0 0 0 5 1 Z" fill="currentColor" />
-    </svg>
   );
 }
 

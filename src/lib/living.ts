@@ -191,7 +191,6 @@ export type AdminMember = {
   status: string;
   plan: string | null;
   current_period_end: string | null;
-  stripe_customer_id: string | null;
   created_at: string;
 };
 

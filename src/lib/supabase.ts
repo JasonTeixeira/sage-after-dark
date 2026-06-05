@@ -48,38 +48,6 @@ export async function subscribeEmail(email: string, source: string): Promise<voi
   await rpc("subscribe", { p_email: email, p_source: source });
 }
 
-/* ---- members ---- */
-export type MemberStatusRow = {
-  status: string;
-  plan: string | null;
-  current_period_end: string | null;
-};
-
-export async function memberStatus(email: string): Promise<MemberStatusRow | null> {
-  const rows = await rpc<MemberStatusRow[]>("sage_after_dark_member_status", { p_email: email });
-  return rows[0] ?? null;
-}
-
-export async function upsertMember(args: {
-  email: string;
-  stripeCustomerId: string | null;
-  stripeSubscriptionId: string | null;
-  status: string;
-  plan: string | null;
-  currentPeriodEnd: string | null;
-  webhookSecret: string;
-}): Promise<void> {
-  await rpc("sage_after_dark_upsert_member", {
-    p_email: args.email,
-    p_stripe_customer_id: args.stripeCustomerId,
-    p_stripe_subscription_id: args.stripeSubscriptionId,
-    p_status: args.status,
-    p_plan: args.plan,
-    p_current_period_end: args.currentPeriodEnd,
-    p_secret: args.webhookSecret,
-  });
-}
-
 /* ---- magic links ---- */
 export async function createMagicLink(email: string, token: string, ttlMinutes = 15): Promise<void> {
   await rpc("sage_after_dark_create_magic_link", {
@@ -192,24 +160,3 @@ export async function whoami(email: string): Promise<WhoamiRow | null> {
   return rows[0] ?? null;
 }
 
-/* ---- stripe event idempotency ----
- * Returns true the FIRST time we see this event id, false on every retry.
- * Lets the webhook handler skip side effects on duplicates.
- */
-export async function recordStripeEvent(
-  eventId: string,
-  eventType: string,
-): Promise<boolean> {
-  if (!supabaseConfigured()) return true; // dry-run: always allow
-  try {
-    const inserted = await rpc<boolean>("sage_after_dark_stripe_event_record", {
-      p_event_id: eventId,
-      p_event_type: eventType,
-    });
-    return Boolean(inserted);
-  } catch (e) {
-    // If the idempotency table isn't migrated yet, allow processing.
-    console.warn("[stripe] idempotency check failed, allowing:", e);
-    return true;
-  }
-}

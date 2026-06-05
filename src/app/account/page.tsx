@@ -15,13 +15,10 @@ import {
   TacticalStrip,
   StripSep,
   TerminalPrompt,
-  NotchedCard,
-  StatusDot,
   Hr,
   Section,
 } from "@/components";
 import { getSessionEmail } from "@/lib/auth";
-import { memberStatus } from "@/lib/supabase";
 
 export const metadata = {
   title: "Account · Sage After Dark",
@@ -30,15 +27,6 @@ export const metadata = {
 
 // Force fresh render — never cache somebody else's account.
 export const dynamic = "force-dynamic";
-
-function formatDate(iso: string | null): string {
-  if (!iso) return "—";
-  try {
-    return new Date(iso).toISOString().slice(0, 10);
-  } catch {
-    return "—";
-  }
-}
 
 export default async function AccountPage({
   searchParams,
@@ -82,9 +70,9 @@ export default async function AccountPage({
             </a>
           </div>
           <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.08em] text-mute">
-            // not a member?{" "}
-            <a className="text-cyan underline decoration-cyan/40 underline-offset-2" href="/membership">
-              see the membership
+            // no account yet?{" "}
+            <a className="text-cyan underline decoration-cyan/40 underline-offset-2" href="/account/signup">
+              create one
             </a>
           </p>
         </Container>
@@ -92,36 +80,23 @@ export default async function AccountPage({
     );
   }
 
-  let status: Awaited<ReturnType<typeof memberStatus>> = null;
-  let lookupError = false;
-  try {
-    status = await memberStatus(email);
-  } catch (e) {
-    console.warn("[account] status lookup failed", e);
-    lookupError = true;
-  }
-
-  const isActive = status?.status === "active";
-  const planLabel = status?.plan === "annual" ? "annual" : status?.plan === "monthly" ? "monthly" : "—";
-  const renews = formatDate(status?.current_period_end ?? null);
-
   return (
     <Page>
       <Container size="default" className="pt-10 pb-24">
-        <TacticalStrip variant={isActive ? "live" : "muted"}>
+        <TacticalStrip variant="live">
           <TerminalPrompt path="~/account" mode="breadcrumb" />
           <StripSep />
           <span>{email.toUpperCase()}</span>
           <StripSep />
-          <span>{isActive ? "MEMBER · ACTIVE" : "NOT ACTIVE"}</span>
+          <span>SIGNED IN</span>
         </TacticalStrip>
 
         <header className="mt-10 mb-12">
           <Tactical className="text-cyan mb-4 block">// dashboard</Tactical>
           <Display className="mb-6">Account.</Display>
           <Lead>
-            Manage your membership, billing, and dispatches. Your password
-            sign-in keeps your session alive for 30 days.
+            Your account and dispatches. Your password sign-in keeps your
+            session alive for 30 days.
           </Lead>
         </header>
 
@@ -134,81 +109,9 @@ export default async function AccountPage({
           </div>
         )}
 
-        {lookupError && (
-          <div
-            role="alert"
-            className="mb-10 border border-ember/40 bg-ember/5 px-4 py-3 font-mono text-[12px] uppercase tracking-[0.08em] text-ember"
-          >
-            ▸ couldn&apos;t load your status — try again in a moment
-          </div>
-        )}
-
-        {/* Stats grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12">
-          <NotchedCard notch="tl" pillarKey={isActive ? "teach" : undefined}>
-            <div className="p-5">
-              <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-mute mb-2">
-                status
-              </p>
-              <div className="flex items-center gap-2">
-                <StatusDot status={isActive ? "live" : "idle"} />
-                <span className="font-sans text-bone text-[20px]">
-                  {isActive ? "Active" : status?.status ?? "Inactive"}
-                </span>
-              </div>
-            </div>
-          </NotchedCard>
-          <NotchedCard notch="tl">
-            <div className="p-5">
-              <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-mute mb-2">
-                plan
-              </p>
-              <p className="font-sans text-bone text-[20px] capitalize">
-                {planLabel}
-              </p>
-            </div>
-          </NotchedCard>
-          <NotchedCard notch="tl">
-            <div className="p-5">
-              <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-mute mb-2">
-                renews
-              </p>
-              <p className="font-sans text-bone text-[20px] tabular-nums lining-nums">
-                {renews}
-              </p>
-            </div>
-          </NotchedCard>
-        </div>
-
         {/* Actions */}
         <Section label="// actions" className="border-t-0 pt-0">
           <div className="flex flex-wrap gap-3">
-            {isActive && (
-              <a
-                href="/members"
-                className="font-mono text-[12px] uppercase tracking-[0.08em] px-5 py-3 border border-teach text-teach hover:bg-teach hover:text-ink transition-colors rounded"
-              >
-                ▸ members area
-              </a>
-            )}
-            {isActive && (
-              <form method="post" action="/api/portal">
-                <button
-                  type="submit"
-                  className="font-mono text-[12px] uppercase tracking-[0.08em] px-5 py-3 border border-cyan text-cyan hover:bg-cyan hover:text-ink transition-colors rounded"
-                >
-                  ▸ manage billing
-                </button>
-              </form>
-            )}
-            {!isActive && (
-              <a
-                href="/membership"
-                className="font-mono text-[12px] uppercase tracking-[0.08em] px-5 py-3 border border-teach text-teach hover:bg-teach hover:text-ink transition-colors rounded"
-              >
-                ▸ start membership
-              </a>
-            )}
             <form method="post" action="/api/auth/logout">
               <button
                 type="submit"

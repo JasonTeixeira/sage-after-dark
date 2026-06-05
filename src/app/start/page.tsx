@@ -100,7 +100,7 @@ export default async function StartPage() {
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <ButtonLink href="/" variant="primary">▸ The home page</ButtonLink>
             <ButtonLink href="/archive" variant="outline">▸ Browse the archive</ButtonLink>
-            <ButtonLink href="/membership" variant="outline">▸ Become a member</ButtonLink>
+            <ButtonLink href="/account/signup" variant="outline">▸ Create an account</ButtonLink>
           </div>
         </header>
 
@@ -284,7 +284,7 @@ export default async function StartPage() {
             </div>
             <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-3">
               <Badge title="Lighthouse" body="96+ across all key pages" />
-              <Badge title="Stripe-secured" body="payments processed by Stripe (PCI-DSS)" />
+              <Badge title="Free to read" body="all essays and dispatches are free, forever" />
               <Badge title="Open in public" body="archive, arcs, and now-playing all live" />
             </div>
             <p className="mt-6 text-mute text-[13px] font-mono uppercase tracking-[0.06em]">
@@ -316,8 +316,8 @@ export default async function StartPage() {
               </div>
             </NotchedCard>
             <div className="mt-6 flex flex-wrap items-center gap-3 justify-center">
-              <ButtonLink href="/membership" variant="primary">
-                ▸ Become a member · $5/mo
+              <ButtonLink href="/account/signup" variant="primary">
+                ▸ Create an account
               </ButtonLink>
               <ButtonLink href="/archive" variant="outline">
                 ▸ Browse the archive

@@ -18,7 +18,6 @@ import {
   getTopPosts,
   getNowStatus,
 } from "@/lib/living";
-import { getPublicMetrics } from "@/lib/stripe";
 import { getSiteCounts } from "@/lib/live-counts";
 
 async function safe<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
@@ -26,17 +25,15 @@ async function safe<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
 }
 
 export default async function AdminOverview() {
-  const [members, magicLinks, traffic, topPosts, metrics, counts, now] = await Promise.all([
+  const [members, magicLinks, traffic, topPosts, counts, now] = await Promise.all([
     safe(adminListMembers, []),
     safe(() => adminListMagicLinks(8), []),
     safe(getTotalPageviews, { views: 0, unique_visitors: 0 }),
     safe(() => getTopPosts(5), []),
-    safe(getPublicMetrics, null),
     getSiteCounts(),
     safe(getNowStatus, null),
   ]);
 
-  const activeMembers = members.filter((m) => m.status === "active" || m.status === "trialing");
   const recentMagicLinks = magicLinks.slice(0, 5);
   const updatedDays = now?.updated_at
     ? Math.floor((Date.now() - new Date(now.updated_at).getTime()) / 86_400_000)
@@ -52,10 +49,10 @@ export default async function AdminOverview() {
 
       {/* Top metrics row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-rule mb-8">
-        <Stat label="Active members" value={String(activeMembers.length).padStart(3, "0")} hint="paying or trialing" />
-        <Stat label="MRR" value={metrics ? `$${metrics.mrrUsd.toLocaleString("en-US")}` : "—"} hint="rounded $5" />
+        <Stat label="Registered accounts" value={String(members.length).padStart(3, "0")} hint="all time" />
         <Stat label="Subscribers" value={counts.subscribersLabel} hint="Resend audience" />
         <Stat label="Pageviews" value={traffic.views.toLocaleString("en-US")} hint="all-time, no bots" />
+        <Stat label="Unique visitors" value={traffic.unique_visitors.toLocaleString("en-US")} hint="hashed, no PII" />
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-rule mb-12">

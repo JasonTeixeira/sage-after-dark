@@ -4,7 +4,6 @@
 
 import { Display, Lead, Tactical, Hr } from "@/components";
 import { adminListMembers } from "@/lib/living";
-import { getPublicMetrics } from "@/lib/stripe";
 
 export const dynamic = "force-dynamic";
 
@@ -37,10 +36,7 @@ function statusColor(s: string): string {
 }
 
 export default async function AdminMembersPage() {
-  const [members, metrics] = await Promise.all([
-    safe(adminListMembers, []),
-    safe(getPublicMetrics, null),
-  ]);
+  const members = await safe(adminListMembers, []);
 
   const sorted = [...members].sort(
     (a, b) =>
@@ -56,8 +52,7 @@ export default async function AdminMembersPage() {
         <Tactical className="text-cyan mb-3 block">// members</Tactical>
         <Display className="mb-3">Members</Display>
         <Lead>
-          {active} active &middot; {sorted.length} total
-          {metrics ? ` \u00b7 $${metrics.mrrUsd.toLocaleString("en-US")} MRR` : ""}
+          {active} active &middot; {sorted.length} registered accounts
         </Lead>
       </header>
 

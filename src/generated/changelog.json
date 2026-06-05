@@ -1,7 +1,22 @@
 {
-  "generatedAt": "2026-06-05T13:14:26.340Z",
-  "count": 77,
+  "generatedAt": "2026-06-05T13:26:35.767Z",
+  "count": 80,
   "entries": [
+    {
+      "hash": "ef0cdad",
+      "date": "2026-06-05",
+      "subject": "feat: remove Stripe checkout/portal/webhook routes, membership/members pages, cron"
+    },
+    {
+      "hash": "09579f4",
+      "date": "2026-06-05",
+      "subject": "fix(best): faithful de-paywall — merge tiers without hiding essays"
+    },
+    {
+      "hash": "70d5dcf",
+      "date": "2026-06-05",
+      "subject": "refactor(ui): drop paywall component + members-only badges/tiering"
+    },
     {
       "hash": "9c11c93",
       "date": "2026-06-05",

@@ -222,23 +222,3 @@ export function setPasswordEmail(args: {
   };
 }
 
-export function memberWelcomeEmail(args: { plan: string; portalUrl: string }): {
-  html: string;
-  text: string;
-  subject: string;
-} {
-  const subject = "Welcome to the inside · Sage After Dark";
-  const planLabel = args.plan === "annual" ? "annual" : "monthly";
-  const inner = `
-    <span class="tag">▸ MEMBER · ACTIVE</span>
-    <h1>You're in.</h1>
-    <p>Your <strong>${planLabel}</strong> membership is live. Members-only tutorials are unlocked across the site, and you'll get every new dispatch first.</p>
-    <p><a class="btn" href="https://www.sageafterdark.com/account">▸ Open dashboard</a></p>
-    <hr/>
-    <p class="mute">Manage billing or cancel anytime:</p>
-    <p class="mute"><a class="lnk" href="${args.portalUrl}">${args.portalUrl}</a></p>
-    <p class="mute">— Jason</p>
-  `;
-  const footer = `// MEMBERSHIP ACTIVATED · WELCOME ABOARD`;
-  return { html: SHELL(inner, footer), text: `Your ${planLabel} membership is live. Dashboard: https://www.sageafterdark.com/account`, subject };
-}
