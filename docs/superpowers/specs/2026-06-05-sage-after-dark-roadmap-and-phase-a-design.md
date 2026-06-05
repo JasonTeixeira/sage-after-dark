@@ -32,12 +32,13 @@ and auth, not bugs.
 
 | Decision | Choice |
 |----------|--------|
-| Vault vs SEO | **Two-layer.** Public essays stay open + indexed (drive organic traffic); the terminal puzzle/encryption is the gateway into the *members-only* vault (content already paywalled). |
+| **Billing (REVISED 2026-06-05)** | **Removed.** The site goes fully free. Stripe (checkout/portal/webhook/metrics) and the members-only paywall are deleted; free accounts/login + newsletter are kept. Existing paying subscriptions are cancelled in Stripe via an ops script the owner runs (no refunds). |
+| Vault vs SEO (REVISED) | **No paywall.** All content is free and indexed. The Phase B terminal puzzle/encryption becomes a *delight gate / easter-egg* layered over free content — not a paid wall. |
 | Google Analytics | **GA4 behind a consent gate**, alongside (not replacing) the existing privacy-first tracker. |
 | Sequencing | **Stabilize → Build → Grow.** |
-| Phase A scope | **Tests + real bugs only.** Do not chase the 193 cosmetic lint flags. |
+| Phase A scope (REVISED) | **De-bill + stabilize.** Surgically remove Stripe/paywall keeping accounts; add a test net over the code that *remains* (auth, cipher, free-content rendering) + smoke. Do not chase the 193 cosmetic lint flags. |
 | CI | **Yes** — GitHub Actions runs typecheck + tests on push/PR. |
-| Test isolation | **Real Stripe test-mode keys + Supabase preview branch** for integration/E2E fidelity; pure unit tests run secret-free. |
+| Test isolation | **Supabase preview branch** for auth integration fidelity; pure unit tests run secret-free. (Stripe test-mode no longer needed — billing removed.) |
 
 ## Program roadmap
 
