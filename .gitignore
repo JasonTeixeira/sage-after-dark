@@ -27,3 +27,8 @@ yarn-error.log*
 next-env.d.ts
 _screenshots/
 .env.production
+
+# test output
+coverage/
+.vitest/
+node_modules/.vitest/
