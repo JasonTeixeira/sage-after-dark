@@ -13,7 +13,6 @@ import remarkGfm from "remark-gfm";
 import { getAllPosts, getPostBySlug } from "@/content/loader";
 import { mdxComponents } from "@/content/mdx-components";
 import { LAYOUT_BY_TEMPLATE } from "@/components/layouts";
-import { Paywall } from "@/components/paywall";
 import { JsonLd, articleLd, breadcrumbsLd } from "@/components/json-ld";
 import { EssayStickyBar } from "@/components/essay-sticky-bar";
 import { StudioWidget } from "@/components/studio-widget";
@@ -22,9 +21,6 @@ import { RelatedRail } from "@/components/related-rail";
 import { relatedEssays } from "@/lib/related-essays";
 import { WRITING_NOW } from "@/content/studio-state";
 import { ARCS } from "@/content/site-data";
-import { getSessionEmail } from "@/lib/auth";
-import { memberStatus } from "@/lib/supabase";
-import { isAdminEmail } from "@/lib/admin-guard";
 import type { Metadata } from "next";
 import type { Pillar } from "@/content/schema";
 
@@ -91,29 +87,6 @@ export default async function PostPage({
 
   const Layout = LAYOUT_BY_TEMPLATE[post.frontmatter.template];
 
-  // Members-only gate. Unsigned-in users see the paywall; non-active members
-  // see the paywall with the dashboard CTA. The site admin always bypasses
-  // the paywall — they need to QA the full essay end-to-end.
-  let isMember = false;
-  let signedIn = false;
-  let isAdmin = false;
-  if (post.frontmatter.members_only) {
-    try {
-      const email = await getSessionEmail();
-      signedIn = Boolean(email);
-      isAdmin = isAdminEmail(email);
-      if (email && !isAdmin) {
-        const status = await memberStatus(email);
-        isMember = status?.status === "active";
-      }
-    } catch (e) {
-      console.warn("[post] member check failed", e);
-      // Fail closed for paywalled content if we genuinely can't check.
-      isMember = false;
-    }
-  }
-  const showPaywall = post.frontmatter.members_only && !isMember && !isAdmin;
-
   const fm = post.frontmatter;
   const url = `https://www.sageafterdark.com/${fm.pillar}/${fm.slug}`;
   const ogImage = fm.og_image ?? `https://www.sageafterdark.com/api/og?slug=${encodeURIComponent(fm.slug)}`;
@@ -141,10 +114,7 @@ export default async function PostPage({
           { name: fm.title, url: `/${fm.pillar}/${fm.slug}` },
         ])}
       />
-      {showPaywall ? (
-        <Paywall pillar={post.frontmatter.pillar} signedIn={signedIn} />
-      ) : (
-        <>
+      <>
           <MDXRemote
             source={post.source}
             components={mdxComponents}
@@ -185,7 +155,6 @@ export default async function PostPage({
             episodeTotal={fm.arc?.total_episodes}
           />
         </>
-      )}
     </Layout>
   );
 }
