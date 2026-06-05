@@ -74,13 +74,6 @@ export default async function LoginPage({
           >
             create one
           </a>
-          {"  ·  "}
-          <a
-            className="text-cyan underline decoration-cyan/40 underline-offset-2"
-            href="/membership"
-          >
-            see the membership
-          </a>
         </p>
       </Container>
     </Page>

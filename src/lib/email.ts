@@ -127,8 +127,6 @@ export function welcomeEmail(opts: { unsubscribeUrl?: string } = {}): { html: st
     <span class="tag">▸ TRANSMISSION 001</span>
     <h1>You're on the list.</h1>
     <p>You'll get a late-night dispatch when something is worth saying — essays, tutorials, the occasional field note. No filler. No drip sequence. No webinar.</p>
-    <p>If you want the members-only stuff (the things I teach), the door is here:</p>
-    <p><a class="btn" href="https://www.sageafterdark.com/membership">▸ See the membership</a></p>
     <hr/>
     <p class="mute">Reply directly if you want to talk. I read every reply.</p>
     <p class="mute">— Jason</p>
@@ -141,9 +139,6 @@ export function welcomeEmail(opts: { unsubscribeUrl?: string } = {}): { html: st
     "You're on the list.",
     "",
     "You'll get a late-night dispatch when something is worth saying — essays, tutorials, the occasional field note. No filler. No drip sequence. No webinar.",
-    "",
-    "If you want the members-only stuff (the things I teach), the door is here:",
-    "https://www.sageafterdark.com/membership",
     "",
     "Reply directly if you want to talk. I read every reply.",
     "— Jason",

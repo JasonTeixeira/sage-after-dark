@@ -65,12 +65,6 @@ export default async function WelcomePage() {
             ▸ start reading
           </a>
           <a
-            href="/membership"
-            className="border border-rule text-bone rounded px-5 py-4 font-mono text-[12px] uppercase tracking-[0.08em] hover:border-cyan hover:text-cyan transition-colors"
-          >
-            ▸ see membership
-          </a>
-          <a
             href="/now"
             className="border border-rule text-bone rounded px-5 py-4 font-mono text-[12px] uppercase tracking-[0.08em] hover:border-cyan hover:text-cyan transition-colors"
           >

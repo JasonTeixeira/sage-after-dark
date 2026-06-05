@@ -292,12 +292,6 @@ export function SignupWizard({ next }: { next: string }) {
               >
                 ▸ start reading
               </a>
-              <a
-                href="/membership"
-                className="border border-rule text-bone rounded px-4 py-3 font-mono text-[12px] uppercase tracking-[0.08em] hover:border-cyan hover:text-cyan transition-colors"
-              >
-                ▸ see membership
-              </a>
             </div>
             <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.08em] text-mute">
               // want full access? become a member to unlock all tutorials.
