@@ -4,6 +4,8 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { SiteFooter, KeyboardShortcuts, HeroReticle, JsonLd, WEBSITE_LD, PERSON_LD, RouterTransitions, AnalyticsTracker, DecoderRing, TerminalPalette, CommandPalette } from "@/components";
 import { SiteHeader } from "@/components/site-header";
+import { getAllPosts } from "@/content/loader";
+import { IntrusionRoot } from "@/components/intrusion/IntrusionRoot";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.sageafterdark.com"),
@@ -51,9 +53,18 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const posts = await getAllPosts();
+  const essays = posts.map((p) => ({
+    slug: p.frontmatter.slug,
+    title: p.frontmatter.title,
+    pillar: p.frontmatter.pillar,
+    mins: p.reading_minutes,
+    dek: p.frontmatter.dek ?? "",
+  }));
+
   return (
     <html
       lang="en"
@@ -79,6 +90,10 @@ export default function RootLayout({
         <DecoderRing />
         <RouterTransitions />
         <AnalyticsTracker />
+        {/* IntrusionRoot is a client-only overlay — it sits on top of the SSR
+            page visually but never removes or hides {children} from the DOM.
+            Search bots and screen readers see the full page content below. */}
+        <IntrusionRoot essays={essays} />
       </body>
     </html>
   );

@@ -965,6 +965,71 @@
   background: rgba(245, 158, 11, 0.06);
 }
 
+/* ===== INTRUSION ROOT OVERLAY ===== */
+
+.intrusion-root {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  background: var(--ink-0);
+  /* Full-viewport opaque ink background so humans see the experience.
+     The SSR page stays fully in the DOM beneath — only visually covered. */
+}
+
+/* Utility bar — top-right corner, always visible on top of all phases */
+.intrusion-bar {
+  position: fixed;
+  top: 14px;
+  right: 16px;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.intrusion-bar-btn {
+  background: none;
+  border: 1px solid var(--rule-hi);
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.intrusion-bar-btn:hover {
+  color: var(--bone);
+  border-color: var(--rule);
+}
+
+.intrusion-bar-read {
+  color: var(--mute);
+  border-color: var(--rule);
+}
+
+.intrusion-bar-read:hover {
+  color: var(--cyan);
+  border-color: var(--cyan);
+}
+
+/* Sub-overlay wrapper for VaultGate (centered, sits above terminal) */
+.intrusion-suboverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 75;
+  background: rgba(5, 7, 10, 0.82);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+  overflow-y: auto;
+  animation: fade 0.3s var(--ease);
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 560px) {
   .code {

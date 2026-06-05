@@ -1,7 +1,97 @@
 {
-  "generatedAt": "2026-06-05T13:26:35.767Z",
-  "count": 80,
+  "generatedAt": "2026-06-05T22:47:42.620Z",
+  "count": 98,
   "entries": [
+    {
+      "hash": "7a388be",
+      "date": "2026-06-05",
+      "subject": "feat(intrusion): cipher vault gate + hidden after-dark vault"
+    },
+    {
+      "hash": "124f9e4",
+      "date": "2026-06-05",
+      "subject": "feat(intrusion): terminal command loop on real essay index"
+    },
+    {
+      "hash": "c746725",
+      "date": "2026-06-05",
+      "subject": "feat(intrusion): operator dialogue component + handle/memory"
+    },
+    {
+      "hash": "ec00882",
+      "date": "2026-06-05",
+      "subject": "feat(intrusion): decoy front + bypass seam component"
+    },
+    {
+      "hash": "840de5c",
+      "date": "2026-06-05",
+      "subject": "feat(intrusion): webaudio sound engine (muteable, autoplay-safe)"
+    },
+    {
+      "hash": "4be1fd6",
+      "date": "2026-06-05",
+      "subject": "feat(intrusion): operator voice + memory-parameterized lines"
+    },
+    {
+      "hash": "b3e5dda",
+      "date": "2026-06-05",
+      "subject": "feat(intrusion): scenario deck + monthly selector"
+    },
+    {
+      "hash": "2688098",
+      "date": "2026-06-05",
+      "subject": "test(intrusion): progress profile + ranks"
+    },
+    {
+      "hash": "d221c9b",
+      "date": "2026-06-05",
+      "subject": "docs: Intrusion v1 implementation plan (13 tasks, TDD, crawlable substrate)"
+    },
+    {
+      "hash": "076f966",
+      "date": "2026-06-05",
+      "subject": "docs: Intrusion experience spec (100/100 vision) + working prototypes"
+    },
+    {
+      "hash": "d42da2d",
+      "date": "2026-06-05",
+      "subject": "docs: terminal-AI redesign handoff for Claude design + spec sync (terminal-first, maze guards vault)"
+    },
+    {
+      "hash": "2faf661",
+      "date": "2026-06-05",
+      "subject": "docs: Phase B terminal-vault design spec + Claude design brief"
+    },
+    {
+      "hash": "0d5170c",
+      "date": "2026-06-05",
+      "subject": "ci: typecheck + unit on push/PR; docs: 2026-06-05 audit + de-bill record"
+    },
+    {
+      "hash": "eb8cd5c",
+      "date": "2026-06-05",
+      "subject": "test: vitest harness + unit suites for passwords, auth, cipher"
+    },
+    {
+      "hash": "9832660",
+      "date": "2026-06-05",
+      "subject": "docs: remove Stripe/billing references after de-bill"
+    },
+    {
+      "hash": "52fe398",
+      "date": "2026-06-05",
+      "subject": "fix: remove dead membership CTAs from auth flow + transactional email"
+    },
+    {
+      "hash": "5b18314",
+      "date": "2026-06-05",
+      "subject": "fix(account): remove stale paid-membership copy after de-bill"
+    },
+    {
+      "hash": "2e72abf",
+      "date": "2026-06-05",
+      "subject": "refactor: strip billing from numbers/admin/account/header/start; remove lib/stripe"
+    },
     {
       "hash": "ef0cdad",
       "date": "2026-06-05",
