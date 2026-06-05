@@ -149,39 +149,10 @@ export default async function AccountPage({
 
         <Hr className="my-16" />
 
-        <Section label="// what's unlocked">
-          <ul className="space-y-3 max-w-[68ch]">
-            <li className="flex items-start gap-4">
-              <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-teach tabular-nums mt-1.5">
-                01
-              </span>
-              <span className="text-bone/90 leading-relaxed">
-                Members-only tutorials with full transcripts and starter
-                repos. Look for the{" "}
-                <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-teach border border-teach/40 px-1.5 py-0.5 rounded">
-                  ▸ MEMBERS
-                </span>{" "}
-                tag in any post header.
-              </span>
-            </li>
-            <li className="flex items-start gap-4">
-              <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-teach tabular-nums mt-1.5">
-                02
-              </span>
-              <span className="text-bone/90 leading-relaxed">
-                Dispatch emails arrive in your inbox first, before they go on
-                the open feed.
-              </span>
-            </li>
-            <li className="flex items-start gap-4">
-              <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-teach tabular-nums mt-1.5">
-                03
-              </span>
-              <span className="text-bone/90 leading-relaxed">
-                Reply to any email — it lands in a folder I actually read.
-              </span>
-            </li>
-          </ul>
+        <Section label="// access">
+          <p className="text-bone/90 leading-relaxed max-w-[68ch]">
+            Everything on the site is free to read — no membership required.
+          </p>
         </Section>
       </Container>
     </Page>
