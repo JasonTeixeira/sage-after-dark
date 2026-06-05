@@ -1,8 +1,8 @@
 /**
  * /best — the curated front door.
  *
- * Anchor essays first (members-only flag means I bet on these), then the
- * featured posts, then anything tagged "longest" or with high word count.
+ * Anchor essays first (the longest, most ambitious pieces), then
+ * recent field notes and dispatches (the everyday signal).
  * No "popular" lie — we don't have view counts to sort by, so we curate.
  */
 
@@ -31,22 +31,12 @@ export const metadata = {
 export default async function BestPage() {
   const all = await getAllPosts();
 
-  // Tier 1: anchor essays (members_only flag = author bets)
+  // Tier 1: anchor essays — longest pieces as proxy for depth and ambition
   const anchors = all
-    .filter((p) => p.frontmatter.members_only)
-    .sort(
-      (a, b) =>
-        new Date(b.frontmatter.published).getTime() -
-        new Date(a.frontmatter.published).getTime(),
-    );
-
-  // Tier 2: longest non-anchor pieces (depth as proxy for ambition)
-  const longest = all
-    .filter((p) => !p.frontmatter.members_only)
     .sort((a, b) => (b.word_count ?? 0) - (a.word_count ?? 0))
-    .slice(0, 5);
+    .slice(0, 8);
 
-  // Tier 3: most recent dispatch + field note (the everyday signal)
+  // Tier 2: most recent dispatch + field note (the everyday signal)
   const recentSignal = all
     .filter(
       (p) =>
@@ -61,7 +51,7 @@ export default async function BestPage() {
         <TacticalStrip>
           <TerminalPrompt path="sageafterdark.com/best" mode="breadcrumb" />
           <StripSep />
-          <span>HAND-PICKED · {anchors.length + longest.length}</span>
+          <span>HAND-PICKED · {anchors.length}</span>
         </TacticalStrip>
 
         <header className="mt-12 mb-16 max-w-3xl">
@@ -132,46 +122,7 @@ export default async function BestPage() {
           </section>
         )}
 
-        {/* Tier 2 — Longest pieces */}
-        {longest.length > 0 && (
-          <section className="mb-20">
-            <div className="flex items-baseline justify-between mb-6 border-b border-rule pb-3">
-              <Tactical className="text-cyan">// when you have time</Tactical>
-              <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-faint">
-                LONGER ESSAYS
-              </span>
-            </div>
-            <ul>
-              {longest.map((p) => (
-                <li
-                  key={p.frontmatter.slug}
-                  className="border-t border-rule first:border-t-0"
-                >
-                  <Link
-                    href={`/${p.frontmatter.pillar}/${p.frontmatter.slug}`}
-                    className="group flex items-baseline gap-4 py-4 hover:bg-ink-1/30 transition-colors px-1"
-                  >
-                    <PillarTag pillar={p.frontmatter.pillar} size="sm" />
-                    <h3
-                      className="text-bone group-hover:text-cyan transition-colors flex-1 leading-snug [font-family:var(--font-editorial)]"
-                      style={{ fontSize: "clamp(1.05rem, 1.4vw, 1.25rem)" }}
-                    >
-                      {p.frontmatter.title}
-                    </h3>
-                    <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-faint shrink-0 tabular-nums hidden sm:inline">
-                      {p.word_count?.toLocaleString()} W
-                    </span>
-                    <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-cyan shrink-0 tabular-nums w-12 text-right">
-                      {p.reading_minutes} MIN
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
-
-        {/* Tier 3 — Recent signal */}
+        {/* Tier 2 — Recent signal */}
         {recentSignal.length > 0 && (
           <section className="mb-12">
             <div className="flex items-baseline justify-between mb-6 border-b border-rule pb-3">

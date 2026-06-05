@@ -75,11 +75,6 @@ export function PostHeader({ post }: { post: Post }) {
     <header className="mt-8 mb-12" data-reticle-zone>
       <ReadingProgress pillar={fm.pillar} />
       <PillarBorder pillar={fm.pillar} className="pl-6">
-        {fm.members_only && (
-          <p className="font-mono text-[10px] uppercase tracking-[0.08em] text-teach border border-teach/40 inline-block px-2 py-1 mb-4">
-            ▸ members only
-          </p>
-        )}
         <Display className="mb-4">{fm.title}</Display>
         {fm.dek && <Lead className="text-bone/70 max-w-[60ch]">{fm.dek}</Lead>}
       </PillarBorder>

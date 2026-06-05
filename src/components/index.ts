@@ -26,7 +26,6 @@ export {
 // Tactical primitives
 export { Reticle } from "./reticle";
 export { NotchedCard } from "./notched-card";
-export { Paywall } from "./paywall";
 export { TacticalStrip, StripSep } from "./tactical-strip";
 export { TerminalPrompt } from "./terminal-prompt";
 export { MarginNote } from "./margin-note";

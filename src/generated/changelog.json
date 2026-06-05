@@ -1,7 +1,42 @@
 {
-  "generatedAt": "2026-05-07T02:34:37.064Z",
-  "count": 70,
+  "generatedAt": "2026-06-05T13:14:26.340Z",
+  "count": 77,
   "entries": [
+    {
+      "hash": "9c11c93",
+      "date": "2026-06-05",
+      "subject": "feat(content): all posts are free — remove members-only gate"
+    },
+    {
+      "hash": "5861932",
+      "date": "2026-06-05",
+      "subject": "docs: pivot Phase A to de-bill + stabilize; add subscription cancel script"
+    },
+    {
+      "hash": "490165f",
+      "date": "2026-06-05",
+      "subject": "docs: Phase A implementation plan (stabilize/test-net)"
+    },
+    {
+      "hash": "185b74a",
+      "date": "2026-06-05",
+      "subject": "docs: program roadmap + Phase A (stabilize/test-net) design spec"
+    },
+    {
+      "hash": "0d4f38c",
+      "date": "2026-05-07",
+      "subject": "docs: master handoff documentation suite"
+    },
+    {
+      "hash": "8b793f7",
+      "date": "2026-05-07",
+      "subject": "fix(paywall): admin always bypasses members-only gate"
+    },
+    {
+      "hash": "1deecc5",
+      "date": "2026-05-07",
+      "subject": "feat(hero): rotating HeroBroadcast on home with 5 transmission variants"
+    },
     {
       "hash": "5398a46",
       "date": "2026-05-07",
