@@ -251,6 +251,80 @@
   }
 }
 
+/* ===== OPERATOR STAGE ===== */
+
+#screen {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  height: 100%;
+  overflow-y: auto;
+  padding: 40px 24px 80px;
+  box-sizing: border-box;
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--bone);
+  scroll-behavior: smooth;
+  outline: none;
+}
+
+/* Operator speech block */
+.op {
+  color: var(--world);
+  margin-bottom: 8px;
+}
+
+/* Echo of what the visitor typed */
+.echo {
+  color: var(--mute);
+  margin-bottom: 8px;
+}
+
+.echo .pr {
+  color: var(--faint);
+}
+
+/* Handle ask prompt row */
+.ask {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+
+.ask .pr {
+  color: var(--world);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ask input {
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--rule-hi);
+  outline: none;
+  color: var(--bone);
+  font-family: var(--mono);
+  font-size: 14px;
+  caret-color: var(--cyan);
+  flex: 1;
+  padding: 2px 0;
+  transition: border-color 0.2s var(--ease);
+}
+
+.ask input:focus {
+  border-bottom-color: var(--cyan);
+}
+
+/* General operator output block (for terminal commands later) */
+.out {
+  color: var(--bone);
+  margin-bottom: 8px;
+}
+
 /* ===== REDUCED MOTION ===== */
 @media (prefers-reduced-motion: reduce) {
   * {
