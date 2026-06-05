@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sage After Dark — Terminal Shell</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink-0:#05070A; --ink-1:#0A0E14; --ink-2:#11161E;
+    --rule:#1C232E; --rule-hi:#2A3340;
+    --bone:#E8E6E0; --mute:#8A8F98; --faint:#4F5563;
+    --cyan:#00E5FF; --ember:#F59E0B;
+    --build:#00E5FF; --signal:#F59E0B; --mind:#A78BFA; --world:#34D399;
+    --taste:#F472B6; --learning:#A3E635; --teach:#EAB308;
+    --mono:'Geist Mono',ui-monospace,'SF Mono','JetBrains Mono',Menlo,monospace;
+    --sans:'Geist',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:var(--mono);
+    background:
+      radial-gradient(1200px 700px at 50% -10%, rgba(0,229,255,.06), transparent 60%),
+      radial-gradient(900px 600px at 50% 0%, #0A0E14 0%, #05070A 70%);
+    color:var(--bone);
+    min-height:100%;
+    display:flex; align-items:center; justify-content:center;
+    padding:48px 24px;
+    -webkit-font-smoothing:antialiased;
+    letter-spacing:.1px;
+  }
+  /* faint atmospheric grid */
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; opacity:.35;
+    background-image:
+      linear-gradient(rgba(42,51,64,.10) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(42,51,64,.10) 1px, transparent 1px);
+    background-size:44px 44px;
+    mask-image:radial-gradient(900px 600px at 50% 30%, #000 0%, transparent 80%);
+  }
+
+  .window{
+    position:relative; width:min(960px,100%);
+    background:linear-gradient(180deg, rgba(17,22,30,.6), var(--ink-1) 14%);
+    border:1px solid var(--rule);
+    border-radius:16px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.04) inset,
+      0 50px 120px -30px rgba(0,0,0,.85),
+      0 0 90px -50px rgba(0,229,255,.35);
+    overflow:hidden;
+  }
+  /* title bar */
+  .titlebar{
+    display:flex; align-items:center; gap:14px;
+    padding:14px 18px;
+    border-bottom:1px solid var(--rule);
+    background:linear-gradient(180deg, rgba(255,255,255,.02), transparent);
+  }
+  .dots{display:flex; gap:8px}
+  .dot{width:11px;height:11px;border-radius:50%;border:1px solid rgba(255,255,255,.06)}
+  .dot.a{background:#222a35}.dot.b{background:#222a35}.dot.c{background:#0b3b42;box-shadow:0 0 10px -2px var(--cyan)}
+  .path{color:var(--mute);font-size:12.5px}
+  .path b{color:var(--bone);font-weight:500}
+  .status{margin-left:auto;display:flex;align-items:center;gap:16px;font-size:11.5px;color:var(--faint)}
+  .live{display:flex;align-items:center;gap:7px;color:var(--mute)}
+  .live i{width:7px;height:7px;border-radius:50%;background:var(--world);box-shadow:0 0 10px -1px var(--world);font-style:normal}
+  .clock{color:var(--faint)}
+
+  /* quick command rail */
+  .rail{
+    display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+    padding:12px 18px; border-bottom:1px solid var(--rule);
+    background:rgba(5,7,10,.4);
+  }
+  .rail .lbl{font-size:10px;letter-spacing:.16em;color:var(--faint);text-transform:uppercase;margin-right:4px}
+  .chip{
+    font-size:12px;color:var(--bone);
+    padding:5px 11px;border:1px solid var(--rule-hi);border-radius:999px;
+    background:rgba(17,22,30,.6); cursor:pointer; transition:all .18s var(--ease);
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .chip:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 18px -8px var(--cyan)}
+  .chip .k{color:var(--faint);font-size:10.5px}
+  .chip.locked{color:var(--faint);border-style:dashed;border-color:var(--rule-hi)}
+  .chip.locked:hover{border-color:var(--ember);color:var(--ember);box-shadow:0 0 18px -8px var(--ember)}
+
+  /* transcript */
+  .screen{padding:26px 30px 8px; font-size:14.5px; line-height:1.72}
+  .boot .mark{
+    font-family:var(--sans); font-weight:700; letter-spacing:.34em;
+    font-size:12px; color:var(--cyan); text-transform:uppercase;
+    display:flex;align-items:center;gap:12px; margin-bottom:14px;
+  }
+  .boot .mark::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,var(--rule),transparent)}
+  .boot .lede{font-family:var(--sans); font-size:15.5px; line-height:1.6; color:var(--bone); max-width:62ch}
+  .boot .lede .dim{color:var(--mute)}
+  .sys{margin-top:14px;color:var(--faint);font-size:12.5px}
+  .sys .sec{color:var(--world)}
+  .greet{margin-top:6px;color:var(--mute);font-size:13.5px}
+  .greet b{color:var(--bone);font-weight:500}
+  .greet code{color:var(--cyan);background:rgba(0,229,255,.07);padding:1px 6px;border-radius:5px}
+
+  .row{margin-top:22px}
+  .cmd{color:var(--bone)}
+  .cmd .pr{color:var(--cyan);user-select:none}
+  .cmd .c{color:var(--bone)}
+  .out{margin-top:10px}
+
+  /* help block */
+  .grp-lbl{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);margin:2px 0 10px}
+  .help{display:grid;grid-template-columns:max-content 1fr;gap:6px 26px;max-width:640px}
+  .help dt{color:var(--cyan)}
+  .help dt small{color:var(--faint)}
+  .help dd{color:var(--mute)}
+
+  /* ls block */
+  .ls{display:grid;gap:7px;max-width:680px}
+  .ls li{list-style:none;display:grid;grid-template-columns:14px 92px 1fr max-content;align-items:center;gap:14px;color:var(--bone)}
+  .ls li .pd{width:8px;height:8px;border-radius:50%}
+  .ls li .pl{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+  .ls li .ti{color:var(--bone)}
+  .ls li .rt{color:var(--faint);font-size:12.5px;justify-self:end}
+  .ls li:hover .ti{color:var(--cyan)}
+  .more{color:var(--faint);font-size:13px;margin-top:4px}
+  .more code{color:var(--mute)}
+
+  .prompt{display:flex;align-items:center;gap:10px;margin:22px 0 2px;font-size:14.5px}
+  .prompt .pr{color:var(--cyan)}
+  .caret{display:inline-block;width:9px;height:18px;background:var(--cyan);box-shadow:0 0 12px -2px var(--cyan);animation:blink 1.1s steps(1) infinite;transform:translateY(2px)}
+  @keyframes blink{50%{opacity:0}}
+
+  /* bottom status */
+  .foot{
+    display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+    padding:11px 18px;border-top:1px solid var(--rule);
+    background:rgba(5,7,10,.5); color:var(--faint); font-size:11.5px;
+  }
+  .foot .kbd{color:var(--mute)} .foot .kbd b{color:var(--bone);font-weight:500}
+  .foot .right{margin-left:auto;display:flex;gap:16px;align-items:center}
+  .foot .hidden{color:var(--faint);display:flex;align-items:center;gap:7px}
+  .foot .hidden i{color:var(--ember);font-style:normal}
+  @media (prefers-reduced-motion: reduce){.caret{animation:none}}
+</style>
+</head>
+<body>
+  <main class="window" role="region" aria-label="Sage After Dark terminal">
+    <div class="titlebar">
+      <div class="dots"><span class="dot a"></span><span class="dot b"></span><span class="dot c"></span></div>
+      <div class="path">sage<span style="color:var(--faint)">@</span><b>afterdark</b><span style="color:var(--faint)">:</span><b style="color:var(--cyan)">~</b></div>
+      <div class="status">
+        <span class="live"><i></i> secure channel</span>
+        <span class="clock">02:14 · 2026.06.05</span>
+      </div>
+    </div>
+
+    <div class="rail">
+      <span class="lbl">try</span>
+      <span class="chip">help</span>
+      <span class="chip">ls</span>
+      <span class="chip">open <span class="k">&lt;name&gt;</span></span>
+      <span class="chip">search <span class="k">&lt;term&gt;</span></span>
+      <span class="chip">pillars</span>
+      <span class="chip">about</span>
+      <span class="chip locked">◈ ??? <span class="k">locked</span></span>
+    </div>
+
+    <div class="screen">
+      <div class="boot">
+        <div class="mark">Sage // After Dark</div>
+        <p class="lede">The after-hours notebook of a one-person studio.<br><span class="dim">Software, taste, and the slow internet — written down as it happens.</span></p>
+        <p class="sys">// session <span style="color:var(--mute)">0x7F3A</span> · channel <span class="sec">secure</span> · 23 essays indexed · vault <span style="color:var(--ember)">sealed</span></p>
+        <p class="greet">I'm listening. Type <code>help</code> to begin — or just start typing. <b>Some things here are hidden.</b></p>
+      </div>
+
+      <div class="row">
+        <div class="cmd"><span class="pr">~ $</span> <span class="c">help</span></div>
+        <div class="out">
+          <div class="grp-lbl">what you can do</div>
+          <dl class="help">
+            <dt>ls</dt><dd>list the essays</dd>
+            <dt>open <small>&lt;name&gt;</small></dt><dd>read one, clean and full</dd>
+            <dt>search <small>&lt;term&gt;</small></dt><dd>find a thread through the work</dd>
+            <dt>pillars</dt><dd>the seven veins — build · mind · taste · …</dd>
+            <dt>about</dt><dd>who's writing, and why</dd>
+            <dt>clear</dt><dd>wipe the screen</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="cmd"><span class="pr">~ $</span> <span class="c">ls</span></div>
+        <div class="out">
+          <ul class="ls">
+            <li><span class="pd" style="background:var(--taste);box-shadow:0 0 9px -1px var(--taste)"></span><span class="pl">taste</span><span class="ti">Taste is the last moat</span><span class="rt">9 min</span></li>
+            <li><span class="pd" style="background:var(--build);box-shadow:0 0 9px -1px var(--build)"></span><span class="pl">build</span><span class="ti">Latency is a worldview</span><span class="rt">14 min</span></li>
+            <li><span class="pd" style="background:var(--mind);box-shadow:0 0 9px -1px var(--mind)"></span><span class="pl">mind</span><span class="ti">The cost of being available</span><span class="rt">11 min</span></li>
+            <li><span class="pd" style="background:var(--learning);box-shadow:0 0 9px -1px var(--learning)"></span><span class="pl">learning</span><span class="ti">The half-life of a skill</span><span class="rt">8 min</span></li>
+            <li><span class="pd" style="background:var(--signal);box-shadow:0 0 9px -1px var(--signal)"></span><span class="pl">signal</span><span class="ti">Field note: May</span><span class="rt">6 min</span></li>
+          </ul>
+          <p class="more">… 18 more. <code>ls --all</code> to see them, or <code>pillars</code> to filter.</p>
+        </div>
+      </div>
+
+      <div class="prompt"><span class="pr">~ $</span> <span class="caret" aria-hidden="true"></span></div>
+    </div>
+
+    <div class="foot">
+      <span class="kbd"><b>↵</b> run</span>
+      <span class="kbd"><b>↑↓</b> history</span>
+      <span class="kbd"><b>⌘K</b> palette</span>
+      <span class="kbd"><b>esc</b> clear</span>
+      <span class="right">
+        <span class="hidden"><i>◆</i> something is hidden</span>
+        <span style="color:var(--faint)">reader mode →</span>
+      </span>
+    </div>
+  </main>
+</body>
+</html>

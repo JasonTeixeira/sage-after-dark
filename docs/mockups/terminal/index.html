@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sage After Dark — Terminal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="scanlines" aria-hidden="true"></div>
+
+  <!-- SPLASH / BOOT -->
+  <div id="splash" role="dialog" aria-label="Booting">
+    <div class="splash-inner">
+      <pre id="bootlog" aria-hidden="true"></pre>
+      <div id="bootbar"><span></span></div>
+      <div id="logo">
+        <div class="logo-mark">SAGE<span>//</span>AFTER&nbsp;DARK</div>
+        <div class="logo-sub">a terminal for the work, written down as it happens</div>
+      </div>
+      <button id="skip" type="button">skip intro →</button>
+    </div>
+  </div>
+
+  <!-- TERMINAL -->
+  <main id="win" class="window" hidden role="region" aria-label="Sage After Dark terminal">
+    <div class="titlebar">
+      <div class="dots"><span class="dot a"></span><span class="dot b"></span><span class="dot c"></span></div>
+      <div class="path">sage<span class="d">@</span><b>afterdark</b><span class="d">:</span><b class="cy">~</b></div>
+      <div class="status">
+        <span class="live"><i id="livedot"></i> <span id="chan">secure channel</span></span>
+        <span class="clock" id="clock">2026.06.05</span>
+      </div>
+    </div>
+
+    <div class="rail" id="rail">
+      <span class="lbl">try</span>
+      <button class="chip" data-cmd="help">help</button>
+      <button class="chip" data-cmd="ls">ls</button>
+      <button class="chip" data-cmd="open taste">open <span class="k">&lt;name&gt;</span></button>
+      <button class="chip" data-cmd="search rollback">search <span class="k">&lt;term&gt;</span></button>
+      <button class="chip" data-cmd="pillars">pillars</button>
+      <button class="chip" data-cmd="about">about</button>
+      <button class="chip locked" data-cmd="decode">◈ ??? <span class="k">locked</span></button>
+    </div>
+
+    <div class="screen" id="screen" tabindex="0">
+      <div id="transcript"></div>
+      <form id="promptform" autocomplete="off">
+        <span class="pr">~ $</span>
+        <input id="cmd" type="text" spellcheck="false" aria-label="terminal input" />
+        <span class="caret" id="caret" aria-hidden="true"></span>
+      </form>
+      <div class="live-region" id="live" aria-live="polite"></div>
+    </div>
+
+    <div class="foot">
+      <span class="kbd"><b>↵</b> run</span>
+      <span class="kbd"><b>↑↓</b> history</span>
+      <span class="kbd"><b>tab</b> complete</span>
+      <span class="kbd"><b>esc</b> clear</span>
+      <span class="right">
+        <span class="hidden" id="hiddenhint"><i>◆</i> something is hidden</span>
+      </span>
+    </div>
+  </main>
+
+  <!-- READER OVERLAY -->
+  <div id="reader" class="overlay" hidden></div>
+  <!-- VAULT OVERLAY -->
+  <div id="vault" class="overlay vault" hidden></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>access restricted</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="scanlines" aria-hidden="true"></div>
+
+  <!-- ===== THE TERMINAL (behind the wall) ===== -->
+  <main id="stage" class="window" aria-hidden="true">
+    <div class="titlebar">
+      <div class="dots"><span class="dot a"></span><span class="dot b"></span><span class="dot c"></span></div>
+      <div class="path">root<span class="d">@</span><b>afterdark</b><span class="d">:</span><b class="cy">/backend</b></div>
+      <div class="status"><span class="live"><i></i> <span id="who">unauthenticated</span></span></div>
+    </div>
+    <div class="screen" id="screen" tabindex="0">
+      <div id="transcript"></div>
+      <form id="promptform" autocomplete="off">
+        <span class="pr" id="ps1">~ $</span>
+        <input id="cmd" type="text" spellcheck="false" aria-label="terminal input" disabled />
+        <span class="caret" id="caret" aria-hidden="true"></span>
+      </form>
+    </div>
+    <div class="foot">
+      <span class="kbd"><b>↵</b> run</span><span class="kbd"><b>help</b> if lost</span>
+      <span class="right"><span class="hidden"><i id="vdot">◆</i> <span id="vtxt">you're inside</span></span></span>
+    </div>
+  </main>
+
+  <!-- ===== THE FAKE FRONT (decoy) ===== -->
+  <div id="wall" role="dialog" aria-label="Access restricted">
+    <div class="wall-grain"></div>
+    <div class="wall-inner">
+      <div class="badge">▚ SYSTEM</div>
+      <div class="code">403</div>
+      <h1>ACCESS RESTRICTED</h1>
+      <p class="sub">This terminal is closed to the public.<br>There is nothing for you here.</p>
+      <button id="leave" class="leave">← return to safety</button>
+      <div class="meta">node sad-07 · region us-dark · <span id="upt">uptime 1,284d</span> · <span class="lock">🔒 sealed</span></div>
+    </div>
+    <!-- the bypass: faint, at the very bottom edge -->
+    <div id="bypass" class="bypass" title="">
+      <span class="hintline">// nothing to see here<span class="blip">.</span></span>
+      <form id="bform" autocomplete="off" hidden>
+        <span class="bp">&gt;</span><input id="binput" type="text" spellcheck="false" aria-label="bypass" placeholder="" />
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
