@@ -57,6 +57,15 @@ export function IntrusionRoot({ essays }: Props) {
 
     // Sync muted state
     setMuted(isMuted());
+
+    // Remove the server-rendered pre-boot shroud now that the overlay is
+    // painted. A short fade avoids a hard cut on slow devices.
+    const pre = document.getElementById("intrusion-preboot");
+    if (pre) {
+      pre.style.transition = "opacity .2s";
+      pre.style.opacity = "0";
+      setTimeout(() => pre.remove(), 220);
+    }
   }, []);
 
   // ── ESC on decoy → dismiss ─────────────────────────────────────────────

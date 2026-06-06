@@ -1,7 +1,32 @@
 {
-  "generatedAt": "2026-06-05T22:47:42.620Z",
-  "count": 98,
+  "generatedAt": "2026-06-06T01:01:57.226Z",
+  "count": 103,
   "entries": [
+    {
+      "hash": "882bfc1",
+      "date": "2026-06-05",
+      "subject": "feat(intrusion): cyberpunk glitch landing treatment"
+    },
+    {
+      "hash": "2518211",
+      "date": "2026-06-05",
+      "subject": "docs(audit): intrusion v1 lighthouse scores"
+    },
+    {
+      "hash": "38bc863",
+      "date": "2026-06-05",
+      "subject": "test(e2e): intrusion break-in flow + crawlable substrate"
+    },
+    {
+      "hash": "e055bce",
+      "date": "2026-06-05",
+      "subject": "feat(intrusion): ssr:false mount (SEO) + a11y + reduced-motion + mobile + mute"
+    },
+    {
+      "hash": "3f29b7c",
+      "date": "2026-06-05",
+      "subject": "feat(intrusion): root overlay state machine + crawlable mount + just-read door + mute"
+    },
     {
       "hash": "7a388be",
       "date": "2026-06-05",

@@ -72,6 +72,13 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="bg-ink-0 text-bone antialiased flex flex-col min-h-screen">
+        {/* Pre-boot shroud: opaque dark cover painted by the server so the
+            editorial homepage never flashes through before IntrusionRoot mounts.
+            z-index 59 = above all page content, below #wall (z-index 60).
+            IntrusionRoot removes it once the decoy/overlay is painted.
+            No-JS users get the real content — noscript hides this element. */}
+        <div id="intrusion-preboot" aria-hidden="true" style={{position:"fixed",inset:0,zIndex:59,background:"#05070A"}} />
+        <noscript><style>{`#intrusion-preboot{display:none!important}`}</style></noscript>
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-ink-1 focus:text-cyan focus:px-3 focus:py-2 focus:border focus:border-cyan focus:font-mono focus:text-[12px] focus:uppercase focus:tracking-wide"
