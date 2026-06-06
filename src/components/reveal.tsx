@@ -63,8 +63,15 @@ export function Reveal({
     return () => io.disconnect();
   }, [reduced, threshold]);
 
+  // `@react-three/fiber` v9 augments the global JSX IntrinsicElements with its
+  // Three.js catalogue. That augmentation collapses the prop types of a dynamic
+  // intrinsic tag (`ElementType`) to `never`, so we render through a permissive
+  // alias to keep standard DOM props (ref/className/style) typed correctly.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const RenderTag = Tag as any;
+
   return (
-    <Tag
+    <RenderTag
       ref={ref as React.Ref<HTMLElement>}
       className={cn(className)}
       style={{
@@ -77,6 +84,6 @@ export function Reveal({
       }}
     >
       {children}
-    </Tag>
+    </RenderTag>
   );
 }

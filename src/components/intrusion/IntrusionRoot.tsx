@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { Decoy } from "./Decoy";
+import { CoreLayer } from "./webgl/CoreLayer";
 import { Operator } from "./Operator";
 import { Terminal, type EssayMeta } from "./Terminal";
 import { VaultGate } from "./VaultGate";
@@ -181,6 +182,12 @@ export function IntrusionRoot({ essays }: Props) {
       </div>
 
       {/* ── Phase layer ─────────────────────────────────────────────── */}
+      {/* The living world behind the fake screen — WebGL core sits BEHIND the
+          decoy skin (z-index below #wall). Mounted only while the 403 is up;
+          disposed the moment the user breaks through (operator/terminal) or
+          dismisses, so the GPU loop never runs once you're inside. */}
+      {(phase === "decoy" || phase === "peeling") && <CoreLayer />}
+
       {/* Keep Decoy mounted during peeling so #wall is still in DOM for the animation */}
       {(phase === "decoy" || phase === "peeling") && (
         <Decoy onBypass={handleBypass} />
